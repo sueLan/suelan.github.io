@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="undefined">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+        XMPP(2):注册账户 - undefined
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+<body>
+
+<div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> The best way out is always through </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar">
+            <img src="/img/avatar.jpeg" />
+        </div>
+        <div class="name">
+            <i>蓝容</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#XMPP注册流程"><span class="toc-text">XMPP注册流程</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-client发送消息体-去服务端查询注册需要的字段"><span class="toc-text">1. client发送消息体, 去服务端查询注册需要的字段</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-未注册：返回注册需要的字段"><span class="toc-text">2.1. 未注册：返回注册需要的字段</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-已注册：服务端的返回结果"><span class="toc-text">2.2. 已注册：服务端的返回结果</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-client-注册"><span class="toc-text">3.client 注册</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-1-注册成功"><span class="toc-text">4.1 注册成功</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-2-注册失败，命名冲突"><span class="toc-text">4.2 注册失败，命名冲突</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-3-消息不全-lt-not-acceptable-gt"><span class="toc-text">4.3 消息不全 &lt;not-acceptable/&gt;</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-4-服务端访问权限问题"><span class="toc-text">4.4 服务端访问权限问题</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-如果用第三方注册的方式，可能需要补充一些额外的信息"><span class="toc-text">5.如果用第三方注册的方式，可能需要补充一些额外的信息</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-服务端返回消息，-提示需要提供的信息"><span class="toc-text">6.服务端返回消息， 提示需要提供的信息</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#7-客户端提供信息"><span class="toc-text">7.客户端提供信息</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Cancellation-of-Existing-Registration"><span class="toc-text">Cancellation of Existing Registration</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-cilent-req"><span class="toc-text">1. cilent req:</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-成功注销-server-response"><span class="toc-text">2.1. 成功注销,server response:</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-Error-Case"><span class="toc-text">2.2.Error Case</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#用户修改密码"><span class="toc-text">用户修改密码</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-Client"><span class="toc-text">1. Client:</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-成功-Server"><span class="toc-text">2.1. 成功, Server:</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-失败-Case"><span class="toc-text">2.2. 失败 Case</span></a></li></ol></li></ol></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+        <div class="index-about-mobile">
+            <i> The best way out is always through </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        
+
+
+<div class="post-container">
+    <div class="post-title">
+        XMPP(2):注册账户
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2019-03-29 10:05:17</span></span>
+        
+        <span class="attr">标签：/
+        
+        <a class="tag" href="/tags/#XMPP" title="XMPP">XMPP</a>
+        <span>/</span>
+        
+        
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span>
+</span>
+</span>
+    </div>
+    <div class="post-content ">
+        <h2 id="XMPP注册流程"><a href="#XMPP注册流程" class="headerlink" title="XMPP注册流程"></a>XMPP注册流程</h2><h4 id="1-client发送消息体-去服务端查询注册需要的字段"><a href="#1-client发送消息体-去服务端查询注册需要的字段" class="headerlink" title="1. client发送消息体, 去服务端查询注册需要的字段"></a>1. client发送消息体, 去服务端查询注册需要的字段</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">iq</span> <span class="attr">type</span>=<span class="string">'get'</span> <span class="attr">id</span>=<span class="string">'reg1'</span> <span class="attr">to</span>=<span class="string">'localhost'</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">query</span> <span class="attr">xmlns</span>=<span class="string">'jabber:iq:register'</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">iq</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>xmlns是 <code>jabber:iq:register</code>, type是<code>get</code></p>
+<h4 id="2-1-未注册：返回注册需要的字段"><a href="#2-1-未注册：返回注册需要的字段" class="headerlink" title="2.1. 未注册：返回注册需要的字段"></a>2.1. 未注册：返回注册需要的字段</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">iq</span> <span class="attr">type</span>=<span class="string">'result'</span> <span class="attr">id</span>=<span class="string">'reg1'</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">query</span> <span class="attr">xmlns</span>=<span class="string">'jabber:iq:register'</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">instructions</span>&gt;</span></span><br><span class="line">      Choose a username and password for use with this service.</span><br><span class="line">      Please also provide your email address.</span><br><span class="line">    <span class="tag">&lt;/<span class="name">instructions</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">username</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">password</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">email</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">query</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">iq</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p><code>&lt;instructions/&gt;</code> element：SHOULD contain an <instructions> element (whose XML character data MAY be modified to reflect the fact that the entity is currently registered)</instructions></p>
+<h4 id="2-2-已注册：服务端的返回结果"><a href="#2-2-已注册：服务端的返回结果" class="headerlink" title="2.2. 已注册：服务端的返回结果"></a>2.2. 已注册：服务端的返回结果</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">iq</span>  <span class="attr">xmlns</span>=<span class="string">'jabber:client'</span> <span class="attr">xml:lang</span>=<span class="string">'en'</span> <span class="attr">to</span>=<span class="string">'olivia@localhost/180244803852118156522754'</span> <span class="attr">from</span>=<span class="string">'localhost'</span> <span class="attr">type</span>=<span class="string">'result'</span> <span class="attr">id</span>=<span class="string">'reg1'</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">query</span>  <span class="attr">xmlns</span>=<span class="string">'jabber:iq:register'</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">username</span>&gt;</span>olivia<span class="tag">&lt;/<span class="name">username</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">registered</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">password</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">instructions</span>&gt;</span>Choose a username and password to register with this server<span class="tag">&lt;/<span class="name">instructions</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">query</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">iq</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>host会根据”from”的地址判断entity是否已经注册了，IQ result消息有一个空的<code>&lt;registered/&gt;</code>， 标示该entiry已经注册过了。</p>
+<h4 id="3-client-注册"><a href="#3-client-注册" class="headerlink" title="3.client 注册"></a>3.client 注册</h4><p>iq stanza的type是<code>set</code>, xmlns<code>jabber:iq:register</code></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">iq</span> <span class="attr">type</span>=<span class="string">'set'</span> <span class="attr">id</span>=<span class="string">'reg2'</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">query</span> <span class="attr">xmlns</span>=<span class="string">'jabber:iq:register'</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">username</span>&gt;</span>bill<span class="tag">&lt;/<span class="name">username</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">password</span>&gt;</span>Calliope<span class="tag">&lt;/<span class="name">password</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">email</span>&gt;</span>bard@shakespeare.lit<span class="tag">&lt;/<span class="name">email</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">query</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">iq</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h4 id="4-1-注册成功"><a href="#4-1-注册成功" class="headerlink" title="4.1 注册成功"></a>4.1 注册成功</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">iq</span> <span class="attr">type</span>=<span class="string">'result'</span> <span class="attr">id</span>=<span class="string">'reg2'</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+<h4 id="4-2-注册失败，命名冲突"><a href="#4-2-注册失败，命名冲突" class="headerlink" title="4.2 注册失败，命名冲突"></a>4.2 注册失败，命名冲突</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">iq</span> <span class="attr">type</span>=<span class="string">'error'</span> <span class="attr">id</span>=<span class="string">'reg2'</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">query</span> <span class="attr">xmlns</span>=<span class="string">'jabber:iq:register'</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">username</span>&gt;</span>bill<span class="tag">&lt;/<span class="name">username</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">password</span>&gt;</span>m1cro$oft<span class="tag">&lt;/<span class="name">password</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">email</span>&gt;</span>billg@bigcompany.com<span class="tag">&lt;/<span class="name">email</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">query</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">error</span> <span class="attr">code</span>=<span class="string">'409'</span> <span class="attr">type</span>=<span class="string">'cancel'</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">conflict</span> <span class="attr">xmlns</span>=<span class="string">'urn:ietf:params:xml:ns:xmpp-stanzas'</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">error</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">iq</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h4 id="4-3-消息不全-lt-not-acceptable-gt"><a href="#4-3-消息不全-lt-not-acceptable-gt" class="headerlink" title="4.3 消息不全 &lt;not-acceptable/&gt;"></a>4.3 消息不全 <code>&lt;not-acceptable/&gt;</code></h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">iq</span> <span class="attr">type</span>=<span class="string">'error'</span> <span class="attr">id</span>=<span class="string">'reg2'</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">query</span> <span class="attr">xmlns</span>=<span class="string">'jabber:iq:register'</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">username</span>&gt;</span>bill<span class="tag">&lt;/<span class="name">username</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">password</span>&gt;</span>Calliope<span class="tag">&lt;/<span class="name">password</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">query</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">error</span> <span class="attr">code</span>=<span class="string">'406'</span> <span class="attr">type</span>=<span class="string">'modify'</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">not-acceptable</span> <span class="attr">xmlns</span>=<span class="string">'urn:ietf:params:xml:ns:xmpp-stanzas'</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">error</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">iq</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h4 id="4-4-服务端访问权限问题"><a href="#4-4-服务端访问权限问题" class="headerlink" title="4.4 服务端访问权限问题"></a>4.4 服务端访问权限问题</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">iq</span>  <span class="attr">xmlns</span>=<span class="string">'jabber:client'</span> <span class="attr">xml:lang</span>=<span class="string">'en'</span> <span class="attr">to</span>=<span class="string">'olivia@localhost/180244803852118156522754'</span> <span class="attr">from</span>=<span class="string">'olivia@localhost'</span> <span class="attr">type</span>=<span class="string">'error'</span> <span class="attr">id</span>=<span class="string">'reg2'</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">query</span>  <span class="attr">xmlns</span>=<span class="string">'jabber:iq:register'</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">email</span>&gt;</span>bard@shakespeare.lit<span class="tag">&lt;/<span class="name">email</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">username</span>&gt;</span>bill<span class="tag">&lt;/<span class="name">username</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">password</span>&gt;</span>Calliope<span class="tag">&lt;/<span class="name">password</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">query</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">error</span>  <span class="attr">code</span>=<span class="string">'403'</span> <span class="attr">type</span>=<span class="string">'auth'</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">forbidden</span>  <span class="attr">xmlns</span>=<span class="string">'urn:ietf:params:xml:ns:xmpp-stanzas'</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">text</span>  <span class="attr">xmlns</span>=<span class="string">'urn:ietf:params:xml:ns:xmpp-stanzas'</span> <span class="attr">xml:lang</span>=<span class="string">'en'</span>&gt;</span>Access denied by service policy<span class="tag">&lt;/<span class="name">text</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">error</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">iq</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h4 id="5-如果用第三方注册的方式，可能需要补充一些额外的信息"><a href="#5-如果用第三方注册的方式，可能需要补充一些额外的信息" class="headerlink" title="5.如果用第三方注册的方式，可能需要补充一些额外的信息"></a>5.如果用第三方注册的方式，可能需要补充一些额外的信息</h4><p>客户端查询</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">iq</span> <span class="attr">type</span>=<span class="string">'get'</span></span></span><br><span class="line"><span class="tag">    <span class="attr">from</span>=<span class="string">'juliet@capulet.com/balcony'</span></span></span><br><span class="line"><span class="tag">    <span class="attr">to</span>=<span class="string">'contests.shakespeare.lit'</span></span></span><br><span class="line"><span class="tag">    <span class="attr">id</span>=<span class="string">'reg3'</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">query</span> <span class="attr">xmlns</span>=<span class="string">'jabber:iq:register'</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">iq</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h4 id="6-服务端返回消息，-提示需要提供的信息"><a href="#6-服务端返回消息，-提示需要提供的信息" class="headerlink" title="6.服务端返回消息， 提示需要提供的信息"></a>6.服务端返回消息， 提示需要提供的信息</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">iq</span> <span class="attr">type</span>=<span class="string">'result'</span></span></span><br><span class="line"><span class="tag">    <span class="attr">from</span>=<span class="string">'contests.shakespeare.lit'</span></span></span><br><span class="line"><span class="tag">    <span class="attr">to</span>=<span class="string">'juliet@capulet.com/balcony'</span></span></span><br><span class="line"><span class="tag">    <span class="attr">id</span>=<span class="string">'reg3'</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">query</span> <span class="attr">xmlns</span>=<span class="string">'jabber:iq:register'</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">instructions</span>&gt;</span></span><br><span class="line">      Use the enclosed form to register. If your Jabber client does not</span><br><span class="line">      support Data Forms, visit http://www.shakespeare.lit/contests.php</span><br><span class="line">    <span class="tag">&lt;/<span class="name">instructions</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">x</span> <span class="attr">xmlns</span>=<span class="string">'jabber:x:data'</span> <span class="attr">type</span>=<span class="string">'form'</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">title</span>&gt;</span>Contest Registration<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">instructions</span>&gt;</span></span><br><span class="line">        Please provide the following information</span><br><span class="line">        to sign up for our special contests!</span><br><span class="line">      <span class="tag">&lt;/<span class="name">instructions</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">field</span> <span class="attr">type</span>=<span class="string">'hidden'</span> <span class="attr">var</span>=<span class="string">'FORM_TYPE'</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">value</span>&gt;</span>jabber:iq:register<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">field</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">field</span> <span class="attr">type</span>=<span class="string">'text-single'</span> <span class="attr">label</span>=<span class="string">'Given Name'</span> <span class="attr">var</span>=<span class="string">'first'</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">required</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">field</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">field</span> <span class="attr">type</span>=<span class="string">'text-single'</span> <span class="attr">label</span>=<span class="string">'Family Name'</span> <span class="attr">var</span>=<span class="string">'last'</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">required</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">field</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">field</span> <span class="attr">type</span>=<span class="string">'text-single'</span> <span class="attr">label</span>=<span class="string">'Email Address'</span> <span class="attr">var</span>=<span class="string">'email'</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">required</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">field</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">field</span> <span class="attr">type</span>=<span class="string">'list-single'</span> <span class="attr">label</span>=<span class="string">'Gender'</span> <span class="attr">var</span>=<span class="string">'x-gender'</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">option</span> <span class="attr">label</span>=<span class="string">'Male'</span>&gt;</span><span class="tag">&lt;<span class="name">value</span>&gt;</span>M<span class="tag">&lt;/<span class="name">value</span>&gt;</span><span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">option</span> <span class="attr">label</span>=<span class="string">'Female'</span>&gt;</span><span class="tag">&lt;<span class="name">value</span>&gt;</span>F<span class="tag">&lt;/<span class="name">value</span>&gt;</span><span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">field</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">x</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">query</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">iq</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h4 id="7-客户端提供信息"><a href="#7-客户端提供信息" class="headerlink" title="7.客户端提供信息"></a>7.客户端提供信息</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">iq</span> <span class="attr">type</span>=<span class="string">'set'</span></span></span><br><span class="line"><span class="tag">    <span class="attr">from</span>=<span class="string">'juliet@capulet.com/balcony'</span></span></span><br><span class="line"><span class="tag">    <span class="attr">to</span>=<span class="string">'contests.shakespeare.lit'</span></span></span><br><span class="line"><span class="tag">    <span class="attr">id</span>=<span class="string">'reg4'</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">query</span> <span class="attr">xmlns</span>=<span class="string">'jabber:iq:register'</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">x</span> <span class="attr">xmlns</span>=<span class="string">'jabber:x:data'</span> <span class="attr">type</span>=<span class="string">'submit'</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">field</span> <span class="attr">type</span>=<span class="string">'hidden'</span> <span class="attr">var</span>=<span class="string">'FORM_TYPE'</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">value</span>&gt;</span>jabber:iq:register<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">field</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">field</span> <span class="attr">type</span>=<span class="string">'text-single'</span> <span class="attr">label</span>=<span class="string">'Given Name'</span> <span class="attr">var</span>=<span class="string">'first'</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">value</span>&gt;</span>Juliet<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">field</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">field</span> <span class="attr">type</span>=<span class="string">'text-single'</span> <span class="attr">label</span>=<span class="string">'Family Name'</span> <span class="attr">var</span>=<span class="string">'last'</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">value</span>&gt;</span>Capulet<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">field</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">field</span> <span class="attr">type</span>=<span class="string">'text-single'</span> <span class="attr">label</span>=<span class="string">'Email Address'</span> <span class="attr">var</span>=<span class="string">'email'</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">value</span>&gt;</span>juliet@capulet.com<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">field</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">field</span> <span class="attr">type</span>=<span class="string">'list-single'</span> <span class="attr">label</span>=<span class="string">'Gender'</span> <span class="attr">var</span>=<span class="string">'x-gender'</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">value</span>&gt;</span>F<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">field</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">x</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">query</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">iq</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h2 id="Cancellation-of-Existing-Registration"><a href="#Cancellation-of-Existing-Registration" class="headerlink" title="Cancellation of Existing Registration"></a>Cancellation of Existing Registration</h2><h4 id="1-cilent-req"><a href="#1-cilent-req" class="headerlink" title="1. cilent req:"></a>1. cilent req:</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">iq</span> <span class="attr">type</span>=<span class="string">'set'</span> <span class="attr">from</span>=<span class="string">'bill@shakespeare.lit/globe'</span> <span class="attr">id</span>=<span class="string">'unreg1'</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">query</span> <span class="attr">xmlns</span>=<span class="string">'jabber:iq:register'</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">remove</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">query</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">iq</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>跟注册不同的是 <code>query</code> 的child多了个<code>&lt;remove/&gt;</code></p>
+<h4 id="2-1-成功注销-server-response"><a href="#2-1-成功注销-server-response" class="headerlink" title="2.1. 成功注销,server response:"></a>2.1. 成功注销,server response:</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">iq</span> <span class="attr">type</span>=<span class="string">'result'</span> <span class="attr">to</span>=<span class="string">'bill@shakespeare.lit/globe'</span> <span class="attr">id</span>=<span class="string">'unreg1'</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+<h4 id="2-2-Error-Case"><a href="#2-2-Error-Case" class="headerlink" title="2.2.Error Case"></a>2.2.Error Case</h4><table>
+<thead>
+<tr>
+<th>Condition</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;bad-request/&gt;</code></td>
+<td>The <remove> element was not the only child element of the <query> element.</query></remove></td>
+</tr>
+<tr>
+<td><code>&lt;forbidden/&gt;</code></td>
+<td>权限不够</td>
+</tr>
+<tr>
+<td><code>&lt;not-allowed/&gt;</code></td>
+<td>不允许用户注销账户</td>
+</tr>
+<tr>
+<td><code>&lt;registration-required/&gt;</code></td>
+<td>要注销的账户本来就不存在</td>
+</tr>
+<tr>
+<td><code>&lt;unexpected-request/&gt;</code></td>
+<td>The host is an instant messaging server and the IQ get does not contain a ‘from’ address because the entity is not registered with the server.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="用户修改密码"><a href="#用户修改密码" class="headerlink" title="用户修改密码"></a>用户修改密码</h2><h4 id="1-Client"><a href="#1-Client" class="headerlink" title="1. Client:"></a>1. Client:</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">iq</span> <span class="attr">type</span>=<span class="string">'set'</span> <span class="attr">to</span>=<span class="string">'shakespeare.lit'</span> <span class="attr">id</span>=<span class="string">'change1'</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">query</span> <span class="attr">xmlns</span>=<span class="string">'jabber:iq:register'</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">username</span>&gt;</span>bill<span class="tag">&lt;/<span class="name">username</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">password</span>&gt;</span>newpass<span class="tag">&lt;/<span class="name">password</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">query</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">iq</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>这里的密码是明文， 要留意客户端服务端通信是否用SSL或者TLS加密，而且服务端证书可信。</p>
+<h4 id="2-1-成功-Server"><a href="#2-1-成功-Server" class="headerlink" title="2.1. 成功, Server:"></a>2.1. 成功, Server:</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">iq</span> <span class="attr">type</span>=<span class="string">'result'</span> <span class="attr">id</span>=<span class="string">'change1'</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+<h4 id="2-2-失败-Case"><a href="#2-2-失败-Case" class="headerlink" title="2.2. 失败 Case"></a>2.2. 失败 Case</h4><table>
+<thead>
+<tr>
+<th>Condition</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;bad-request/&gt;</code></td>
+<td>request请求体拼写有问题，比如没带username</td>
+</tr>
+<tr>
+<td><code>&lt;not-authorized/&gt;</code></td>
+<td>没通过server的安全验证</td>
+</tr>
+<tr>
+<td><code>&lt;not-allowed/&gt;</code></td>
+<td>server 不允许</td>
+</tr>
+<tr>
+<td><code>&lt;unexpected-request/&gt;</code></td>
+<td>The host is an instant messaging server and the IQ set does not contain a ‘from’ address because the entity is not registered with the server.</td>
+</tr>
+</tbody>
+</table>
+<p>比如：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">// Bad  request</span><br><span class="line"><span class="tag">&lt;<span class="name">iq</span> <span class="attr">type</span>=<span class="string">'error'</span> <span class="attr">from</span>=<span class="string">'shakespeare.lit'</span> <span class="attr">to</span>=<span class="string">'bill@shakespeare.lit/globe'</span> <span class="attr">id</span>=<span class="string">'change1'</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">error</span> <span class="attr">code</span>=<span class="string">'400'</span> <span class="attr">type</span>=<span class="string">'modify'</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">bad-request</span> <span class="attr">xmlns</span>=<span class="string">'urn:ietf:params:xml:ns:xmpp-stanzas'</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">error</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">iq</span>&gt;</span></span><br><span class="line"></span><br><span class="line">// Not Authorized</span><br><span class="line"><span class="tag">&lt;<span class="name">iq</span> <span class="attr">type</span>=<span class="string">'error'</span> <span class="attr">from</span>=<span class="string">'shakespeare.lit'</span> <span class="attr">to</span>=<span class="string">'bill@shakespeare.lit/globe'</span> <span class="attr">id</span>=<span class="string">'change1'</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">error</span> <span class="attr">code</span>=<span class="string">'401'</span> <span class="attr">type</span>=<span class="string">'modify'</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">not-authorized</span> <span class="attr">xmlns</span>=<span class="string">'urn:ietf:params:xml:ns:xmpp-stanzas'</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">error</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">iq</span>&gt;</span></span><br><span class="line"></span><br><span class="line">// Not Allowed</span><br><span class="line"><span class="tag">&lt;<span class="name">iq</span> <span class="attr">type</span>=<span class="string">'error'</span> <span class="attr">from</span>=<span class="string">'shakespeare.lit'</span> <span class="attr">to</span>=<span class="string">'bill@shakespeare.lit/globe'</span> <span class="attr">id</span>=<span class="string">'change1'</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">error</span> <span class="attr">code</span>=<span class="string">'405'</span> <span class="attr">type</span>=<span class="string">'cancel'</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">not-allowed</span> <span class="attr">xmlns</span>=<span class="string">'urn:ietf:params:xml:ns:xmpp-stanzas'</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">error</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">iq</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>有时候，服务端需要更多的信息来改密码，这时候它会返回信息提示客户端</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">iq</span> <span class="attr">type</span>=<span class="string">'error'</span> <span class="attr">from</span>=<span class="string">'shakespeare.lit'</span> <span class="attr">to</span>=<span class="string">'bill@shakespeare.lit/globe'</span> <span class="attr">id</span>=<span class="string">'change1'</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">query</span> <span class="attr">xmlns</span>=<span class="string">'jabber:iq:register'</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">x</span> <span class="attr">xmlns</span>=<span class="string">'jabber:x:data'</span> <span class="attr">type</span>=<span class="string">'form'</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">title</span>&gt;</span>Password Change<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">instructions</span>&gt;</span>Use this form to change your password.<span class="tag">&lt;/<span class="name">instructions</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">field</span> <span class="attr">type</span>=<span class="string">'hidden'</span> <span class="attr">var</span>=<span class="string">'FORM_TYPE'</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">value</span>&gt;</span>jabber:iq:register:changepassword<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">field</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">field</span> <span class="attr">type</span>=<span class="string">'text-single'</span> <span class="attr">label</span>=<span class="string">'Username'</span> <span class="attr">var</span>=<span class="string">'username'</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">required</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">field</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">field</span> <span class="attr">type</span>=<span class="string">'text-private'</span> <span class="attr">label</span>=<span class="string">'Old Password'</span> <span class="attr">var</span>=<span class="string">'old_password'</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">required</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">field</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">field</span> <span class="attr">type</span>=<span class="string">'text-private'</span> <span class="attr">label</span>=<span class="string">'New Password'</span> <span class="attr">var</span>=<span class="string">'password'</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">required</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">field</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">field</span> <span class="attr">type</span>=<span class="string">'text-single'</span> <span class="attr">label</span>=<span class="string">'Mother&amp;apos;s Maiden Name'</span> <span class="attr">var</span>=<span class="string">'x-mmn'</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">required</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">field</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">x</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">query</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">error</span> <span class="attr">code</span>=<span class="string">'401'</span> <span class="attr">type</span>=<span class="string">'modify'</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">not-authorized</span> <span class="attr">xmlns</span>=<span class="string">'urn:ietf:params:xml:ns:xmpp-stanzas'</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">error</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">iq</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>然后客户端返回相关信息</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">iq</span> <span class="attr">type</span>=<span class="string">'set'</span> <span class="attr">from</span>=<span class="string">'bill@shakespeare.lit/globe'</span> <span class="attr">to</span>=<span class="string">'shakespeare.lit'</span> <span class="attr">id</span>=<span class="string">'change2'</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">query</span> <span class="attr">xmlns</span>=<span class="string">'jabber:iq:register'</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">x</span> <span class="attr">xmlns</span>=<span class="string">'jabber:x:data'</span> <span class="attr">type</span>=<span class="string">'submit'</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">field</span> <span class="attr">type</span>=<span class="string">'hidden'</span> <span class="attr">var</span>=<span class="string">'FORM_TYPE'</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">value</span>&gt;</span>jabber:iq:register:changepassword<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">field</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">field</span> <span class="attr">type</span>=<span class="string">'text-single'</span> <span class="attr">var</span>=<span class="string">'username'</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">value</span>&gt;</span>bill@shakespeare.lit<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">field</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">field</span> <span class="attr">type</span>=<span class="string">'text-private'</span> <span class="attr">var</span>=<span class="string">'old_password'</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">value</span>&gt;</span>theglobe<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">field</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">field</span> <span class="attr">type</span>=<span class="string">'text-private'</span> <span class="attr">var</span>=<span class="string">'password'</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">value</span>&gt;</span>groundlings<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">field</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">field</span> <span class="attr">type</span>=<span class="string">'text-single'</span> <span class="attr">var</span>=<span class="string">'x-mmn'</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">value</span>&gt;</span>Throckmorton<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">field</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">x</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">query</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">iq</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>ref: <a href="https://xmpp.org/extensions/xep-0077.html#usecases" target="_blank" rel="noopener">XEP-0077: In-Band Registration</a></p>
+
+        
+            <div class="donate-container">
+    <div class="donate-button">
+        <button id="donate-button">赞赏</button>
+    </div>
+    <div class="donate-img-container hide" id="donate-img-container">
+        <img id="donate-img" src="" data-src="/img/donate.jpeg">
+        <p> 感谢鼓励 </p>
+    </div>
+</div>
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+    </ul>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        Created By <a href="https://hexo.io/">Hexo</a>  Theme <a href="https://github.com/aircloud/hexo-theme-aircloud">AirCloud</a></p>
+</footer>
+
+
+
+
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+    <script>
+        /**
+         *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+         *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+        */
+        if( '' || '')
+        var disqus_config = function () {
+            this.page.url = '';  // Replace PAGE_URL with your page's canonical URL variable
+            this.page.identifier = ''; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+        };
+
+        (function() { // DON'T EDIT BELOW THIS LINE
+            var d = document, s = d.createElement('script');
+            s.src = 'https://airclouds-blog.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+
+
+
+</html>
