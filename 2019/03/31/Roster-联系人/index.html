@@ -89,7 +89,7 @@
     </div>
     
         <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#客户端获取联系人列表"><span class="toc-text">客户端获取联系人列表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#添加联系人的流程"><span class="toc-text">添加联系人的流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#删除联系人"><span class="toc-text">删除联系人</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Presence"><span class="toc-text">Presence</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#客户端获取联系人列表"><span class="toc-text">客户端获取联系人列表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#添加联系人-加好友）的流程"><span class="toc-text">添加联系人(加好友）的流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#删除联系人"><span class="toc-text">删除联系人</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Presence"><span class="toc-text">Presence</span></a></li></ol>
 </div>
     
 </div>
@@ -137,12 +137,12 @@
 </span>
     </div>
     <div class="post-content ">
-        <p>Roster直接翻译叫花名册，其实它就是联系人列表啦。</p>
+        <p>XMPP中联系人模块协议是<code>jabber:iq:roster</code>. Roster直接翻译叫花名册，其实它就是联系人列表啦。</p>
 <h2 id="客户端获取联系人列表"><a href="#客户端获取联系人列表" class="headerlink" title="客户端获取联系人列表"></a>客户端获取联系人列表</h2><p>比较简单，发送IQ stanza给server. xmlns=<code>jabber:iq:roster</code>;type=’get’</p>
 <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">iq</span> <span class="attr">from</span>=<span class="string">'user@server.com/balcony'</span></span></span><br><span class="line"><span class="tag">       <span class="attr">id</span>=<span class="string">'bv1bs71f'</span></span></span><br><span class="line"><span class="tag">       <span class="attr">type</span>=<span class="string">'get'</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">query</span> <span class="attr">xmlns</span>=<span class="string">'jabber:iq:roster'</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">iq</span>&gt;</span></span><br></pre></td></tr></table></figure>
 <p>返回结果的item中有联系人Jid</p>
 <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">iq</span> <span class="attr">id</span>=<span class="string">'bv1bs71f'</span></span></span><br><span class="line"><span class="tag">       <span class="attr">to</span>=<span class="string">'user@server.com/balcony'</span></span></span><br><span class="line"><span class="tag">       <span class="attr">type</span>=<span class="string">'result'</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">query</span> <span class="attr">xmlns</span>=<span class="string">'jabber:iq:roster'</span> <span class="attr">ver</span>=<span class="string">'ver7'</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">item</span> <span class="attr">jid</span>=<span class="string">'contact1@server.com'</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">item</span> <span class="attr">jid</span>=<span class="string">'contact2@server.com'</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">query</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">iq</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<h2 id="添加联系人的流程"><a href="#添加联系人的流程" class="headerlink" title="添加联系人的流程"></a>添加联系人的流程</h2><p>方法有两种，第一种用IQ set, 见<a href="https://xmpp.org/rfcs/rfc6121.html#roster-add" target="_blank" rel="noopener">rfc6121</a>.</p>
+<h2 id="添加联系人-加好友）的流程"><a href="#添加联系人-加好友）的流程" class="headerlink" title="添加联系人(加好友）的流程"></a>添加联系人(加好友）的流程</h2><p>方法有两种，第一种用IQ set, 见<a href="https://xmpp.org/rfcs/rfc6121.html#roster-add" target="_blank" rel="noopener">rfc6121</a>.</p>
 <ol>
 <li>客户端请求添加联系人</li>
 </ol>
