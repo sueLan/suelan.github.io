@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="undefined">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+        Roster&amp;联系人 - undefined
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+<body>
+
+<div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> The best way out is always through </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar">
+            <img src="/img/avatar.jpeg" />
+        </div>
+        <div class="name">
+            <i>蓝容</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#客户端获取联系人列表"><span class="toc-text">客户端获取联系人列表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#添加联系人的流程"><span class="toc-text">添加联系人的流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#删除联系人"><span class="toc-text">删除联系人</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Presence"><span class="toc-text">Presence</span></a></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+        <div class="index-about-mobile">
+            <i> The best way out is always through </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        
+
+
+<div class="post-container">
+    <div class="post-title">
+        Roster&amp;联系人
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2019-03-31 11:49:32</span></span>
+        
+        <span class="attr">标签：/
+        
+        <a class="tag" href="/tags/#XMPP" title="XMPP">XMPP</a>
+        <span>/</span>
+        
+        
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span>
+</span>
+</span>
+    </div>
+    <div class="post-content ">
+        <p>Roster直接翻译叫花名册，其实它就是联系人列表啦。</p>
+<h2 id="客户端获取联系人列表"><a href="#客户端获取联系人列表" class="headerlink" title="客户端获取联系人列表"></a>客户端获取联系人列表</h2><p>比较简单，发送IQ stanza给server. xmlns=<code>jabber:iq:roster</code>;type=’get’</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">iq</span> <span class="attr">from</span>=<span class="string">'user@server.com/balcony'</span></span></span><br><span class="line"><span class="tag">       <span class="attr">id</span>=<span class="string">'bv1bs71f'</span></span></span><br><span class="line"><span class="tag">       <span class="attr">type</span>=<span class="string">'get'</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">query</span> <span class="attr">xmlns</span>=<span class="string">'jabber:iq:roster'</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">iq</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>返回结果的item中有联系人Jid</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">iq</span> <span class="attr">id</span>=<span class="string">'bv1bs71f'</span></span></span><br><span class="line"><span class="tag">       <span class="attr">to</span>=<span class="string">'user@server.com/balcony'</span></span></span><br><span class="line"><span class="tag">       <span class="attr">type</span>=<span class="string">'result'</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">query</span> <span class="attr">xmlns</span>=<span class="string">'jabber:iq:roster'</span> <span class="attr">ver</span>=<span class="string">'ver7'</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">item</span> <span class="attr">jid</span>=<span class="string">'contact1@server.com'</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">item</span> <span class="attr">jid</span>=<span class="string">'contact2@server.com'</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">query</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">iq</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h2 id="添加联系人的流程"><a href="#添加联系人的流程" class="headerlink" title="添加联系人的流程"></a>添加联系人的流程</h2><p>方法有两种，第一种用IQ set, 见<a href="https://xmpp.org/rfcs/rfc6121.html#roster-add" target="_blank" rel="noopener">rfc6121</a>.</p>
+<ol>
+<li>客户端请求添加联系人</li>
+</ol>
+<p>xmlns用<code>jabber:iq:roster</code>; 带上想添加的用户jid. name可以不带; <code>group</code>分组用。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">iq</span> <span class="attr">from</span>=<span class="string">'user@server.com/balcony'</span> <span class="attr">type</span>=<span class="string">'set'</span> <span class="attr">id</span>=<span class="string">'roster_2'</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">query</span> <span class="attr">xmlns</span>=<span class="string">'jabber:iq:roster'</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">item</span> <span class="attr">jid</span>=<span class="string">'contact@server.com'</span></span></span><br><span class="line"><span class="tag">          <span class="attr">name</span>=<span class="string">'contact'</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">group</span>&gt;</span>Servants<span class="tag">&lt;/<span class="name">group</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">item</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">query</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">iq</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>2.1. server通知同一个账户关联的所有客户端: 联系人列表更新了。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">iq</span> <span class="attr">to</span>=<span class="string">'user@server.com/balcony'</span></span></span><br><span class="line"><span class="tag">    <span class="attr">type</span>=<span class="string">'set'</span></span></span><br><span class="line"><span class="tag">    <span class="attr">id</span>=<span class="string">'a78b4q6ha463'</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">query</span> <span class="attr">xmlns</span>=<span class="string">'jabber:iq:roster'</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">item</span> <span class="attr">jid</span>=<span class="string">'contact@server.com'</span></span></span><br><span class="line"><span class="tag">          <span class="attr">name</span>=<span class="string">'contact'</span></span></span><br><span class="line"><span class="tag">          <span class="attr">subscription</span>=<span class="string">'none'</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">group</span>&gt;</span>Servants<span class="tag">&lt;/<span class="name">group</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">item</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">query</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">iq</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">iq</span> <span class="attr">to</span>=<span class="string">'user@server.com/chamber'</span></span></span><br><span class="line"><span class="tag">    <span class="attr">type</span>=<span class="string">'set'</span></span></span><br><span class="line"><span class="tag">    <span class="attr">id</span>=<span class="string">'a78b4q6ha464'</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">query</span> <span class="attr">xmlns</span>=<span class="string">'jabber:iq:roster'</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">item</span> <span class="attr">jid</span>=<span class="string">'contact@server.com'</span></span></span><br><span class="line"><span class="tag">          <span class="attr">name</span>=<span class="string">'contact'</span></span></span><br><span class="line"><span class="tag">          <span class="attr">subscription</span>=<span class="string">'none'</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">group</span>&gt;</span>Servants<span class="tag">&lt;/<span class="name">group</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">item</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">query</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">iq</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>server回复IQ stanza给请求添加联系人的客户端balcony<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">iq</span> <span class="attr">to</span>=<span class="string">'user@server.com/balcony'</span> <span class="attr">type</span>=<span class="string">'result'</span> <span class="attr">id</span>=<span class="string">'roster_2'</span>/&gt;</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="删除联系人"><a href="#删除联系人" class="headerlink" title="删除联系人"></a>删除联系人</h2><p>给server发送个IQ set， subscription一定是’remove’.</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">iq</span> <span class="attr">from</span>=<span class="string">'user@server.com/balcony'</span> <span class="attr">type</span>=<span class="string">'set'</span> <span class="attr">id</span>=<span class="string">'roster_4'</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">query</span> <span class="attr">xmlns</span>=<span class="string">'jabber:iq:roster'</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">item</span> <span class="attr">jid</span>=<span class="string">'contact@server.com'</span> <span class="attr">subscription</span>=<span class="string">'remove'</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">query</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">iq</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h2 id="Presence"><a href="#Presence" class="headerlink" title="Presence"></a>Presence</h2><p>增删联系人的另一种方法是Presence订阅机制.Presence stanza其实有两种功能：</p>
+<ul>
+<li>广播online/offline状态, <a href="https://suelan.github.io/2019/03/26/XMPP-Overview/#The-Presence-Stanza">之前文章</a>提过</li>
+<li>控制联系人订阅. 就是增删好友功能咯</li>
+</ul>
+<p>我们用type来区分这两种功能。type是<code>available| unavailable</code>， presence stanza表达online/offline状态。type若是<code>subscribe | subscribed | unsubscribe| unsubscribed</code>，就跟联系人有关啦。</p>
+<p>subscribtion有四种状态：</p>
+<ul>
+<li>NONE :  </li>
+<li>TO  :  user订阅contact的状态</li>
+<li>FROM : contact被user订阅</li>
+<li>BOTH : user跟contact相互subcribe</li>
+</ul>
+<p><img src="https://www.blikoontech.com/wp-content/uploads/2018/03/XMPP_Subscription_Flow.png" alt="flow"></p>
+<p>如上图：一开始user跟contact没啥关系，subscription状态都是none。 接着user发送了一条Presence stanza给contact，想subscribe他的状态。如下：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">// from user</span><br><span class="line"><span class="tag">&lt;<span class="name">presence</span> <span class="attr">to</span>=<span class="string">'contact@server.com'</span> <span class="attr">type</span>=<span class="string">'subscribed'</span>/&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>现在user用<code>jabber:iq:roster</code> 查询所有联系人的时候，会发现item多了一条, contact还没确认, 所以 ask=’subscribe’, subscribtion=’none’</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">// user's roster</span><br><span class="line"><span class="tag">&lt;<span class="name">item</span> <span class="attr">ask</span>=<span class="string">'subscribe'</span> <span class="attr">subscription</span>=<span class="string">'none'</span> <span class="attr">jid</span>=<span class="string">'contact@server.com'</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+<p>如果contact接受请求，他要发送一条presence</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">presence</span> <span class="attr">to</span>=<span class="string">'user@server.com'</span> <span class="attr">type</span>=<span class="string">'subscribed'</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+<p>user这边的roster会更新<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">// user's roster</span><br><span class="line"><span class="tag">&lt;<span class="name">item</span> <span class="attr">subscription</span>=<span class="string">'to'</span> <span class="attr">jid</span>=<span class="string">'contact@server.com'</span>/&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>这时在contact的roster列表里，user的subscription是from。 接着contact也请求订阅user<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">// contact's roster</span><br><span class="line"><span class="tag">&lt;<span class="name">item</span> <span class="attr">ask</span>=<span class="string">'subscribe'</span> <span class="attr">subscription</span>=<span class="string">'from'</span> <span class="attr">jid</span>=<span class="string">'user@server.com'</span>/&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>同样流程后，他两的subscription都变成了both。</p>
+<p>如果contact想拒绝user的请求，也是发送presence<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">presence</span> <span class="attr">to</span>=<span class="string">'user@server.com'</span> <span class="attr">type</span>=<span class="string">'unsubscribed'</span>/&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>如果user想取消对contact的订阅, 发送presence stanza，type 是unsubscribed<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">presence</span> <span class="attr">to</span>=<span class="string">'contact@server.com'</span> <span class="attr">type</span>=<span class="string">'unsubscribed'</span>/&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>ref: <a href="https://xmpp.org/rfcs/rfc3921.html#roster" target="_blank" rel="noopener">https://xmpp.org/rfcs/rfc3921.html#roster</a></p>
+
+        
+            <div class="donate-container">
+    <div class="donate-button">
+        <button id="donate-button">赞赏</button>
+    </div>
+    <div class="donate-img-container hide" id="donate-img-container">
+        <img id="donate-img" src="" data-src="/img/donate.jpeg">
+        <p> 感谢鼓励 </p>
+    </div>
+</div>
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+    </ul>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        Created By <a href="https://hexo.io/">Hexo</a>  Theme <a href="https://github.com/aircloud/hexo-theme-aircloud">AirCloud</a></p>
+</footer>
+
+
+
+
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+    <script>
+        /**
+         *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+         *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+        */
+        if( '' || '')
+        var disqus_config = function () {
+            this.page.url = '';  // Replace PAGE_URL with your page's canonical URL variable
+            this.page.identifier = ''; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+        };
+
+        (function() { // DON'T EDIT BELOW THIS LINE
+            var d = document, s = d.createElement('script');
+            s.src = 'https://airclouds-blog.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+
+
+
+</html>

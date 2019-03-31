@@ -155,8 +155,16 @@
 <p>xmpp中，服务端、客户数据交换时，最小XML数据单位 叫 stanza。如上图，绿色的就是一个stanza，黑色的也是一个stanza。Stanza有几种类型: <code>message</code>, <code>iq</code>, <code>presence</code>。 </p>
 <h4 id="The-Message-Stanza"><a href="#The-Message-Stanza" class="headerlink" title="The Message Stanza"></a>The Message Stanza</h4><p>The <message> stanza is meant to be used to send data between XMPP entities.</message></p>
 <p><img src="/img/32c16f22-9862-45e8-b15f-1b1eceb7b30f/6fe8a15e.png" alt="6fe8a15e.png"></p>
-<p> from：发送方<br> to： 接收方<br> Message的type属性有几种类型: </p>
-<p>The most used are the <code>&lt;message type=”chat”/&gt;</code> ( chat message stanza) , the <code>&lt; message type=”groupchat”/&gt;</code> ( groupchat message stanza) and the <code>&lt; message type=”error”/&gt;</code> (error message stanza)</p>
+<ul>
+<li>from：发送方</li>
+<li>to： 接收方</li>
+<li>body: 消息内容</li>
+<li>type 有几种类型:<br>  -<code>&lt;message type=”chat”/&gt;</code> ( chat message stanza) <ul>
+<li><code>&lt; message type=”groupchat”/&gt;</code> ( groupchat message stanza)</li>
+<li><code>&lt; message type=”error”/&gt;</code> (error message stanza)</li>
+</ul>
+</li>
+</ul>
 <h4 id="The-Presence-Stanza"><a href="#The-Presence-Stanza" class="headerlink" title="The Presence Stanza"></a>The Presence Stanza</h4><p>用来表示在线状态的</p>
 <p><img src="/img/32c16f22-9862-45e8-b15f-1b1eceb7b30f/0fbe995b.png" alt="0fbe995b.png"></p>
 <p><code>show</code> 标签里可能会有的几种状态:<br><code>chat</code> : online and available for chat ;<br><code>away</code> : 暂时离开<br><code>xa</code> : 长时间离开<br><code>dnd</code>: 请勿打扰</p>
