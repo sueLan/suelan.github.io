@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="undefined">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+        JWT 入门 - undefined
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+<body>
+
+<div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> The best way out is always through </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar">
+            <img src="/img/avatar.jpeg" />
+        </div>
+        <div class="name">
+            <i>蓝容</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#JWT"><span class="toc-text">JWT</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是JSON-Web-Tokens-JWT-？"><span class="toc-text">什么是JSON Web Tokens (JWT)？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#怎么用？"><span class="toc-text">怎么用？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结构"><span class="toc-text">结构</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-生成header"><span class="toc-text">1. 生成header</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-生成payload"><span class="toc-text">2. 生成payload</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-生成signature"><span class="toc-text">3.生成signature</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#验证"><span class="toc-text">验证</span></a></li></ol></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+        <div class="index-about-mobile">
+            <i> The best way out is always through </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        
+
+
+<div class="post-container">
+    <div class="post-title">
+        JWT 入门
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2019-04-03 10:40:16</span></span>
+        
+        <span class="attr">标签：/
+        
+        <a class="tag" href="/tags/#-- Auth" title="-- Auth">-- Auth</a>
+        <span>/</span>
+        
+        
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span>
+</span>
+</span>
+    </div>
+    <div class="post-content ">
+        <h1 id="JWT"><a href="#JWT" class="headerlink" title="JWT"></a>JWT</h1><h2 id="什么是JSON-Web-Tokens-JWT-？"><a href="#什么是JSON-Web-Tokens-JWT-？" class="headerlink" title="什么是JSON Web Tokens (JWT)？"></a>什么是JSON Web Tokens (JWT)？</h2><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">JSON Web Token (JWT) is <span class="keyword">a</span> compact, <span class="built_in">URL</span>-safe means <span class="keyword">of</span> representing</span><br><span class="line"> claims <span class="built_in">to</span> be transferred between <span class="literal">two</span> parties.  The claims <span class="keyword">in</span> <span class="keyword">a</span> JWT</span><br><span class="line"> are encoded <span class="keyword">as</span> <span class="keyword">a</span> JSON object that is used <span class="keyword">as</span> <span class="keyword">the</span> payload <span class="keyword">of</span> <span class="keyword">a</span> JSON</span><br><span class="line"> Web Signature (JWS) structure <span class="keyword">or</span> <span class="keyword">as</span> <span class="keyword">the</span> plaintext <span class="keyword">of</span> <span class="keyword">a</span> JSON Web</span><br><span class="line"> Encryption (JWE) structure, enabling <span class="keyword">the</span> claims <span class="built_in">to</span> be digitally</span><br><span class="line"> signed <span class="keyword">or</span> integrity protected <span class="keyword">with</span> <span class="keyword">a</span> Message Authentication Code</span><br><span class="line"> (MAC) <span class="keyword">and</span>/<span class="keyword">or</span> encrypted.</span><br></pre></td></tr></table></figure>
+<h2 id="怎么用？"><a href="#怎么用？" class="headerlink" title="怎么用？"></a>怎么用？</h2><p>authentication时，当user成功登录，server生成access token, 发送给user；user请求server时带上JWT，server通过JWT验证是否是可信任的客户端请求了。</p>
+<p><img src="https://cdn-images-1.medium.com/max/1600/1*SSXUQJ1dWjiUrDoKaaiGLA.png" alt="1*SSXUQJ1dWjiUrDoKaaiGLA.png"></p>
+<h2 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h2><p>在客户端看来JWT是一串encode加密过的字符串，<code>header.payload.signature</code>，如下图左边。但它decode后其实是下图右边的JSON结构体</p>
+<p><img src="https://cdn.auth0.com/blog/legacy-app-auth/legacy-app-auth-5.png" alt="legacy-app-auth-5.png"></p>
+<h4 id="1-生成header"><a href="#1-生成header" class="headerlink" title="1. 生成header"></a>1. 生成header</h4><p>e.g.<br><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"alg"</span>: <span class="string">"HS256"</span>,</span><br><span class="line">  <span class="attr">"typ"</span>: <span class="string">"JWT"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这里，alg的值指定用HMAC-SHA256算法签名</p>
+<h4 id="2-生成payload"><a href="#2-生成payload" class="headerlink" title="2. 生成payload"></a>2. 生成payload</h4><p>包含用户相关的信息<br><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">The <span class="keyword">second</span> part <span class="keyword">of</span> <span class="keyword">the</span> <span class="keyword">token</span> is <span class="keyword">the</span> payload, which <span class="keyword">contains</span> <span class="keyword">the</span> claims. </span><br><span class="line">Claims are statements about <span class="keyword">an</span> entity (typically, <span class="keyword">the</span> user) <span class="keyword">and</span> additional data.</span><br></pre></td></tr></table></figure></p>
+<p>有三种<a href="https://tools.ietf.org/html/rfc7519#section-4.1" target="_blank" rel="noopener">claims</a>: registered, public, and private claims.</p>
+<p>e.g.<br><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">  <span class="attr">"sub"</span>: <span class="string">"1234567890"</span>,</span><br><span class="line">  <span class="attr">"name"</span>: <span class="string">"John Doe"</span>,</span><br><span class="line">  <span class="attr">"iat"</span>: <span class="number">1516239022</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="3-生成signature"><a href="#3-生成signature" class="headerlink" title="3.生成signature"></a>3.生成signature</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">HMACSHA256(</span><br><span class="line">  base64UrlEncode(header) + <span class="string">"."</span> +</span><br><span class="line">  base64UrlEncode(payload),</span><br><span class="line">  your<span class="number">-256</span>-bit-secret</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>把header跟payload encode结构后，用’.’连接，生成</p>
+<p><span style="color:#fb015b"> eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9</span><span>.</span><br><span style="color:#d63aff"> eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ</span></p>
+<p>再用指定的hash算法(例子是HS256),用私钥（服务端的）生成签名.</p>
+<p><span style="color:#00b9f1">SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c<span></span></span></p>
+<h2 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h2><p>如图1， JWT由Authentication server生成， 在client认证后发给client； client请求application server的时候带上JWT，application server在认证阶段从Authentiation server那儿拿到scret key；用同样算法生成signature， 跟client发来的JWT的signature做比较，看是否match。</p>
+<p><a href="https://medium.com/vandium-software/5-easy-steps-to-understanding-json-web-tokens-jwt-1164c0adfcec" target="_blank" rel="noopener">5 Easy Steps to Understanding JSON Web Tokens (JWT)</a><br><a href="https://jwt.io/introduction/" target="_blank" rel="noopener">JSON Web Token Introduction - jwt.io</a><br><a href="https://tools.ietf.org/html/rfc7519" target="_blank" rel="noopener">RFC 7519 - JSON Web Token (JWT)</a></p>
+
+        
+            <div class="donate-container">
+    <div class="donate-button">
+        <button id="donate-button">赞赏</button>
+    </div>
+    <div class="donate-img-container hide" id="donate-img-container">
+        <img id="donate-img" src="" data-src="/img/donate.jpeg">
+        <p> 感谢鼓励 </p>
+    </div>
+</div>
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+    </ul>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        Created By <a href="https://hexo.io/">Hexo</a>  Theme <a href="https://github.com/aircloud/hexo-theme-aircloud">AirCloud</a></p>
+</footer>
+
+
+
+
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+    <script>
+        /**
+         *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+         *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+        */
+        if( '' || '')
+        var disqus_config = function () {
+            this.page.url = '';  // Replace PAGE_URL with your page's canonical URL variable
+            this.page.identifier = ''; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+        };
+
+        (function() { // DON'T EDIT BELOW THIS LINE
+            var d = document, s = d.createElement('script');
+            s.src = 'https://airclouds-blog.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+
+
+
+</html>
