@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="undefined">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+        XMPP(6):XMPP-消息存储与拉取历史消息 - undefined
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+<body>
+
+<div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> The best way out is always through </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar">
+            <img src="/img/avatar.jpeg" />
+        </div>
+        <div class="name">
+            <i>蓝容</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#场景需求"><span class="toc-text">场景需求</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#存储"><span class="toc-text">存储</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#查询"><span class="toc-text">查询</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-A-user-queries-their-archive-for-messages"><span class="toc-text">1. A user queries their archive for messages</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-Their-server-sends-the-matching-messages"><span class="toc-text">2. Their server sends the matching messages</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-Server-returns-the-result-IQ-to-signal-the-end"><span class="toc-text">3. Server returns the result IQ to signal the end</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#过滤器"><span class="toc-text">过滤器</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-根据JID过滤"><span class="toc-text">1. 根据JID过滤</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-根据接收时间过滤"><span class="toc-text">2. 根据接收时间过滤</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-限定results的数量"><span class="toc-text">3. 限定results的数量</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-分页拉取消息"><span class="toc-text">4. 分页拉取消息</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-其他字段的筛选"><span class="toc-text">5.其他字段的筛选</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#返回的message-stanza-结构"><span class="toc-text">返回的message stanza 结构</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MUC-Archive"><span class="toc-text">MUC Archive</span></a>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+        <div class="index-about-mobile">
+            <i> The best way out is always through </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        
+
+
+<div class="post-container">
+    <div class="post-title">
+        XMPP(6):XMPP-消息存储与拉取历史消息
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2019-04-10 22:09:53</span></span>
+        
+        <span class="attr">标签：/
+        
+        <a class="tag" href="/tags/#XMPP" title="XMPP">XMPP</a>
+        <span>/</span>
+        
+        
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span>
+</span>
+</span>
+    </div>
+    <div class="post-content ">
+        <p>XEP-0313定义了XMPP消息存储的规则。</p>
+<h3 id="场景需求"><a href="#场景需求" class="headerlink" title="场景需求"></a>场景需求</h3><p>0313协议主要有这些场景： </p>
+<ul>
+<li>同账号多客户端之间的历史消息同步</li>
+<li>客户端拉取历史消息，按日期排序展示（想想我们在微信的历史消息）</li>
+<li>分页拉取消息</li>
+</ul>
+<h3 id="存储"><a href="#存储" class="headerlink" title="存储"></a>存储</h3><ol>
+<li>单条消息存储包括： </li>
+</ol>
+<ul>
+<li>消息发送跟接收的时间戳</li>
+<li>from 跟 to 的JID</li>
+<li>server-assigned UID</li>
+<li>message stanza </li>
+</ul>
+<ol start="2">
+<li>消息的顺序要保存： 依赖timestamp要小心，因为多条消息可能共享时间戳</li>
+<li>超过一定数量，可删除旧信息</li>
+<li>群聊记录用MAM服务</li>
+<li>archive id <code>&lt;stanza-id/&gt;</code><br>被archived过的消息，server要给它加上stanza-id<br>Example 1. Client receives a message that has been archived</li>
+</ol>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">message</span> <span class="attr">to</span>=<span class="string">'juliet@capulet.lit/balcony'</span></span></span><br><span class="line"><span class="tag">         <span class="attr">from</span>=<span class="string">'romeo@montague.lit/orchard'</span></span></span><br><span class="line"><span class="tag">         <span class="attr">type</span>=<span class="string">'chat'</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">body</span>&gt;</span>Call me but love, and I'll be new baptized; Henceforth I never will be Romeo.<span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">stanza-id</span> <span class="attr">xmlns</span>=<span class="string">'urn:xmpp:sid:0'</span> <span class="attr">by</span>=<span class="string">'juliet@capulet.lit'</span> <span class="attr">id</span>=<span class="string">'28482-98726-73623'</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">message</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>stanza-id: archive ID </p>
+<h3 id="查询"><a href="#查询" class="headerlink" title="查询"></a>查询</h3><h4 id="1-A-user-queries-their-archive-for-messages"><a href="#1-A-user-queries-their-archive-for-messages" class="headerlink" title="1. A user queries their archive for messages"></a>1. A user queries their archive for messages</h4><p>用消息UID查询</p>
+<p>‘urn:xmpp:mam:2’ namespace, indicating the UID of the first and last message of the (possibly limited) result set. </p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">iq</span> <span class="attr">type</span>=<span class="string">'set'</span> <span class="attr">id</span>=<span class="string">'juliet1'</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">query</span> <span class="attr">xmlns</span>=<span class="string">'urn:xmpp:mam:2'</span> <span class="attr">queryid</span>=<span class="string">'f27'</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">iq</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h4 id="2-Their-server-sends-the-matching-messages"><a href="#2-Their-server-sends-the-matching-messages" class="headerlink" title="2. Their server sends the matching messages"></a>2. Their server sends the matching messages</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">message</span> <span class="attr">id</span>=<span class="string">'aeb213'</span> <span class="attr">to</span>=<span class="string">'juliet@capulet.lit/chamber'</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">result</span> <span class="attr">xmlns</span>=<span class="string">'urn:xmpp:mam:2'</span> <span class="attr">queryid</span>=<span class="string">'f27'</span> <span class="attr">id</span>=<span class="string">'28482-98726-73623'</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">forwarded</span> <span class="attr">xmlns</span>=<span class="string">'urn:xmpp:forward:0'</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">delay</span> <span class="attr">xmlns</span>=<span class="string">'urn:xmpp:delay'</span> <span class="attr">stamp</span>=<span class="string">'2010-07-10T23:08:25Z'</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">message</span> <span class="attr">xmlns</span>=<span class="string">'jabber:client'</span> <span class="attr">from</span>=<span class="string">"witch@shakespeare.lit"</span> <span class="attr">to</span>=<span class="string">"macbeth@shakespeare.lit"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">body</span>&gt;</span>Hail to thee<span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">message</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">forwarded</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">result</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">message</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h4 id="3-Server-returns-the-result-IQ-to-signal-the-end"><a href="#3-Server-returns-the-result-IQ-to-signal-the-end" class="headerlink" title="3. Server returns the result IQ to signal the end"></a>3. Server returns the result IQ to signal the end</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">iq</span> <span class="attr">type</span>=<span class="string">'result'</span> <span class="attr">id</span>=<span class="string">'juliet1'</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">fin</span> <span class="attr">xmlns</span>=<span class="string">'urn:xmpp:mam:2'</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">set</span> <span class="attr">xmlns</span>=<span class="string">'http://jabber.org/protocol/rsm'</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">first</span> <span class="attr">index</span>=<span class="string">'0'</span>&gt;</span>28482-98726-73623<span class="tag">&lt;/<span class="name">first</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">last</span>&gt;</span>09af3-cc343-b409f<span class="tag">&lt;/<span class="name">last</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">set</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">fin</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">iq</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>server的这条iq stanza标记查询结果结束。</p>
+<h3 id="过滤器"><a href="#过滤器" class="headerlink" title="过滤器"></a>过滤器</h3><h4 id="1-根据JID过滤"><a href="#1-根据JID过滤" class="headerlink" title="1. 根据JID过滤"></a>1. 根据JID过滤</h4><p><code>with</code> 字段 + JID(Bare JID)： 会拿到to或from地址匹配JID的信息; 如果没有with, 服务端返回query指定的时间段内的消息。 </p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Example 6. Querying for all messages to/from a particular JID¶</span><br><span class="line"><span class="tag">&lt;<span class="name">iq</span> <span class="attr">type</span>=<span class="string">'set'</span> <span class="attr">id</span>=<span class="string">'juliet1'</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">query</span> <span class="attr">xmlns</span>=<span class="string">'urn:xmpp:mam:2'</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">x</span> <span class="attr">xmlns</span>=<span class="string">'jabber:x:data'</span> <span class="attr">type</span>=<span class="string">'submit'</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">field</span> <span class="attr">var</span>=<span class="string">'FORM_TYPE'</span> <span class="attr">type</span>=<span class="string">'hidden'</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">value</span>&gt;</span>urn:xmpp:mam:2<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">field</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">field</span> <span class="attr">var</span>=<span class="string">'with'</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">value</span>&gt;</span>juliet@capulet.lit<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">field</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">x</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">query</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">iq</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p><strong>使用场景：</strong><br>A想查询跟B的聊天记录，with字段的value设为B, 服务端返回的messages中，既有B发送给A的msg，也有A发送给B的msg。 </p>
+<p><img src="/img/f3eaaed1-370f-4abc-93b2-a3312d3ebcd4/3c4760c7.png" alt="3c4760c7.png"></p>
+<h4 id="2-根据接收时间过滤"><a href="#2-根据接收时间过滤" class="headerlink" title="2. 根据接收时间过滤"></a>2. 根据接收时间过滤</h4><p><code>start</code> 跟 <code>end</code> 字段标记时间戳。 </p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">Example 7. Querying the archive for all messages in a certain timespan¶</span><br><span class="line"><span class="tag">&lt;<span class="name">iq</span> <span class="attr">type</span>=<span class="string">'set'</span> <span class="attr">id</span>=<span class="string">'juliet1'</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">query</span> <span class="attr">xmlns</span>=<span class="string">'urn:xmpp:mam:2'</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">x</span> <span class="attr">xmlns</span>=<span class="string">'jabber:x:data'</span> <span class="attr">type</span>=<span class="string">'submit'</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">field</span> <span class="attr">var</span>=<span class="string">'FORM_TYPE'</span> <span class="attr">type</span>=<span class="string">'hidden'</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">value</span>&gt;</span>urn:xmpp:mam:2<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">field</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">field</span> <span class="attr">var</span>=<span class="string">'start'</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">value</span>&gt;</span>2010-06-07T00:00:00Z<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">field</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">field</span> <span class="attr">var</span>=<span class="string">'end'</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">value</span>&gt;</span>2010-07-07T13:23:54Z<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">field</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">x</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">query</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">iq</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>如果<code>end</code> 缺失， server会自动认为是最近的消息的存储时间</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Example 8. Querying the archive for all messages after a certain time¶</span><br><span class="line"><span class="tag">&lt;<span class="name">iq</span> <span class="attr">type</span>=<span class="string">'set'</span> <span class="attr">id</span>=<span class="string">'juliet1'</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">query</span> <span class="attr">xmlns</span>=<span class="string">'urn:xmpp:mam:2'</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">x</span> <span class="attr">xmlns</span>=<span class="string">'jabber:x:data'</span> <span class="attr">type</span>=<span class="string">'submit'</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">field</span> <span class="attr">var</span>=<span class="string">'FORM_TYPE'</span> <span class="attr">type</span>=<span class="string">'hidden'</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">value</span>&gt;</span>urn:xmpp:mam:2<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">field</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">field</span> <span class="attr">var</span>=<span class="string">'start'</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">value</span>&gt;</span>2010-08-07T00:00:00Z<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">field</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">x</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">query</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">iq</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h4 id="3-限定results的数量"><a href="#3-限定results的数量" class="headerlink" title="3. 限定results的数量"></a>3. 限定results的数量</h4><p><a href="https://xmpp.org/extensions/xep-0059.html" target="_blank" rel="noopener">Result Set Management (XEP-0059)</a> </p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">Example 9. A query using Result Set Management¶</span><br><span class="line"><span class="tag">&lt;<span class="name">iq</span> <span class="attr">type</span>=<span class="string">'set'</span> <span class="attr">id</span>=<span class="string">'q29302'</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">query</span> <span class="attr">xmlns</span>=<span class="string">'urn:xmpp:mam:2'</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">x</span> <span class="attr">xmlns</span>=<span class="string">'jabber:x:data'</span> <span class="attr">type</span>=<span class="string">'submit'</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">field</span> <span class="attr">var</span>=<span class="string">'FORM_TYPE'</span> <span class="attr">type</span>=<span class="string">'hidden'</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">value</span>&gt;</span>urn:xmpp:mam:2<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">field</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">field</span> <span class="attr">var</span>=<span class="string">'start'</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">value</span>&gt;</span>2010-08-07T00:00:00Z<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">field</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">x</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">set</span> <span class="attr">xmlns</span>=<span class="string">'http://jabber.org/protocol/rsm'</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">max</span>&gt;</span>10<span class="tag">&lt;/<span class="name">max</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">set</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">query</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">iq</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>这个请求，指定客户端最多只能收到10条stanzas。但服务端的返回结果可能回改变<code>set</code>的内容，返回自己限定的数量，比如： 这是返回<code>start</code>时间跟<code>end</code>时间段内的20条消息。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Example 10. Server responds to client with limited results using RSM¶</span><br><span class="line"><span class="comment">&lt;!-- result messages --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">iq</span> <span class="attr">type</span>=<span class="string">'result'</span> <span class="attr">id</span>=<span class="string">'q29302'</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">fin</span> <span class="attr">xmlns</span>=<span class="string">'urn:xmpp:mam:2'</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">set</span> <span class="attr">xmlns</span>=<span class="string">'http://jabber.org/protocol/rsm'</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">first</span> <span class="attr">index</span>=<span class="string">'0'</span>&gt;</span>28482-98726-73623<span class="tag">&lt;/<span class="name">first</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">last</span>&gt;</span>09af3-cc343-b409f<span class="tag">&lt;/<span class="name">last</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">count</span>&gt;</span>20<span class="tag">&lt;/<span class="name">count</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">set</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">fin</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">iq</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h4 id="4-分页拉取消息"><a href="#4-分页拉取消息" class="headerlink" title="4. 分页拉取消息"></a>4. 分页拉取消息</h4><p>如果之前已经获取了m条消息，客户端可以再发送同样的请求，拉取下一页消息。<code>set</code>中要带上<code>after</code>(上次拉取到的最后一条消息的UID)</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Example 11. A page query using Result Set Management¶</span><br><span class="line"><span class="tag">&lt;<span class="name">iq</span> <span class="attr">type</span>=<span class="string">'set'</span> <span class="attr">id</span>=<span class="string">'q29303'</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">query</span> <span class="attr">xmlns</span>=<span class="string">'urn:xmpp:mam:2'</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">x</span> <span class="attr">xmlns</span>=<span class="string">'jabber:x:data'</span> <span class="attr">type</span>=<span class="string">'submit'</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">field</span> <span class="attr">var</span>=<span class="string">'FORM_TYPE'</span> <span class="attr">type</span>=<span class="string">'hidden'</span>&gt;</span><span class="tag">&lt;<span class="name">value</span>&gt;</span>urn:xmpp:mam:2<span class="tag">&lt;/<span class="name">value</span>&gt;</span><span class="tag">&lt;/<span class="name">field</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">field</span> <span class="attr">var</span>=<span class="string">'start'</span>&gt;</span><span class="tag">&lt;<span class="name">value</span>&gt;</span>2010-08-07T00:00:00Z<span class="tag">&lt;/<span class="name">value</span>&gt;</span><span class="tag">&lt;/<span class="name">field</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">x</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">set</span> <span class="attr">xmlns</span>=<span class="string">'http://jabber.org/protocol/rsm'</span>&gt;</span></span><br><span class="line">         <span class="tag">&lt;<span class="name">max</span>&gt;</span>10<span class="tag">&lt;/<span class="name">max</span>&gt;</span></span><br><span class="line">         <span class="tag">&lt;<span class="name">after</span>&gt;</span>09af3-cc343-b409f<span class="tag">&lt;/<span class="name">after</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">set</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">query</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">iq</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>server返回最后一页消息，会在 fin里头带上<code>complete</code>属性，值为<code>ture</code></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Example 12. Server completes a result with the last page of messages¶</span><br><span class="line"><span class="comment">&lt;!-- result messages --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">iq</span> <span class="attr">type</span>=<span class="string">'result'</span> <span class="attr">id</span>=<span class="string">'u29303'</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">fin</span> <span class="attr">xmlns</span>=<span class="string">'urn:xmpp:mam:2'</span> <span class="attr">complete</span>=<span class="string">'true'</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">set</span> <span class="attr">xmlns</span>=<span class="string">'http://jabber.org/protocol/rsm'</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">first</span> <span class="attr">index</span>=<span class="string">'0'</span>&gt;</span>23452-4534-1<span class="tag">&lt;/<span class="name">first</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">last</span>&gt;</span>390-2342-22<span class="tag">&lt;/<span class="name">last</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">count</span>&gt;</span>16<span class="tag">&lt;/<span class="name">count</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">set</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">fin</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">iq</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p><strong>使用场景：</strong></p>
+<p>A客户端本地存储跟B的聊天信息， 最后一条message的id是<code>09af3-cc343-b409f</code>。 现在A想看看最近的消息（<code>09af3-cc343-b409f</code>后的message，可以发送iq请求中带上<code>&lt;after&gt;09af3-cc343-b409f&lt;/after&gt;</code>。差量请求最新消息，基于游标的分页。</p>
+<h4 id="5-其他字段的筛选"><a href="#5-其他字段的筛选" class="headerlink" title="5.其他字段的筛选"></a>5.其他字段的筛选</h4><p>客户端查询服务端支持的其他字段<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Example 13. Client requests supported query fields¶</span><br><span class="line"><span class="tag">&lt;<span class="name">iq</span> <span class="attr">type</span>=<span class="string">'get'</span> <span class="attr">id</span>=<span class="string">'form1'</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">query</span> <span class="attr">xmlns</span>=<span class="string">'urn:xmpp:mam:2'</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">iq</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">Example 14. Server returns supported fields¶</span><br><span class="line"><span class="tag">&lt;<span class="name">iq</span> <span class="attr">type</span>=<span class="string">'result'</span> <span class="attr">id</span>=<span class="string">'form1'</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">query</span> <span class="attr">xmlns</span>=<span class="string">'urn:xmpp:mam:2'</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">x</span> <span class="attr">xmlns</span>=<span class="string">'jabber:x:data'</span> <span class="attr">type</span>=<span class="string">'form'</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">field</span> <span class="attr">type</span>=<span class="string">'hidden'</span> <span class="attr">var</span>=<span class="string">'FORM_TYPE'</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">value</span>&gt;</span>urn:xmpp:mam:2<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">field</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">field</span> <span class="attr">type</span>=<span class="string">'jid-single'</span> <span class="attr">var</span>=<span class="string">'with'</span>/&gt;</span></span><br><span class="line">      // 按消息received时间查询</span><br><span class="line">      <span class="tag">&lt;<span class="name">field</span> <span class="attr">type</span>=<span class="string">'text-single'</span> <span class="attr">var</span>=<span class="string">'start'</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">field</span> <span class="attr">type</span>=<span class="string">'text-single'</span> <span class="attr">var</span>=<span class="string">'end'</span>/&gt;</span></span><br><span class="line">      // 按文本查询</span><br><span class="line">      <span class="tag">&lt;<span class="name">field</span> <span class="attr">type</span>=<span class="string">'text-single'</span> <span class="attr">var</span>=<span class="string">'urn:example:xmpp:free-text-search'</span>/&gt;</span></span><br><span class="line">      // stanza内容</span><br><span class="line">      <span class="tag">&lt;<span class="name">field</span> <span class="attr">type</span>=<span class="string">'text-single'</span> <span class="attr">var</span>=<span class="string">'urn:example:xmpp:stanza-content'</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">x</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">query</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">iq</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="返回的message-stanza-结构"><a href="#返回的message-stanza-结构" class="headerlink" title="返回的message stanza 结构"></a>返回的message stanza 结构</h3><ul>
+<li><code>message</code>被封装在<code>forwarded</code>元素中。 <a href="https://xmpp.org/extensions/xep-0297.html" target="_blank" rel="noopener">XEP-0297: Stanza Forwarding</a></li>
+<li>带<code>result</code> 元素， 其属性id是这条message的UID</li>
+<li>delay元素 <a href="https://xmpp.org/extensions/xep-0203.html" target="_blank" rel="noopener">XEP-0203: Delayed Delivery</a> message被收到的时间, UTC时间戳格式</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">Example 16. Server returns two matching messages¶</span><br><span class="line"><span class="tag">&lt;<span class="name">message</span> <span class="attr">id</span>=<span class="string">'aeb213'</span> <span class="attr">to</span>=<span class="string">'juliet@capulet.lit/chamber'</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">result</span> <span class="attr">xmlns</span>=<span class="string">'urn:xmpp:mam:2'</span> <span class="attr">queryid</span>=<span class="string">'f27'</span> <span class="attr">id</span>=<span class="string">'28482-98726-73623'</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">forwarded</span> <span class="attr">xmlns</span>=<span class="string">'urn:xmpp:forward:0'</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">delay</span> <span class="attr">xmlns</span>=<span class="string">'urn:xmpp:delay'</span> <span class="attr">stamp</span>=<span class="string">'2010-07-10T23:08:25Z'</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">message</span> <span class="attr">xmlns</span>=<span class="string">'jabber:client'</span></span></span><br><span class="line"><span class="tag">        <span class="attr">to</span>=<span class="string">'juliet@capulet.lit/balcony'</span></span></span><br><span class="line"><span class="tag">        <span class="attr">from</span>=<span class="string">'romeo@montague.lit/orchard'</span></span></span><br><span class="line"><span class="tag">        <span class="attr">type</span>=<span class="string">'chat'</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">body</span>&gt;</span>Call me but love, and I'll be new baptized; Henceforth I never will be Romeo.<span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">message</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">forwarded</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">result</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">message</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">message</span> <span class="attr">id</span>=<span class="string">'aeb214'</span> <span class="attr">to</span>=<span class="string">'juliet@capulet.lit/chamber'</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">result</span> <span class="attr">xmlns</span>=<span class="string">'urn:xmpp:mam:2'</span> <span class="attr">queryid</span>=<span class="string">'f27'</span> <span class="attr">id</span>=<span class="string">'5d398-28273-f7382'</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">forwarded</span> <span class="attr">xmlns</span>=<span class="string">'urn:xmpp:forward:0'</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">delay</span> <span class="attr">xmlns</span>=<span class="string">'urn:xmpp:delay'</span> <span class="attr">stamp</span>=<span class="string">'2010-07-10T23:09:32Z'</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">message</span> <span class="attr">xmlns</span>=<span class="string">'jabber:client'</span></span></span><br><span class="line"><span class="tag">         <span class="attr">to</span>=<span class="string">'romeo@montague.lit/orchard'</span></span></span><br><span class="line"><span class="tag">         <span class="attr">from</span>=<span class="string">'juliet@capulet.lit/balcony'</span></span></span><br><span class="line"><span class="tag">         <span class="attr">type</span>=<span class="string">'chat'</span> <span class="attr">id</span>=<span class="string">'8a54s'</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">body</span>&gt;</span>What man art thou that thus bescreen'd in night so stumblest on my counsel?<span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">message</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">forwarded</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">result</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">message</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h2 id="MUC-Archive"><a href="#MUC-Archive" class="headerlink" title="MUC Archive"></a>MUC Archive</h2><ul>
+<li>存储所有发送给roomJid的message</li>
+<li>不包含<code>private message</code></li>
+<li>user需要权限查询群历史聊天记录</li>
+<li><code>forward</code> stanza中带有<code>to</code>属性,值是roomJid，<code>from</code>值是userJid </li>
+<li><code>x</code>里有该消息的发送者Jid<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">Example 17. Server returns MUC messages¶</span><br><span class="line"><span class="tag">&lt;<span class="name">message</span> <span class="attr">id</span>=<span class="string">'iasd207'</span> <span class="attr">from</span>=<span class="string">'coven@chat.shakespeare.lit'</span> <span class="attr">to</span>=<span class="string">'hag66@shakespeare.lit/pda'</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">result</span> <span class="attr">xmlns</span>=<span class="string">'urn:xmpp:mam:2'</span> <span class="attr">queryid</span>=<span class="string">'g27'</span> <span class="attr">id</span>=<span class="string">'34482-21985-73620'</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">forwarded</span> <span class="attr">xmlns</span>=<span class="string">'urn:xmpp:forward:0'</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">delay</span> <span class="attr">xmlns</span>=<span class="string">'urn:xmpp:delay'</span> <span class="attr">stamp</span>=<span class="string">'2002-10-13T23:58:37Z'</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">message</span> <span class="attr">xmlns</span>=<span class="string">"jabber:client"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">from</span>=<span class="string">'coven@chat.shakespeare.lit/firstwitch'</span></span></span><br><span class="line"><span class="tag">        <span class="attr">id</span>=<span class="string">'162BEBB1-F6DB-4D9A-9BD8-CFDCC801A0B2'</span></span></span><br><span class="line"><span class="tag">        <span class="attr">type</span>=<span class="string">'groupchat'</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">body</span>&gt;</span>Thrice the brinded cat hath mew'd.<span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">x</span> <span class="attr">xmlns</span>=<span class="string">'http://jabber.org/protocol/muc#user'</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">item</span> <span class="attr">affiliation</span>=<span class="string">'none'</span></span></span><br><span class="line"><span class="tag">                <span class="attr">jid</span>=<span class="string">'witch1@shakespeare.lit'</span></span></span><br><span class="line"><span class="tag">                <span class="attr">role</span>=<span class="string">'participant'</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">x</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">message</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">forwarded</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">result</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">message</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">message</span> <span class="attr">id</span>=<span class="string">'iasd207'</span> <span class="attr">from</span>=<span class="string">'coven@chat.shakespeare.lit'</span> <span class="attr">to</span>=<span class="string">'hag66@shakespeare.lit/pda'</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">result</span> <span class="attr">xmlns</span>=<span class="string">'urn:xmpp:mam:2'</span> <span class="attr">queryid</span>=<span class="string">'g27'</span> <span class="attr">id</span>=<span class="string">'34482-21985-73620'</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">forwarded</span> <span class="attr">xmlns</span>=<span class="string">'urn:xmpp:forward:0'</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">delay</span> <span class="attr">xmlns</span>=<span class="string">'urn:xmpp:delay'</span> <span class="attr">stamp</span>=<span class="string">'2002-10-13T23:58:43Z'</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">message</span> <span class="attr">xmlns</span>=<span class="string">"jabber:client"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">from</span>=<span class="string">'coven@chat.shakespeare.lit/secondwitch'</span></span></span><br><span class="line"><span class="tag">        <span class="attr">id</span>=<span class="string">'90057840-30FD-4141-AA44-103EEDF218FC'</span></span></span><br><span class="line"><span class="tag">        <span class="attr">type</span>=<span class="string">'groupchat'</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">body</span>&gt;</span>Thrice and once the hedge-pig whined.<span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">x</span> <span class="attr">xmlns</span>=<span class="string">'http://jabber.org/protocol/muc#user'</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">item</span> <span class="attr">affiliation</span>=<span class="string">'none'</span></span></span><br><span class="line"><span class="tag">                <span class="attr">jid</span>=<span class="string">'witch2@shakespeare.lit'</span></span></span><br><span class="line"><span class="tag">                <span class="attr">role</span>=<span class="string">'participant'</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">x</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">message</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">forwarded</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">result</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">message</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><a href="https://xmpp.org/extensions/xep-0313.html#intro" target="_blank" rel="noopener">XEP-0313: Message Archive Management</a></p>
+
+        
+            <div class="donate-container">
+    <div class="donate-button">
+        <button id="donate-button">赞赏</button>
+    </div>
+    <div class="donate-img-container hide" id="donate-img-container">
+        <img id="donate-img" src="" data-src="/img/donate.jpeg">
+        <p> 感谢鼓励 </p>
+    </div>
+</div>
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+    </ul>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        Created By <a href="https://hexo.io/">Hexo</a>  Theme <a href="https://github.com/aircloud/hexo-theme-aircloud">AirCloud</a></p>
+</footer>
+
+
+
+
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+    <script>
+        /**
+         *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+         *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+        */
+        if( '' || '')
+        var disqus_config = function () {
+            this.page.url = '';  // Replace PAGE_URL with your page's canonical URL variable
+            this.page.identifier = ''; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+        };
+
+        (function() { // DON'T EDIT BELOW THIS LINE
+            var d = document, s = d.createElement('script');
+            s.src = 'https://airclouds-blog.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+
+
+
+</html>
