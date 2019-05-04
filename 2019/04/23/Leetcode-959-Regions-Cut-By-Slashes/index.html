@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="undefined">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+        Leetcode 959. Regions Cut By Slashes 笔记 - undefined
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+<body>
+
+<div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> The best way out is always through </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar">
+            <img src="/img/avatar.jpeg" />
+        </div>
+        <div class="name">
+            <i>蓝容</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Solution1-DFS"><span class="toc-text">Solution1: DFS</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#分析："><span class="toc-text">分析：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Solution2-DSU"><span class="toc-text">Solution2: DSU</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#分析：-1"><span class="toc-text">分析：</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#DSU"><span class="toc-text">DSU:</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#分割成4个三角形，-上下左右"><span class="toc-text">分割成4个三角形， 上下左右</span></a></li></ol></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+        <div class="index-about-mobile">
+            <i> The best way out is always through </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        
+
+
+<div class="post-container">
+    <div class="post-title">
+        Leetcode 959. Regions Cut By Slashes 笔记
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2019-04-23 10:23:33</span></span>
+        
+        <span class="attr">标签：/
+        
+        <a class="tag" href="/tags/#-- Algorithm" title="-- Algorithm">-- Algorithm</a>
+        <span>/</span>
+        
+        
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span>
+</span>
+</span>
+    </div>
+    <div class="post-content ">
+        <p>题目：<a href="https://leetcode.com/problems/regions-cut-by-slashes/description/" target="_blank" rel="noopener">https://leetcode.com/problems/regions-cut-by-slashes/description/</a></p>
+<h2 id="Solution1-DFS"><a href="#Solution1-DFS" class="headerlink" title="Solution1: DFS"></a>Solution1: DFS</h2><p>Time Complexity::  $O(n^2)$</p>
+<h3 id="分析："><a href="#分析：" class="headerlink" title="分析："></a>分析：</h3><p><a href="https://leetcode.com/problems/regions-cut-by-slashes/discuss/205674/C++-with-picture-DFS-on-upscaled-grid" target="_blank" rel="noopener">这个神奇的思路</a>分割格子，转化为图的DFS问题。<br><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Input:</span><br><span class="line">[</span><br><span class="line">  <span class="string">"\\/"</span>,</span><br><span class="line">  <span class="string">"/\\"</span></span><br><span class="line">]</span><br></pre></td></tr></table></figure></p>
+<p>把<code>\\</code>，<code>/</code>或者<code></code>分别分割成3*3的格子。图转化为: </p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[</span><br><span class="line"> <span class="number">1</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">1</span>,</span><br><span class="line"> <span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>,</span><br><span class="line"> <span class="number">0</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">0</span></span><br><span class="line"> <span class="number">0</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">0</span></span><br><span class="line"> <span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span></span><br><span class="line"> <span class="number">1</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">1</span></span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<p>问题就变成： 计算被1分割开的区域的数量。</p>
+<p>类似的<a href="https://www.geeksforgeeks.org/find-number-of-islands/" target="_blank" rel="noopener">孤岛数量问题</a> 都是同一个问题的变种：<a href="https://www.geeksforgeeks.org/connected-components-in-an-undirected-graph/" target="_blank" rel="noopener">Counting the number of connected components in an undirected graph</a></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">dfs</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; board, <span class="keyword">int</span> i, <span class="keyword">int</span> j )</span> </span>&#123;</span><br><span class="line">    <span class="comment">// index out of range</span></span><br><span class="line">    <span class="keyword">if</span> (i &lt; <span class="number">0</span> || j &lt; <span class="number">0</span> || i &gt;= board.size() || j &gt;= board[<span class="number">0</span>].size()) <span class="keyword">return</span>;</span><br><span class="line">    <span class="comment">// this grid has been visited or it was part of a slash character</span></span><br><span class="line">    <span class="keyword">if</span> (board[i][j] == <span class="number">1</span>) <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// mark this grid visited</span></span><br><span class="line">    board[i][j] = <span class="literal">true</span>;</span><br><span class="line"></span><br><span class="line">    dfs(board, i - <span class="number">1</span>, j);</span><br><span class="line">    dfs(board, i + <span class="number">1</span>, j);</span><br><span class="line">    dfs(board, i, j - <span class="number">1</span>);</span><br><span class="line">    dfs(board, i, j + <span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">regionsBySlashes</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt;&amp; grid)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (grid.empty())</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> row = (<span class="keyword">int</span>)grid.size(), col = (<span class="keyword">int</span>)grid[<span class="number">0</span>].size();</span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; board (row * <span class="number">3</span>, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(col * <span class="number">3</span>, <span class="number">0</span>));</span><br><span class="line"></span><br><span class="line">    <span class="comment">// n*n graph represented as 3n*3n graph</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; row; ++i) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; col; ++j) &#123;</span><br><span class="line">            <span class="keyword">if</span> (grid[i][j] == <span class="string">'/'</span>) board[i * <span class="number">3</span>][j * <span class="number">3</span> + <span class="number">2</span>] = board[i * <span class="number">3</span> + <span class="number">1</span>][j * <span class="number">3</span> + <span class="number">1</span>] = board[i * <span class="number">3</span> + <span class="number">2</span>][j * <span class="number">3</span>] = <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">if</span> (grid[i][j] == <span class="string">'\\'</span>) board[i * <span class="number">3</span>][j * <span class="number">3</span>] = board[i * <span class="number">3</span> + <span class="number">1</span>][j * <span class="number">3</span> + <span class="number">1</span>] = board[i * <span class="number">3</span> + <span class="number">2</span>][j * <span class="number">3</span> + <span class="number">2</span>] = <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> cnt = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; row * <span class="number">3</span>; ++i) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; col * <span class="number">3</span>; ++j) &#123;</span><br><span class="line">            <span class="comment">// only count components connected by space</span></span><br><span class="line">            <span class="keyword">if</span> (!board[i][j]) &#123;</span><br><span class="line">               dfs(board, i, j);</span><br><span class="line">               cnt++;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> cnt;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果分割为2*2的格子，会遇到这个问题:<br><figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">Input:</span></span><br><span class="line">[</span><br><span class="line">  <span class="string">"//"</span>,</span><br><span class="line">  <span class="string">"/ "</span></span><br><span class="line">]</span><br><span class="line"><span class="symbol">Output:</span> <span class="number">5</span></span><br><span class="line"><span class="symbol">Expected:</span> <span class="number">3</span></span><br><span class="line"></span><br><span class="line"><span class="number">0101</span></span><br><span class="line"><span class="number">1010</span></span><br><span class="line"><span class="number">0100</span></span><br><span class="line"><span class="number">1000</span></span><br></pre></td></tr></table></figure></p>
+<p>01<strong>0</strong>1<br>1<strong>0</strong>10<br><strong>0</strong>100<br>1000</p>
+<p>加粗的这三个0，被分割开了。题意要求是连在一起的。</p>
+<h2 id="Solution2-DSU"><a href="#Solution2-DSU" class="headerlink" title="Solution2: DSU"></a>Solution2: DSU</h2><p>Time Complexity:  $O(n^2*\alpha(n))$<br>Space Complexity: $O(n^2)$</p>
+<h3 id="分析：-1"><a href="#分析：-1" class="headerlink" title="分析："></a>分析：</h3><h4 id="DSU"><a href="#DSU" class="headerlink" title="DSU:"></a>DSU:</h4><p><a href="https://www.youtube.com/watch?v=YKE4Vd1ysPI" target="_blank" rel="noopener">https://www.youtube.com/watch?v=YKE4Vd1ysPI</a><br><a href="https://www.youtube.com/watch?v=gpmOaSBcbYA" target="_blank" rel="noopener">https://www.youtube.com/watch?v=gpmOaSBcbYA</a></p>
+<p>DSU中用数组来表示树， 如下： </p>
+<table>
+<thead>
+<tr>
+<th>idx</th>
+<th>0</th>
+<th>1</th>
+<th>2</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>parent</td>
+<td>1</td>
+<td>-1</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+<p>parent[0] = 1, 代表node 0的parent是1； parent[2] = 1代表node 2的parent是1; parent[1] = -1, 代表它是root。 </p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">   <span class="number">1</span></span><br><span class="line"> /  \</span><br><span class="line"><span class="number">0</span>    <span class="number">2</span></span><br></pre></td></tr></table></figure>
+<p>两个operation：<br><strong>find(x)</strong>: find root of cluster in which x is </p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">  <span class="number">1</span>                   <span class="number">5</span></span><br><span class="line"> / \                 / \</span><br><span class="line"><span class="number">0</span>   <span class="number">2</span>               <span class="number">6</span>   <span class="number">7</span></span><br><span class="line">   / \                   \</span><br><span class="line">  <span class="number">3</span>   <span class="number">4</span>                  <span class="number">8</span></span><br></pre></td></tr></table></figure>
+<p>比如： 我们想找3跟8所在cluster的root， find(3) == 1,  find(8) == 5</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*递归查找root*/</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">find</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> parent[])</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> x_root = x; </span><br><span class="line">    <span class="keyword">while</span> (parent[x_root]!= <span class="number">-1</span>) &#123;</span><br><span class="line">        x_root = parent[x_root];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> x_root;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>union(x, y)</strong>: union two cluster where x, y are in </p>
+<p>比如： 我们想union(3, 8),  就要先找到3的x_root， 跟8的y_root，然后合并两个root.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">union</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> y, <span class="keyword">int</span> parent[])</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> x_root = find(x, parent);</span><br><span class="line">    <span class="keyword">int</span> y_root = find(y, parent); </span><br><span class="line">    <span class="keyword">if</span> (x_root == y_root) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>; </span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// y_root 变成 x_root的根</span></span><br><span class="line">        parent[x_root] = y_root;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">        <span class="number">5</span></span><br><span class="line">   /   / \</span><br><span class="line">  <span class="number">1</span>   <span class="number">6</span>   <span class="number">7</span></span><br><span class="line"> / \       \</span><br><span class="line"><span class="number">0</span>   <span class="number">2</span>       <span class="number">8</span></span><br><span class="line">   / \ </span><br><span class="line">  <span class="number">3</span>   <span class="number">4</span></span><br></pre></td></tr></table></figure>
+<p>DSU腻害的一点是优化后，用$O(1)$的average time cost, 检测图里有咩有环</p>
+<p>两种优化： </p>
+<ul>
+<li>Make tree flat </li>
+<li>Union by rank</li>
+</ul>
+<p><a href="https://www.youtube.com/watch?v=VJnUwsE4fWA" target="_blank" rel="noopener">https://www.youtube.com/watch?v=VJnUwsE4fWA</a></p>
+<h3 id="分割成4个三角形，-上下左右"><a href="#分割成4个三角形，-上下左右" class="headerlink" title="分割成4个三角形， 上下左右"></a>分割成4个三角形， 上下左右</h3><p>每个格子分割成上下左右四个三角形。<br><a href="https://assets.leetcode.com/uploads/2018/12/15/3.png" target="_blank" rel="noopener">https://assets.leetcode.com/uploads/2018/12/15/3.png</a></p>
+<p>每个三角形给个idx: 0, 1, 2, 3分别对应 top, right, bottom, left<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">\ <span class="number">0</span> /</span><br><span class="line"><span class="number">3</span> \ <span class="number">1</span></span><br><span class="line">/ <span class="number">2</span> \</span><br></pre></td></tr></table></figure></p>
+<p>n<em>n的图；变成 4</em>n*n的数组。 初始化时数组parent的每个值都是-1, 代表每个点都是独立的。我们遍历grid中的每个点, grid[i][j]， 分别进行如下操作： </p>
+<p>‘/‘:  上、左连接； 下、右连接<br>‘\‘: 上、右连接； 左、下连接<br>‘ ‘: 四个部分连接</p>
+<p>对每个grid[i][j], 合并grid[i-1][j]的bottom三角形根grid[i][j]的top 三角形；合并grid[i][j-1]的right三角形跟grid[i][j]的left三角形。</p>
+<p>最终代码如下:</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DSU</span> &#123;</span></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="comment">// use array represents a graph</span></span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; parent;</span><br><span class="line">    <span class="keyword">int</span> row = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="comment">// num of root of independent cluster</span></span><br><span class="line">    <span class="keyword">int</span> num_root = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    DSU(<span class="keyword">int</span> n) &#123;</span><br><span class="line">        parent = <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(n * n * <span class="number">4</span>, <span class="number">-1</span>);</span><br><span class="line">        num_root = n * n * <span class="number">4</span>;</span><br><span class="line">        row = n;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">find</span><span class="params">(<span class="keyword">int</span> x)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// find the root of the cluster where x is iteratively</span></span><br><span class="line">        <span class="keyword">while</span> (parent[x] != <span class="number">-1</span>) &#123;</span><br><span class="line">            x = parent[x];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> x;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">    * return: 1: successfully; 0: failed</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">union_cluster</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> y)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> x_root = find(x);</span><br><span class="line">        <span class="keyword">int</span> y_root = find(y);</span><br><span class="line">        <span class="keyword">if</span> (x_root == y_root) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">int</span> min_ = min(x_root, y_root);</span><br><span class="line">            <span class="keyword">int</span> max_ = max(x_root, y_root);</span><br><span class="line">            parent[min_] = max_;</span><br><span class="line">            </span><br><span class="line">            num_root--;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 将图中（i,j)位置的点，映射到数组的idx</span></span><br><span class="line"><span class="comment">     * @param i</span></span><br><span class="line"><span class="comment">     * @param j</span></span><br><span class="line"><span class="comment">     * @param part</span></span><br><span class="line"><span class="comment">     * @param n</span></span><br><span class="line"><span class="comment">     * @return</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">idx</span><span class="params">(<span class="keyword">int</span> i, <span class="keyword">int</span> j, <span class="keyword">int</span> part)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> (i * row + j) * <span class="number">4</span> + part;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// https://leetcode.com/problems/regions-cut-by-slashes/discuss/205680/JavaC%2B%2BPython-Split-4-parts-and-Union-Find</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">regionsBySlashes</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt; &amp;grid)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (grid.empty()) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> n = (<span class="keyword">int</span>) grid.size();</span><br><span class="line"></span><br><span class="line">    DSU dsu = DSU(n);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; ++i) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; n; ++j) &#123;</span><br><span class="line">            <span class="comment">// merge the bottom part of the (i-1, j) grid and the top part of the grid (i, j)</span></span><br><span class="line">            <span class="keyword">if</span> (i &gt; <span class="number">0</span>) dsu.union_cluster(dsu.idx(i - <span class="number">1</span>, j, <span class="number">2</span>), dsu.idx(i, j, <span class="number">0</span>));</span><br><span class="line">            <span class="comment">// merge the right part of the (i, j-1) grid and the left part of the grid(i,j)</span></span><br><span class="line">            <span class="keyword">if</span> (j &gt; <span class="number">0</span>) dsu.union_cluster(dsu.idx(i, j - <span class="number">1</span>, <span class="number">1</span>), dsu.idx(i, j, <span class="number">3</span>));</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (grid[i][j] == <span class="string">'/'</span>) &#123;</span><br><span class="line">                <span class="comment">// union the top and the left part of this cell</span></span><br><span class="line">                dsu.union_cluster(dsu.idx(i, j, <span class="number">3</span>), dsu.idx(i, j, <span class="number">0</span>));</span><br><span class="line">                <span class="comment">// union the right and the bottom of this cell</span></span><br><span class="line">                dsu.union_cluster(dsu.idx(i, j, <span class="number">2</span>), dsu.idx(i, j, <span class="number">1</span>));</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (grid[i][j] == <span class="string">'\\'</span>) &#123;</span><br><span class="line">                dsu.union_cluster(dsu.idx(i, j, <span class="number">0</span>), dsu.idx(i, j, <span class="number">1</span>));</span><br><span class="line">                dsu.union_cluster(dsu.idx(i, j, <span class="number">2</span>), dsu.idx(i, j, <span class="number">3</span>));</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (grid[i][j] == <span class="string">' '</span>) &#123;</span><br><span class="line">                dsu.union_cluster(dsu.idx(i, j, <span class="number">0</span>), dsu.idx(i, j, <span class="number">2</span>));</span><br><span class="line">                dsu.union_cluster(dsu.idx(i, j, <span class="number">1</span>), dsu.idx(i, j, <span class="number">3</span>));</span><br><span class="line">                dsu.union_cluster(dsu.idx(i, j, <span class="number">1</span>), dsu.idx(i, j, <span class="number">2</span>));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> dsu.num_root;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><a href="https://leetcode.com/problems/regions-cut-by-slashes/discuss/205680/JavaC%2B%2BPython-Split-4-parts-and-Union-Find" target="_blank" rel="noopener">https://leetcode.com/problems/regions-cut-by-slashes/discuss/205680/JavaC%2B%2BPython-Split-4-parts-and-Union-Find</a></p>
+
+        
+            <div class="donate-container">
+    <div class="donate-button">
+        <button id="donate-button">赞赏</button>
+    </div>
+    <div class="donate-img-container hide" id="donate-img-container">
+        <img id="donate-img" src="" data-src="/img/donate.jpeg">
+        <p> 感谢鼓励 </p>
+    </div>
+</div>
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+    </ul>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        Created By <a href="https://hexo.io/">Hexo</a>  Theme <a href="https://github.com/aircloud/hexo-theme-aircloud">AirCloud</a></p>
+</footer>
+
+
+
+
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+    <script>
+        /**
+         *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+         *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+        */
+        if( '' || '')
+        var disqus_config = function () {
+            this.page.url = '';  // Replace PAGE_URL with your page's canonical URL variable
+            this.page.identifier = ''; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+        };
+
+        (function() { // DON'T EDIT BELOW THIS LINE
+            var d = document, s = d.createElement('script');
+            s.src = 'https://airclouds-blog.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+
+
+
+</html>
