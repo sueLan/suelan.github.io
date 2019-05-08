@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="undefined">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+        Leetcode Unique Paths 1-2 - undefined
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+<body>
+
+<div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> The best way out is always through </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar">
+            <img src="/img/avatar.jpeg" />
+        </div>
+        <div class="name">
+            <i>蓝容</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Unique-Paths-1-2"><span class="toc-text">Unique Paths 1-2</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#题目1：-Unique-Paths-1"><span class="toc-text">题目1： Unique Paths 1</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#动态规划解题步骤要点"><span class="toc-text">动态规划解题步骤要点:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#分析"><span class="toc-text">分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Unique-Paths-2"><span class="toc-text">Unique Paths 2</span></a></li></ol></li></ol></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+        <div class="index-about-mobile">
+            <i> The best way out is always through </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        
+
+
+<div class="post-container">
+    <div class="post-title">
+        Leetcode Unique Paths 1-2
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2019-05-08 20:57:05</span></span>
+        
+        <span class="attr">标签：/
+        
+        <a class="tag" href="/tags/#-- Algorithm" title="-- Algorithm">-- Algorithm</a>
+        <span>/</span>
+        
+        
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span>
+</span>
+</span>
+    </div>
+    <div class="post-content no-indent">
+        <h1 id="Unique-Paths-1-2"><a href="#Unique-Paths-1-2" class="headerlink" title="Unique Paths 1-2"></a>Unique Paths 1-2</h1><h2 id="题目1：-Unique-Paths-1"><a href="#题目1：-Unique-Paths-1" class="headerlink" title="题目1： Unique Paths 1"></a>题目1： <a href="https://leetcode.com/problems/unique-paths/" target="_blank" rel="noopener">Unique Paths 1</a></h2><p><img src=":storage/c5619f25-13a6-4e38-b7f8-d87ff624f5b5/e2ca2848.png" alt="e2ca2848.png"></p>
+<h3 id="动态规划解题步骤要点"><a href="#动态规划解题步骤要点" class="headerlink" title="动态规划解题步骤要点:"></a>动态规划解题步骤要点:</h3><ol>
+<li>找到最优解的结构</li>
+<li>递归方案</li>
+<li>bottom-up 或者 top-down方式求最优解</li>
+<li>优化，空间换时间</li>
+</ol>
+<h3 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h3><p>这道题很简单。</p>
+<ol>
+<li>定义一个 mxn 的二维数组grides[m][n]， 对应格子地图。对应途中grides[2][6]</li>
+</ol>
+<p><img src=":storage/c5619f25-13a6-4e38-b7f8-d87ff624f5b5/e594b650.png" alt="e594b650.png"><br>比如，我们想知道从(0,0)到(1, 2)有几条路。根据题目要求，只能往右走或者下走一个格子。<br>我们先看从(1, 1)到（1，2），两种走法： </p>
+<ul>
+<li>(2, 0) -&gt; (1, 2)</li>
+<li>(1, 1) -&gt; (1, 2)</li>
+</ul>
+<p>再看从(0, 0)到(2， 0) 只有一条路: (0, 0) -&gt; (1, 1) -&gt; (2, 0)； grides[2][0] = 1。</p>
+<p>从(0, 0)格子到(1,1)格子，有两种路: </p>
+<ul>
+<li>(0,0) -&gt; (0, 1)-&gt; (1, 1)</li>
+<li>(0,0) -&gt; (1, 0)-&gt; (1, 1)<br>那么grides(1, 1) = 2. </li>
+</ul>
+<p>很容易发现规律， grids[m][n] = grids[m - 1][n] + grides[m][n -1]; 可用递归求解。但是纯碎的递归有很多重复计算。 如下图的递归树：<br><img src=":storage/c5619f25-13a6-4e38-b7f8-d87ff624f5b5/72a3d4ef.png" alt="72a3d4ef.png"><br>所以我们引入一个record数组，记录已经计算的结果，省去重复计算。</p>
+<p>时间复杂度:<br>o(m* n)</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">inner_path</span><span class="params">(<span class="keyword">int</span> i, <span class="keyword">int</span> j, <span class="keyword">int</span> m, <span class="keyword">int</span> n, <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; record)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (i &lt; <span class="number">0</span> || j &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (record[i][j]) &#123;</span><br><span class="line">        <span class="keyword">return</span> record[i][j];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> ((i == <span class="number">0</span>) &amp;&amp; (j == <span class="number">0</span>)) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    record[i][j] = inner_path(i<span class="number">-1</span>, j, m, n, record) + inner_path(i, j<span class="number">-1</span>, m, n, record);</span><br><span class="line">    <span class="keyword">return</span> record[i][j];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">uniquePaths</span><span class="params">(<span class="keyword">int</span> m, <span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; res(m, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(n, <span class="number">0</span>));</span><br><span class="line">    <span class="keyword">return</span> inner_path(m<span class="number">-1</span>, n<span class="number">-1</span>, m, n, res);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Unique-Paths-2"><a href="#Unique-Paths-2" class="headerlink" title="Unique Paths 2"></a><a href="https://leetcode.com/problems/unique-paths-ii/" target="_blank" rel="noopener">Unique Paths 2</a></h3><p>分析：<br>跟Unique Paths 1比起来，多了障碍物。如果(i, j)是障碍物，那么grid(i, j) = 0, 表示我们无法经由(i, j) 到达终点。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">path_helper</span><span class="params">(<span class="keyword">int</span> i, <span class="keyword">int</span> j, <span class="keyword">int</span> m, <span class="keyword">int</span> n, <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; record, <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; &amp;obstacleGrid)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (i &lt; <span class="number">0</span> || j &lt; <span class="number">0</span> || obstacleGrid[i][j] == <span class="number">1</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (record[i][j]) &#123;</span><br><span class="line">            <span class="keyword">return</span> record[i][j];</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> ((i == <span class="number">0</span>) &amp;&amp; (j == <span class="number">0</span>)) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        record[i][j] = path_helper(i - <span class="number">1</span>, j, m, n, record, obstacleGrid) + path_helper(i, j - <span class="number">1</span>, m, n, record, obstacleGrid);</span><br><span class="line">        <span class="keyword">return</span> record[i][j];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">uniquePathsWithObstacles</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; obstacleGrid)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (obstacleGrid.empty()) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> m = (<span class="keyword">int</span>)obstacleGrid.size();</span><br><span class="line">        <span class="keyword">int</span> n = (<span class="keyword">int</span>)obstacleGrid[<span class="number">0</span>].size();</span><br><span class="line"></span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; res(m, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(n, <span class="number">0</span>));</span><br><span class="line">        <span class="keyword">return</span> path_helper(m - <span class="number">1</span>, n - <span class="number">1</span>, m, n, res, obstacleGrid);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>自底向上的写法： </p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">uniquePathsWithObstacles</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; grid)</span> </span>&#123;</span><br><span class="line">     <span class="keyword">int</span> rows = grid.size();</span><br><span class="line">     <span class="keyword">if</span>(rows == <span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">     <span class="keyword">int</span> cols = grid[<span class="number">0</span>].size();</span><br><span class="line">     <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">long</span>&gt;&gt; res(rows+<span class="number">1</span>, <span class="built_in">vector</span>&lt;<span class="keyword">long</span>&gt;(cols+<span class="number">1</span>, <span class="number">0</span>));</span><br><span class="line">     <span class="keyword">for</span>(<span class="keyword">int</span> i=rows<span class="number">-1</span>; i&gt;=<span class="number">0</span>;i--)&#123;</span><br><span class="line">         <span class="keyword">for</span>(<span class="keyword">int</span> j=cols<span class="number">-1</span>; j&gt;=<span class="number">0</span>;j--)&#123;</span><br><span class="line">             <span class="keyword">if</span>(grid[i][j] == <span class="number">1</span>) res[i][j] = <span class="number">0</span>;</span><br><span class="line">             <span class="keyword">else</span> <span class="keyword">if</span>(i == rows<span class="number">-1</span> &amp;&amp; j == cols<span class="number">-1</span>) res[i][j] = <span class="number">1</span>;</span><br><span class="line">             <span class="keyword">else</span> res[i][j] = res[i][j+<span class="number">1</span>] + res[i+<span class="number">1</span>][j];</span><br><span class="line">         &#125;</span><br><span class="line">     &#125;</span><br><span class="line">     <span class="keyword">return</span> res[<span class="number">0</span>][<span class="number">0</span>];</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+        
+            <div class="donate-container">
+    <div class="donate-button">
+        <button id="donate-button">赞赏</button>
+    </div>
+    <div class="donate-img-container hide" id="donate-img-container">
+        <img id="donate-img" src="" data-src="/img/donate.jpeg">
+        <p> 感谢鼓励 </p>
+    </div>
+</div>
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+    </ul>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        Created By <a href="https://hexo.io/">Hexo</a>  Theme <a href="https://github.com/aircloud/hexo-theme-aircloud">AirCloud</a></p>
+</footer>
+
+
+
+
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+    <script>
+        /**
+         *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+         *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+        */
+        if( '' || '')
+        var disqus_config = function () {
+            this.page.url = '';  // Replace PAGE_URL with your page's canonical URL variable
+            this.page.identifier = ''; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+        };
+
+        (function() { // DON'T EDIT BELOW THIS LINE
+            var d = document, s = d.createElement('script');
+            s.src = 'https://airclouds-blog.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+
+
+
+</html>
