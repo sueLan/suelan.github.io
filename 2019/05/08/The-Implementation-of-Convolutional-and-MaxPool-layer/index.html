@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="undefined">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+        The Implementation of Convolutional and MaxPool layer - undefined
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+<body>
+
+<div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> The best way out is always through </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar">
+            <img src="/img/avatar.jpeg" />
+        </div>
+        <div class="name">
+            <i>蓝容</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#The-Implementation-of-Convolutional-and-MaxPool-layer"><span class="toc-text">The Implementation of Convolutional and MaxPool layer</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Parse-the-argumenets"><span class="toc-text">Parse the argumenets</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Parser-the-configuration-file"><span class="toc-text">Parser the configuration file</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Sections-in-the-file"><span class="toc-text">Sections in the file</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#net"><span class="toc-text">[net]</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#convolutional"><span class="toc-text">[convolutional]</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Activation"><span class="toc-text">Activation</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#maxpool"><span class="toc-text">[maxpool]</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Why-does-1-x-1-convolution-do"><span class="toc-text">Why does 1 x 1 convolution do?</span></a></li></ol></li></ol></li></ol></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+        <div class="index-about-mobile">
+            <i> The best way out is always through </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        
+
+
+<div class="post-container">
+    <div class="post-title">
+        The Implementation of Convolutional and MaxPool layer
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2019-05-08 22:19:05</span></span>
+        
+        <span class="attr">标签：/
+        
+        <a class="tag" href="/tags/#--- YOLO" title="--- YOLO">--- YOLO</a>
+        <span>/</span>
+        
+        
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span>
+</span>
+</span>
+    </div>
+    <div class="post-content no-indent">
+        <h1 id="The-Implementation-of-Convolutional-and-MaxPool-layer"><a href="#The-Implementation-of-Convolutional-and-MaxPool-layer" class="headerlink" title="The Implementation of Convolutional and MaxPool layer"></a>The Implementation of Convolutional and MaxPool layer</h1><p><img src="/img/995676c2-24ed-4165-8224-0bc01148242a/16d3896c.png" alt="16d3896c.png"></p>
+<h2 id="Parse-the-argumenets"><a href="#Parse-the-argumenets" class="headerlink" title="Parse the argumenets"></a>Parse the argumenets</h2><p>In <code>main</code> function, it goes to function <code>test_detector</code> according to the first argument<code>detect</code>. </p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (<span class="number">0</span> == <span class="built_in">strcmp</span>(argv[<span class="number">1</span>], <span class="string">"detect"</span>))&#123;</span><br><span class="line">   <span class="keyword">float</span> thresh = find_float_arg(argc, argv, <span class="string">"-thresh"</span>, <span class="number">.5</span>);</span><br><span class="line">   <span class="keyword">char</span> *filename = (argc &gt; <span class="number">4</span>) ? argv[<span class="number">4</span>]: <span class="number">0</span>;</span><br><span class="line">   <span class="keyword">char</span> *outfile = find_char_arg(argc, argv, <span class="string">"-out"</span>, <span class="number">0</span>);</span><br><span class="line">   <span class="keyword">int</span> fullscreen = find_arg(argc, argv, <span class="string">"-fullscreen"</span>);</span><br><span class="line">   test_detector(<span class="string">"cfg/coco.data"</span>, argv[<span class="number">2</span>], argv[<span class="number">3</span>], filename, thresh, <span class="number">.5</span>, outfile, fullscreen);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<p>Here is the architecture of neural network defined by yolov3-tiny.cfg</p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">layer     filters    size              input                output</span><br><span class="line">    <span class="number">0</span> conv     <span class="number">16</span>  <span class="number">3</span> x <span class="number">3</span> / <span class="number">1</span>   <span class="number">416</span> x <span class="number">416</span> x   <span class="number">3</span>   -&gt;   <span class="number">416</span> x <span class="number">416</span> x  <span class="number">16</span>  <span class="number">0.150</span> BFLOPs</span><br><span class="line">    <span class="number">1</span> max          <span class="number">2</span> x <span class="number">2</span> / <span class="number">2</span>   <span class="number">416</span> x <span class="number">416</span> x  <span class="number">16</span>   -&gt;   <span class="number">208</span> x <span class="number">208</span> x  <span class="number">16</span></span><br><span class="line">    <span class="number">2</span> conv     <span class="number">32</span>  <span class="number">3</span> x <span class="number">3</span> / <span class="number">1</span>   <span class="number">208</span> x <span class="number">208</span> x  <span class="number">16</span>   -&gt;   <span class="number">208</span> x <span class="number">208</span> x  <span class="number">32</span>  <span class="number">0.399</span> BFLOPs</span><br><span class="line">    <span class="number">3</span> max          <span class="number">2</span> x <span class="number">2</span> / <span class="number">2</span>   <span class="number">208</span> x <span class="number">208</span> x  <span class="number">32</span>   -&gt;   <span class="number">104</span> x <span class="number">104</span> x  <span class="number">32</span></span><br><span class="line">    <span class="number">4</span> conv     <span class="number">64</span>  <span class="number">3</span> x <span class="number">3</span> / <span class="number">1</span>   <span class="number">104</span> x <span class="number">104</span> x  <span class="number">32</span>   -&gt;   <span class="number">104</span> x <span class="number">104</span> x  <span class="number">64</span>  <span class="number">0.399</span> BFLOPs</span><br><span class="line">    <span class="number">5</span> max          <span class="number">2</span> x <span class="number">2</span> / <span class="number">2</span>   <span class="number">104</span> x <span class="number">104</span> x  <span class="number">64</span>   -&gt;    <span class="number">52</span> x  <span class="number">52</span> x  <span class="number">64</span></span><br><span class="line">    <span class="number">6</span> conv    <span class="number">128</span>  <span class="number">3</span> x <span class="number">3</span> / <span class="number">1</span>    <span class="number">52</span> x  <span class="number">52</span> x  <span class="number">64</span>   -&gt;    <span class="number">52</span> x  <span class="number">52</span> x <span class="number">128</span>  <span class="number">0.399</span> BFLOPs</span><br><span class="line">    <span class="number">7</span> max          <span class="number">2</span> x <span class="number">2</span> / <span class="number">2</span>    <span class="number">52</span> x  <span class="number">52</span> x <span class="number">128</span>   -&gt;    <span class="number">26</span> x  <span class="number">26</span> x <span class="number">128</span></span><br><span class="line">    <span class="number">8</span> conv    <span class="number">256</span>  <span class="number">3</span> x <span class="number">3</span> / <span class="number">1</span>    <span class="number">26</span> x  <span class="number">26</span> x <span class="number">128</span>   -&gt;    <span class="number">26</span> x  <span class="number">26</span> x <span class="number">256</span>  <span class="number">0.399</span> BFLOPs</span><br><span class="line">    <span class="number">9</span> max          <span class="number">2</span> x <span class="number">2</span> / <span class="number">2</span>    <span class="number">26</span> x  <span class="number">26</span> x <span class="number">256</span>   -&gt;    <span class="number">13</span> x  <span class="number">13</span> x <span class="number">256</span></span><br><span class="line">   <span class="number">10</span> conv    <span class="number">512</span>  <span class="number">3</span> x <span class="number">3</span> / <span class="number">1</span>    <span class="number">13</span> x  <span class="number">13</span> x <span class="number">256</span>   -&gt;    <span class="number">13</span> x  <span class="number">13</span> x <span class="number">512</span>  <span class="number">0.399</span> BFLOPs</span><br><span class="line">   <span class="number">11</span> max          <span class="number">2</span> x <span class="number">2</span> / <span class="number">1</span>    <span class="number">13</span> x  <span class="number">13</span> x <span class="number">512</span>   -&gt;    <span class="number">13</span> x  <span class="number">13</span> x <span class="number">512</span></span><br><span class="line">   <span class="number">12</span> conv   <span class="number">1024</span>  <span class="number">3</span> x <span class="number">3</span> / <span class="number">1</span>    <span class="number">13</span> x  <span class="number">13</span> x <span class="number">512</span>   -&gt;    <span class="number">13</span> x  <span class="number">13</span> x1024  <span class="number">1.595</span> BFLOPs</span><br><span class="line">   <span class="number">13</span> conv    <span class="number">256</span>  <span class="number">1</span> x <span class="number">1</span> / <span class="number">1</span>    <span class="number">13</span> x  <span class="number">13</span> x1024   -&gt;    <span class="number">13</span> x  <span class="number">13</span> x <span class="number">256</span>  <span class="number">0.089</span> BFLOPs</span><br><span class="line">   <span class="number">14</span> conv    <span class="number">512</span>  <span class="number">3</span> x <span class="number">3</span> / <span class="number">1</span>    <span class="number">13</span> x  <span class="number">13</span> x <span class="number">256</span>   -&gt;    <span class="number">13</span> x  <span class="number">13</span> x <span class="number">512</span>  <span class="number">0.399</span> BFLOPs</span><br><span class="line">   <span class="number">15</span> conv    <span class="number">255</span>  <span class="number">1</span> x <span class="number">1</span> / <span class="number">1</span>    <span class="number">13</span> x  <span class="number">13</span> x <span class="number">512</span>   -&gt;    <span class="number">13</span> x  <span class="number">13</span> x <span class="number">255</span>  <span class="number">0.044</span> BFLOPs</span><br><span class="line">   <span class="number">16</span> yolo</span><br><span class="line">   <span class="number">17</span> route  <span class="number">13</span></span><br><span class="line">   <span class="number">18</span> conv    <span class="number">128</span>  <span class="number">1</span> x <span class="number">1</span> / <span class="number">1</span>    <span class="number">13</span> x  <span class="number">13</span> x <span class="number">256</span>   -&gt;    <span class="number">13</span> x  <span class="number">13</span> x <span class="number">128</span>  <span class="number">0.011</span> BFLOPs</span><br><span class="line">   <span class="number">19</span> upsample            <span class="number">2</span>x    <span class="number">13</span> x  <span class="number">13</span> x <span class="number">128</span>   -&gt;    <span class="number">26</span> x  <span class="number">26</span> x <span class="number">128</span></span><br><span class="line">   <span class="number">20</span> route  <span class="number">19</span> <span class="number">8</span></span><br><span class="line">   <span class="number">21</span> conv    <span class="number">256</span>  <span class="number">3</span> x <span class="number">3</span> / <span class="number">1</span>    <span class="number">26</span> x  <span class="number">26</span> x <span class="number">384</span>   -&gt;    <span class="number">26</span> x  <span class="number">26</span> x <span class="number">256</span>  <span class="number">1.196</span> BFLOPs</span><br><span class="line">   <span class="number">22</span> conv    <span class="number">255</span>  <span class="number">1</span> x <span class="number">1</span> / <span class="number">1</span>    <span class="number">26</span> x  <span class="number">26</span> x <span class="number">256</span>   -&gt;    <span class="number">26</span> x  <span class="number">26</span> x <span class="number">255</span>  <span class="number">0.088</span> BFLOPs</span><br><span class="line">   <span class="number">23</span> yolo</span><br></pre></td></tr></table></figure>
+<p>Now, let’s see how Darknet construct a nerual network. See at <code>detector.c</code> <code>test_detector</code> function, it construct a network by parsing  the <code>xxx.cfg</code> file and <code>xxx.weights</code> file. In my case, they are yolo3-tiny.cfg and yolo3-tiny.weights </p>
+<h2 id="Parser-the-configuration-file"><a href="#Parser-the-configuration-file" class="headerlink" title="Parser the configuration file"></a>Parser the configuration file</h2><h3 id="Sections-in-the-file"><a href="#Sections-in-the-file" class="headerlink" title="Sections in the file"></a>Sections in the file</h3><p>parse the yolo.cfg file here </p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="built_in">list</span> *<span class="title">read_cfg</span><span class="params">(<span class="keyword">char</span> *filename)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    FILE *file = fopen(filename, <span class="string">"r"</span>);</span><br><span class="line">    <span class="keyword">if</span>(file == <span class="number">0</span>) file_error(filename);</span><br><span class="line">    <span class="keyword">char</span> *line;</span><br><span class="line">    <span class="keyword">int</span> nu = <span class="number">0</span>;</span><br><span class="line">    <span class="built_in">list</span> *options = make_list();</span><br><span class="line">    section *current = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span>((line=fgetl(file)) != <span class="number">0</span>)&#123;</span><br><span class="line">        ++ nu;</span><br><span class="line">        strip(line);</span><br><span class="line">        <span class="keyword">switch</span>(line[<span class="number">0</span>])&#123;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">'['</span>:</span><br><span class="line">                current = <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(section));</span><br><span class="line">                list_insert(options, current);</span><br><span class="line">                current-&gt;options = make_list();</span><br><span class="line">                current-&gt;type = line;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">'\0'</span>:</span><br><span class="line">            <span class="keyword">case</span> <span class="string">'#'</span>:</span><br><span class="line">            <span class="keyword">case</span> <span class="string">';'</span>:</span><br><span class="line">                <span class="built_in">free</span>(line);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">default</span>:</span><br><span class="line">                <span class="keyword">if</span>(!read_option(line, current-&gt;options))&#123;</span><br><span class="line">                    <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"Config file error line %d, could parse: %s\n"</span>, nu, line);</span><br><span class="line">                    <span class="built_in">free</span>(line);</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    fclose(file);</span><br><span class="line">    <span class="keyword">return</span> options;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>for exmaple: </p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">[net]              <span class="comment">// '[' is a tag for a section, the type of current setion is '[net]'</span></span><br><span class="line"># Testing          // ignore</span><br><span class="line">batch=<span class="number">1</span>         </span><br><span class="line">subdivisions=<span class="number">1</span></span><br><span class="line"># Training</span><br><span class="line"># batch=64</span><br><span class="line"># subdivisions=2</span><br><span class="line">width=<span class="number">416</span></span><br><span class="line">height=<span class="number">416</span></span><br><span class="line">channels=<span class="number">3</span></span><br><span class="line">momentum=<span class="number">0.9</span></span><br><span class="line">decay=<span class="number">0.0005</span></span><br><span class="line">angle=<span class="number">0</span></span><br><span class="line">saturation = <span class="number">1.5</span></span><br><span class="line">exposure = <span class="number">1.5</span></span><br><span class="line">hue=<span class="number">.1</span></span><br><span class="line">                 <span class="comment">// ignore</span></span><br><span class="line">learning_rate=<span class="number">0.001</span></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">[convolutional]    <span class="comment">// [convoltional] </span></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">[maxpool]      <span class="comment">// [maxpool] </span></span><br><span class="line"></span><br><span class="line">...</span><br><span class="line">[yolo]</span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">[route]</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<h4 id="net"><a href="#net" class="headerlink" title="[net]"></a><code>[net]</code></h4><p>In section ‘[net]’, <code>batch=1</code> is a option stored in <code>kvp</code>(option_list.c line 70) struct. Its key is batch, value is 1. Then this kvp object will be inserted into a node list (see it at option_list.c line76 &amp; list.c line 40).<br>After parsing the yolo3-tiny.cfg file, We will get a section list; its size is 25. Because there are 25 \’[\’ tags in yolo3-tiny.cfg</p>
+<p>In <code>parse_network_cfg</code> function, it parses the <code>[net]</code> section to get the params for the whole network. </p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">network *<span class="title">parse_network_cfg</span><span class="params">(<span class="keyword">char</span> *filename)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">list</span> *sections = read_cfg(filename);</span><br><span class="line">    node *n = sections-&gt;front;</span><br><span class="line">    <span class="keyword">if</span>(!n) error(<span class="string">"Config file has no sections"</span>);</span><br><span class="line">    network *net = make_network(sections-&gt;size - <span class="number">1</span>);</span><br><span class="line">    <span class="comment">// other codes ...</span></span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="convolutional"><a href="#convolutional" class="headerlink" title="[convolutional]"></a><code>[convolutional]</code></h4><p>Then parse the different sections. </p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">s = (section *)n-&gt;val;</span><br><span class="line">options = s-&gt;options;</span><br><span class="line">layer l = &#123;<span class="number">0</span>&#125;;</span><br><span class="line">LAYER_TYPE lt = string_to_layer_type(s-&gt;type);</span><br><span class="line"><span class="keyword">if</span>(lt == CONVOLUTIONAL)&#123;</span><br><span class="line">    l = parse_convolutional(options, params);</span><br><span class="line">&#125;<span class="keyword">else</span> <span class="keyword">if</span>(lt == DECONVOLUTIONAL)&#123;</span><br><span class="line">    l = parse_deconvolutional(options, params);</span><br><span class="line">&#125;<span class="keyword">else</span> <span class="keyword">if</span>(lt == LOCAL)&#123;</span><br><span class="line">    l = parse_local(options, params);</span><br><span class="line">&#125;<span class="keyword">else</span> <span class="keyword">if</span>(lt == ACTIVE)&#123;</span><br><span class="line">    l = parse_activation(options, params);</span><br><span class="line"><span class="comment">// other code here ...</span></span><br></pre></td></tr></table></figure>
+<p>For the first <code>[convolutional]</code> section in the yolo3-tiny.cfg as follow, the darknet will construct a <code>convolutional_layer</code> using thess params (see function <code>parse_convolutional</code> in parse.c and  function <code>make_convolutional_layer</code> in convolutional_layer.c)</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[convolutional]</span><br><span class="line">batch_normalize=<span class="number">1</span></span><br><span class="line">filters=<span class="number">16</span></span><br><span class="line">size=<span class="number">3</span></span><br><span class="line">stride=<span class="number">1</span></span><br><span class="line">pad=<span class="number">1</span></span><br><span class="line">activation=leaky</span><br></pre></td></tr></table></figure>
+<p>In this layer, there are 16 filters; the size of each filter is 3X3Xnum_channel; what is num_channel? well, <code>the number of channels in a filter must match the number of channels in input volume</code>, so here num_channel is equal to 3. The stride value for filters is 1, padding value is 1. </p>
+<p>Let’s see how darknet calculate the output size of convolutional_layer by the input size(<code>l.h</code>) and filter params (<code>l.size</code>, <code>l.pad</code>, <code>l.stride</code>). There is a formula that shows how size of input volume relates to the one of output volume</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">convolutional_out_height</span><span class="params">(convolutional_layer l)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> (l.h + <span class="number">2</span>*l.pad - l.size) / l.stride + <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">convolutional_out_width</span><span class="params">(convolutional_layer l)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> (l.w + <span class="number">2</span>*l.pad - l.size) / l.stride + <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p> As for yolo3-tiny.cfg, for this first convolutional_layer, its input size is 416 x 416 and channel is 3. So its ouput height is (416+2x1 - 3)/1 + 1 = 416, its output width is 416 too. <code>What about its output channel? It equals to the number of filters (16)</code>. </p>
+ <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"> </span><br><span class="line">l.out_c = n    <span class="comment">// in func make_convolutional_layer</span></span><br></pre></td></tr></table></figure>
+<p> So its output volume size is 416 X 416 X 16.</p>
+<p> <img src="/img/995676c2-24ed-4165-8224-0bc01148242a/9b76325f.png" alt="02b028d9.png"></p>
+<p> For a beginner, I strongly recommend these courses: <a href="https://www.coursera.org/lecture/convolutional-neural-networks/strided-convolutions-wfUhx" target="_blank" rel="noopener">Strided Convolutions - Foundations of Convolutional Neural Networks | Coursera</a> and  <a href="https://www.coursera.org/lecture/convolutional-neural-networks/one-layer-of-a-convolutional-network-nsiuW" target="_blank" rel="noopener">One Layer of a Convolutional Network - Foundations of Convolutional Neural Networks | Coursera</a></p>
+<p>Now, we have 16 filters that are 3X3X3 in this layer, <code>how many parameters does this layer have</code>?  Each filter is a 3X3X3 volume, so it’s 27 numbers tp be learned, and then plus the bias, so that was the b parameters. it’s 28 parameters. There are 16 filters so that would be 448 parameters to be learned in this layer. </p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">// c: the number of channels; n: the number of filters; </span></span><br><span class="line"><span class="comment">// size: the number of filter width or height; groups: default is 1 </span></span><br><span class="line">l.weights = <span class="built_in">calloc</span>(c/groups*n*size*size, <span class="keyword">sizeof</span>(<span class="keyword">float</span>));</span><br><span class="line">l.weight_updates = <span class="built_in">calloc</span>(c/groups*n*size*size, <span class="keyword">sizeof</span>(<span class="keyword">float</span>));</span><br><span class="line"></span><br><span class="line">l.biases = <span class="built_in">calloc</span>(n, <span class="keyword">sizeof</span>(<span class="keyword">float</span>));</span><br><span class="line">l.bias_updates = <span class="built_in">calloc</span>(n, <span class="keyword">sizeof</span>(<span class="keyword">float</span>));</span><br><span class="line"></span><br><span class="line">l.nweights = c/groups*n*size*size;</span><br><span class="line">l.nbiases = n;</span><br></pre></td></tr></table></figure>
+<h4 id="Activation"><a href="#Activation" class="headerlink" title="Activation"></a>Activation</h4><p> In this convolution layer, it choose leaky ReLU as activation function. The function is defined as follow  where α is a small constant.</p>
+<p><img src="/img/995676c2-24ed-4165-8224-0bc01148242a/59d0cfbc.png" alt="59d0cfbc.png"></p>
+<p> Still, I recommend this course for a beginner. <a href="https://www.coursera.org/lecture/neural-networks-deep-learning/activation-functions-4dDC1" target="_blank" rel="noopener">Activation functions - Shallow neural networks | Coursera</a></p>
+<p>There are <code>forward_activation_layer</code> and <code>backward_activation_layer</code> in Darknet. Both of them handle batch inputs. </p>
+<p>For forward activation layer, leaky_activate is to computes f(x)</p>
+ <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">inline</span> <span class="keyword">float</span> <span class="title">leaky_activate</span><span class="params">(<span class="keyword">float</span> x)</span></span>&#123;<span class="keyword">return</span> (x&gt;<span class="number">0</span>) ? x : <span class="number">.1</span>*x;&#125;</span><br></pre></td></tr></table></figure>
+<p> For backward activation layer, leaky_gradient returns the slop of the function </p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">inline</span> <span class="keyword">float</span> <span class="title">leaky_gradient</span><span class="params">(<span class="keyword">float</span> x)</span></span>&#123;<span class="keyword">return</span> (x&gt;<span class="number">0</span>) ? <span class="number">1</span> : <span class="number">.1</span>;&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="maxpool"><a href="#maxpool" class="headerlink" title="[maxpool]"></a>[maxpool]</h4><p> Maxpool layer is used to reduce the size of representation to speed up computation as well as to make some of the features it detects a bit more robust. Look at the <code>tiny-yolo3.cfg</code></p>
+ <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"> [maxpool]</span><br><span class="line">size=<span class="number">2</span></span><br><span class="line">stride=<span class="number">2</span></span><br></pre></td></tr></table></figure>
+ <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"> <span class="function">maxpool_layer <span class="title">make_maxpool_layer</span><span class="params">(<span class="keyword">int</span> batch, <span class="keyword">int</span> h, <span class="keyword">int</span> w, <span class="keyword">int</span> c, <span class="keyword">int</span> size, <span class="keyword">int</span> stride, <span class="keyword">int</span> padding)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    maxpool_layer l = &#123;<span class="number">0</span>&#125;;</span><br><span class="line">    l.type = MAXPOOL;</span><br><span class="line">    l.batch = batch;</span><br><span class="line">    l.h = h;</span><br><span class="line">    l.w = w;</span><br><span class="line">    l.c = c;         <span class="comment">// output channel equals to input one </span></span><br><span class="line">    l.pad = padding;  <span class="comment">// default value is size - 1</span></span><br><span class="line">    l.out_w = (w + padding - size)/stride + <span class="number">1</span>;</span><br><span class="line">    l.out_h = (h + padding - size)/stride + <span class="number">1</span>;</span><br><span class="line">    l.out_c = c;</span><br><span class="line">    l.outputs = l.out_h * l.out_w * l.out_c;</span><br><span class="line">    <span class="comment">// other codes ...</span></span><br><span class="line">    <span class="keyword">return</span> l;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p> This <code>[maxpool]</code> sections comes after the <code>[convolutional]</code> section. Its input size(416 x 416 x 16) equal to the ouput size of the former layer (416 x 416 x  16). The filter size is 2 x 2, stride is 2. Each time, the filter would move 2 steps, for a 4x4x1 input volume, its output is 2x2x1 volume.<br><img src="/img/995676c2-24ed-4165-8224-0bc01148242a/e65fb56d.png" alt="e65fb56d.png"><br><figure class="highlight basic"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">9 </span>== max(<span class="number">1</span>, <span class="number">3</span>, <span class="number">2</span>, <span class="number">9</span>)</span><br><span class="line"><span class="symbol">2 </span>== max(<span class="number">2</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>)</span><br><span class="line"><span class="symbol">6 </span>== max(<span class="number">1</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">6</span>)</span><br><span class="line"><span class="symbol">3 </span>== max(<span class="number">2</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">2</span>)</span><br></pre></td></tr></table></figure></p>
+<p>So in this layer, its ouput width equals to (int)((416+ 1 - 2)/2 + 1), 208. And the number of its output channels equals to the number of input channels. Now, we know its output volume size is 208 X 208 X 16. There is no parameter to be learned. </p>
+<p><strong>input volume size</strong>: </p>
+<p><img src="/img/995676c2-24ed-4165-8224-0bc01148242a/4e5c00fc.png" alt="4e5c00fc.png"><br><strong>output volume size</strong>: </p>
+<p><img src="/img/995676c2-24ed-4165-8224-0bc01148242a/1bd46d76.png" alt="1bd46d76.png"><br>$f$: the width or height of a filter</p>
+<p> <a href="https://www.coursera.org/lecture/convolutional-neural-networks/pooling-layers-hELHk" target="_blank" rel="noopener">Pooling Layers - Foundations of Convolutional Neural Networks | Coursera</a></p>
+<h4 id="Why-does-1-x-1-convolution-do"><a href="#Why-does-1-x-1-convolution-do" class="headerlink" title="Why does 1 x 1 convolution do?"></a>Why does 1 x 1 convolution do?</h4><p> <a href="https://www.coursera.org/lecture/convolutional-neural-networks/networks-in-networks-and-1x1-convolutions-ZTb8x" target="_blank" rel="noopener">Networks in Networks and 1x1 Convolutions - Deep convolutional models: case studies | Coursera</a></p>
+<p> For example, in this picture, the number of input volume channels ,192, has gotten too big, we can shrink it to a 28x28x32 dimension volume using 32 filters that are 1x1x192. So this is a way to shrink the number of channels .</p>
+<p> <img src="/img/995676c2-24ed-4165-8224-0bc01148242a/a085e0e4.png" alt="a085e0e4.png"></p>
+<p> In YOLO, it implements fully connected layer by two convolutional layer.<br> <figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[convolutional]</span></span><br><span class="line"><span class="attr">batch_normalize</span>=<span class="number">1</span></span><br><span class="line"><span class="attr">filters</span>=<span class="number">256</span></span><br><span class="line"><span class="attr">size</span>=<span class="number">3</span></span><br><span class="line"><span class="attr">stride</span>=<span class="number">1</span></span><br><span class="line"><span class="attr">pad</span>=<span class="number">1</span></span><br><span class="line"><span class="attr">activation</span>=leaky</span><br><span class="line"></span><br><span class="line"><span class="section">[convolutional]</span></span><br><span class="line"><span class="attr">size</span>=<span class="number">1</span></span><br><span class="line"><span class="attr">stride</span>=<span class="number">1</span></span><br><span class="line"><span class="attr">pad</span>=<span class="number">1</span></span><br><span class="line"><span class="attr">filters</span>=<span class="number">255</span></span><br><span class="line"><span class="attr">activation</span>=linear</span><br></pre></td></tr></table></figure></p>
+<p> <a href="https://www.coursera.org/lecture/convolutional-neural-networks/convolutional-implementation-of-sliding-windows-6UnU4" target="_blank" rel="noopener">Convolutional Implementation of Sliding Windows - Object detection | Coursera</a></p>
+
+        
+            <div class="donate-container">
+    <div class="donate-button">
+        <button id="donate-button">赞赏</button>
+    </div>
+    <div class="donate-img-container hide" id="donate-img-container">
+        <img id="donate-img" src="" data-src="/img/donate.jpeg">
+        <p> 感谢鼓励 </p>
+    </div>
+</div>
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+    </ul>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        Created By <a href="https://hexo.io/">Hexo</a>  Theme <a href="https://github.com/aircloud/hexo-theme-aircloud">AirCloud</a></p>
+</footer>
+
+
+
+
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+    <script>
+        /**
+         *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+         *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+        */
+        if( '' || '')
+        var disqus_config = function () {
+            this.page.url = '';  // Replace PAGE_URL with your page's canonical URL variable
+            this.page.identifier = ''; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+        };
+
+        (function() { // DON'T EDIT BELOW THIS LINE
+            var d = document, s = d.createElement('script');
+            s.src = 'https://airclouds-blog.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+
+
+
+</html>
