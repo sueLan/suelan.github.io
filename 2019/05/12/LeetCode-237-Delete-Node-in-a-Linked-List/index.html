@@ -8,7 +8,7 @@
   
   
   
-  <title>LeetCode  Flatten a Multilevel Doubly Linked List | 蓝容的Blog</title>
+  <title>LeetCode:237. Delete Node in a Linked List | 蓝容的Blog</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -197,7 +197,7 @@
 
 <div class="post">
   <h1 class="article-title">
-    <span>LeetCode  Flatten a Multilevel Doubly Linked List</span>
+    <span>LeetCode:237. Delete Node in a Linked List</span>
   </h1>
   <div class="article-top-meta">
     <span>
@@ -207,7 +207,7 @@
     
     
       <span>
-        浏览 : <span class="article-timer" data-identity="LeetCode-Flatten-a-Multilevel-Doubly-Linked-List"></span>
+        浏览 : <span class="article-timer" data-identity="LeetCode-237-Delete-Node-in-a-Linked-List"></span>
       </span>
     
   </div>
@@ -216,11 +216,22 @@
 
   <div class="article-content">
     <div class="markdown-body">
-      <p>题目： <a href="[Loading...](https://leetcode.com/problems/flatten-a-multilevel-doubly-linked-list/">430. Flatten a Multilevel Doubly Linked List</a><br>)</p>
-<p>分析：<br><img src=":storage/ed6ee62a-3dcb-4189-9404-14b91692d436/da80f35a.png" alt="da80f35a.png"></p>
-<p> 当遇到有child的Node，先用<code>*next</code>存cur-&gt;next; 把cur-&gt;next指针指向child, child-&gt;pre指向cur； 接着以child为起点找到该曾最后一个Node，让它指向<code>*next</code>的节点。 接着以原来的child为cur Node重新开始一轮。 </p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Node</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="keyword">int</span> val;</span><br><span class="line">    Node *prev;</span><br><span class="line">    Node *next;</span><br><span class="line">    Node *child;</span><br><span class="line"></span><br><span class="line">    Node() &#123;&#125;</span><br><span class="line"></span><br><span class="line">    Node(<span class="keyword">int</span> _val, Node *_prev, Node *_next, Node *_child) &#123;</span><br><span class="line">        val = _val;</span><br><span class="line">        prev = _prev;</span><br><span class="line">        next = _next;</span><br><span class="line">        child = _child;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function">Node *<span class="title">flatten</span><span class="params">(Node *head)</span> </span>&#123;</span><br><span class="line">    Node *cur = head;</span><br><span class="line">    <span class="keyword">while</span> (cur) &#123;</span><br><span class="line">        <span class="keyword">if</span> (cur-&gt;child) &#123;</span><br><span class="line">            Node *next = cur-&gt;next;</span><br><span class="line">            cur-&gt;next = cur-&gt;child;</span><br><span class="line">            cur-&gt;child = <span class="literal">nullptr</span>;</span><br><span class="line">            cur-&gt;next-&gt;prev = cur;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// iter the children </span></span><br><span class="line">            Node *p = cur-&gt;next;</span><br><span class="line">            <span class="keyword">while</span> (p-&gt;next) p = p-&gt;next;</span><br><span class="line">              </span><br><span class="line">            p-&gt;next = next;</span><br><span class="line">            <span class="keyword">if</span> (next) next-&gt;prev = p;</span><br><span class="line">        &#125;</span><br><span class="line">        cur = cur-&gt;next;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> head;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>时间复杂度： $O(n)$</p>
+      <h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a><a href="https://leetcode.com/problems/delete-node-in-a-linked-list/" target="_blank" rel="noopener">题目</a></h2><p>Write a function to delete a node (except the tail) in a singly linked list, given only access to that node.</p>
+<p>Given linked list – head = [4,5,1,9], which looks like following:</p>
+<p><img src="https://assets.leetcode.com/uploads/2018/12/28/237_example.png" alt="237_example.png"></p>
+<h2 id="分析："><a href="#分析：" class="headerlink" title="分析："></a>分析：</h2><p>如果我们有一个如下的Linked List，想删除值是5的节点. 这道题要求 ，<code>only access to that node</code>。</p>
+<figure class="highlight basic"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">4 </span>-&gt; <span class="number">5</span> -&gt; <span class="number">1</span></span><br></pre></td></tr></table></figure>
+<p><img src="/img/f394f304-a25b-4128-bcaa-779a974c8c4a/48d29b19.png" alt="48d29b19.png"><br>留意图中，要删除的对象的地址是0x7ff07ae00090</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">deleteNode</span><span class="params">(ListNode* node)</span> </span>&#123;</span><br><span class="line">    *node = *(node-&gt;next);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>*node</code>对node指针取内容，返回是一个对象, 对象地址0x7ff07ae00090</p>
+<p><img src="/img/f394f304-a25b-4128-bcaa-779a974c8c4a/f94bba4f.png" alt="f94bba4f.png"></p>
+<p><code>*node-&gt;next</code>对node指针取内容，返回是一个对象， 对象地址0x7ff07ae000a0</p>
+<p><img src="/img/f394f304-a25b-4128-bcaa-779a974c8c4a/69411ad8.png" alt="69411ad8.png"></p>
+<p>执行<br><figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">*<span class="keyword">node</span> <span class="title">= *(node-</span>&gt;next);</span><br></pre></td></tr></table></figure></p>
+<p>结果如下： </p>
+<p><img src="/img/f394f304-a25b-4128-bcaa-779a974c8c4a/83d8670d.png" alt="83d8670d.png"></p>
+<p>node指针所执行的对象地址不变，但是对象内容发生变化。就像三个房子，位置没变， 但是第三个房子里的住户搬到了第二个房子里住了。 node指针指向的对象的地址依旧是0x7ff07ae00090, val不再是5而是1， next指针也执向NULL。但是我们也丢失了对0x7ff07ae000a0对象的指针引用。</p>
+<p><img src="/img/f394f304-a25b-4128-bcaa-779a974c8c4a/e8798a20.png" alt="e8798a20.png"></p>
     </div>
   </div>
   
@@ -231,7 +242,7 @@
         
           本文作者 : 蓝容 <br>
         
-        原文链接 : <a href>https://suelan.github.io/2019/05/12/LeetCode-Flatten-a-Multilevel-Doubly-Linked-List/</a><br>
+        原文链接 : <a href>https://suelan.github.io/2019/05/12/LeetCode-237-Delete-Node-in-a-Linked-List/</a><br>
         版权声明 : 本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！
         </blockquote>
       </div>
@@ -303,15 +314,9 @@
       <div class="nav-pre">
         <i class="iconfont icon-prev"></i>
         上一篇:
-        <a href="/2019/05/08/The-Implementation-of-Convolutional-and-MaxPool-layer/" target="_self">The Architecture of YOLO-Tiny Neural Network</a>
+        <a href="/2019/05/12/LeetCode-Flatten-a-Multilevel-Doubly-Linked-List/" target="_self">LeetCode  Flatten a Multilevel Doubly Linked List</a>
       </div>
     
-    
-      <div class="nav-next">
-        下一篇:
-        <a href="/2019/05/12/LeetCode-237-Delete-Node-in-a-Linked-List/" target="_self">LeetCode:237. Delete Node in a Linked List</a>
-        <i class="iconfont icon-next"></i>
-      </div>
     
   </nav>
 
