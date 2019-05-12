@@ -8,12 +8,12 @@
   
   
   
-  <title>蓝容的Blog</title>
+  <title>The Weights of the YOLO Neural Network | 蓝容的Blog</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
   
-    <meta name="keywords" content="Hexo, theme-bmw">
+    <meta name="keywords" content="Neural Network,YOLO,">
   
 
   <script>
@@ -197,17 +197,24 @@
 
 <div class="post">
   <h1 class="article-title">
-    <span></span>
+    <span>The Weights of the YOLO Neural Network</span>
   </h1>
   <div class="article-top-meta">
     <span>
       发布 : 
-      2019-03-26
+      2019-05-12
     </span>
+    
+      <span>
+        分类 : 
+          <a href="/categories/Neural-Network/">
+            Neural Network
+          </a>
+      </span>
     
     
       <span>
-        浏览 : <span class="article-timer" data-identity="404.html"></span>
+        浏览 : <span class="article-timer" data-identity="The-Weights-of-the-YOLO-Neural-Network"></span>
       </span>
     
   </div>
@@ -216,7 +223,30 @@
 
   <div class="article-content">
     <div class="markdown-body">
-      
+      <p>First, see this C library function:<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">size_t</span> fread(<span class="keyword">void</span> *ptr, <span class="keyword">size_t</span> size, <span class="keyword">size_t</span> nmemb, FILE *stream)</span><br></pre></td></tr></table></figure></p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><p><strong>ptr</strong> − This is the pointer to a block of memory with a minimum size of size*nmemb bytes.</p>
+</li>
+<li><p><strong>size</strong> − This is the size in bytes of each element to be read.</p>
+</li>
+<li><p><strong>nmemb</strong> − This is the number of elements, each one with a size of size bytes.</p>
+</li>
+<li><p><strong>stream</strong> − This is the pointer to a FILE object that specifies an input stream.</p>
+</li>
+</ul>
+<p>Then, in the <code>load_weights_upto</code> function in <code>parser.c</code>, it begins to load weights for layers from xxx.weights.<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">load_weights_upto</span><span class="params">(network *net, <span class="keyword">char</span> *filename, <span class="keyword">int</span> start, <span class="keyword">int</span> cutoff)</span> </span>&#123;</span><br><span class="line"> ...</span><br><span class="line">     <span class="comment">// Begin to load weights for layers</span></span><br><span class="line">    <span class="keyword">for</span>(i = start; i &lt; net-&gt;n &amp;&amp; i &lt; cutoff; ++i)&#123;</span><br><span class="line">        layer l = net-&gt;layers[i];</span><br><span class="line">        <span class="keyword">if</span> (l.dontload) <span class="keyword">continue</span>;</span><br><span class="line">        <span class="keyword">if</span>(l.type == CONVOLUTIONAL || l.type == DECONVOLUTIONAL)&#123;</span><br><span class="line">            load_convolutional_weights(l, fp);</span><br><span class="line">        &#125;</span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="Convolutional-Layer"><a href="#Convolutional-Layer" class="headerlink" title="Convolutional Layer"></a>Convolutional Layer</h2><p>In <code>load_convolutional_weights</code> function, it loads values of biases for filters. One bias for one filter. </p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fread(l.biases, <span class="keyword">sizeof</span>(<span class="keyword">float</span>), l.n, fp);</span><br></pre></td></tr></table></figure>
+<p><code>l.n</code> is the number of filter in this layer. </p>
+<p>Assign the values to scales, rolling_mean and rooling_variance<br><figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">if (l.<span class="keyword">batch_normalize </span>&amp;&amp; (!l.dontloadscales))&#123;</span><br><span class="line">       fread(l.<span class="keyword">scales, </span>sizeof(float), l.n, <span class="built_in">fp</span>)<span class="comment">;</span></span><br><span class="line">       fread(l.rolling_mean, sizeof(float), l.n, <span class="built_in">fp</span>)<span class="comment">;</span></span><br><span class="line">       fread(l.rolling_variance, sizeof(float), l.n, <span class="built_in">fp</span>)<span class="comment">;</span></span><br></pre></td></tr></table></figure></p>
+<p>And load weights for filters in this layer. The default value of <code>l.groups</code> is 1.<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> num = l.c/l.groups*l.n*l.size*l.size;</span><br><span class="line">fread(l.weights, <span class="keyword">sizeof</span>(<span class="keyword">float</span>), num, fp);</span><br></pre></td></tr></table></figure></p>
+<p><code>l.c</code> is input channel. The number of input channel equal to the number of channel of a filter in this layer. Thus, <code>l.size</code> is the size of a filter.</p>
+<p>For a 3x3x3 filter (size=3, channel=3), it has 3x3x3=27 parameters as follow  </p>
+<p><img src="/img/15576478323378/15576531132966.jpg" alt="-w208"></p>
+<p>If a convolutional layer has 3 such filters, it will have 3 values for bias, 3x3x3x3 .Its weight layout in memory is like this: </p>
+<p><img src="/img/15576478323378/15576535368751.jpg" alt="-w746"></p>
+
     </div>
   </div>
   
@@ -227,7 +257,7 @@
         
           本文作者 : RongyanZheng <br>
         
-        原文链接 : <a href>https://suelan.github.io/404.html</a><br>
+        原文链接 : <a href>https://suelan.github.io/2019/05/12/The-Weights-of-the-YOLO-Neural-Network/</a><br>
         版权声明 : 本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！
         </blockquote>
       </div>
@@ -279,6 +309,15 @@
     <div class="article-meta pull-left">
       <span>
         
+          <i class="iconfont icon-06tags"></i>标签: 
+          
+          <span class="span--tag">
+            <a href="/tags/YOLO/">
+              #YOLO
+            </a>
+          </span>
+          
+        
       </span>
     </div>
     <div class="article-meta pull-right">
@@ -295,6 +334,12 @@
 
 
   <nav class="post-navigation">
+    
+      <div class="nav-pre">
+        <i class="iconfont icon-prev"></i>
+        上一篇:
+        <a href="/2019/05/12/LeetCode-237-Delete-Node-in-a-Linked-List/" target="_self">LeetCode:237. Delete Node in a Linked List</a>
+      </div>
     
     
   </nav>
@@ -394,7 +439,7 @@ const valineAPI = (() => {
 })()
 
 const calcAndWriteTimes = () => {
-  let isPost = false;
+  let isPost = true;
 
   let timerAllDOM = document.querySelectorAll(".article-timer");
 
