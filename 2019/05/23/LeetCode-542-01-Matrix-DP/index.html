@@ -8,7 +8,7 @@
   
   
   
-  <title>LeetCode:650. 2 Keys Keyboard | 蓝容的Blog</title>
+  <title>LeetCode:542. 01 Matrix-DP | 蓝容的Blog</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -197,12 +197,12 @@
 
 <div class="post">
   <h1 class="article-title">
-    <span>LeetCode:650. 2 Keys Keyboard</span>
+    <span>LeetCode:542. 01 Matrix-DP</span>
   </h1>
   <div class="article-top-meta">
     <span>
       发布 : 
-      2019-05-20
+      2019-05-23
     </span>
     
       <span>
@@ -214,7 +214,7 @@
     
     
       <span>
-        浏览 : <span class="article-timer" data-identity="LeetCode-650-2-Keys-Keyboard"></span>
+        浏览 : <span class="article-timer" data-identity="LeetCode-542-01-Matrix-DP"></span>
       </span>
     
   </div>
@@ -223,123 +223,20 @@
 
   <div class="article-content">
     <div class="markdown-body">
-      <h2 id="题意"><a href="#题意" class="headerlink" title="题意:"></a>题意:</h2><p>notepad里只有一个’A’字符串。 只能允许两个操作: </p>
+      <h2 id="题目-01-matrix"><a href="#题目-01-matrix" class="headerlink" title="题目: 01-matrix"></a>题目: <a href="https://leetcode.com/problems/01-matrix/" target="_blank" rel="noopener">01-matrix</a></h2><p>Given a matrix consists of 0 and 1, find the distance of the nearest 0 for each cell.</p>
+<p>The distance between two adjacent cells is 1.<br><figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Example:</span><br><span class="line">Input:</span><br><span class="line"><span class="string">[[0,0,0],</span></span><br><span class="line"><span class="string"> [0,1,0],</span></span><br><span class="line"><span class="string"> [1,1,1]]</span></span><br><span class="line"></span><br><span class="line">Output:</span><br><span class="line"><span class="string">[[0,0,0],</span></span><br><span class="line"><span class="string"> [0,1,0],</span></span><br><span class="line"><span class="string"> [1,2,1]]</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="分析："><a href="#分析：" class="headerlink" title="分析："></a>分析：</h2><p>题目有点没讲明白，这道题，求值为1的cell到最近的0的最短距离。</p>
+<p>这道题，我的第一想法是BFS，后来看到DP写法更优雅。<a href="https://leetcode.com/problems/01-matrix/discuss/101051/Simple-Java-solution-beat-99-(use-DP" target="_blank" rel="noopener">Simple-Java-solution</a>)</p>
+<p>可以发现规律。对matrix[i][j], 如果知道它上下左右四个cell到0的最短距离，那么<br>$$matrix[i][j] = min(left, top, right, bottom) + 1$$</p>
 <ol>
-<li>Copy All: 把notepad里所有的字符串copy</li>
-<li>Paste: 复制上次copy的内容</li>
+<li>遍历matrix矩阵，matrix[i][j]不为0，计算 leftCell 跟 topCell最小值，再加1. </li>
+<li>再倒叙遍历matrix, matrix[i][j]不为0, 先计算rightCell 跟 topCell的最小值，再跟min(left, top)的值比较</li>
 </ol>
-<p>问，最少的步骤（copy &amp; paste) 能生成n个’A’</p>
-<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>可以发现规律: </p>
-<table>
-<thead>
-<tr>
-<th>n</th>
-<th>op</th>
-<th>cur char</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>2</td>
-<td>c</td>
-<td>A</td>
-</tr>
-<tr>
-<td></td>
-<td>p</td>
-<td>AA</td>
-</tr>
-<tr>
-<td>3</td>
-<td>c</td>
-<td>A</td>
-</tr>
-<tr>
-<td></td>
-<td>p</td>
-<td>AA</td>
-</tr>
-<tr>
-<td></td>
-<td>p</td>
-<td>AAA</td>
-</tr>
-<tr>
-<td>4</td>
-<td>c</td>
-<td>A</td>
-</tr>
-<tr>
-<td></td>
-<td>p</td>
-<td>AA</td>
-</tr>
-<tr>
-<td></td>
-<td>c</td>
-<td>AA</td>
-</tr>
-<tr>
-<td></td>
-<td>p</td>
-<td>AAAA</td>
-</tr>
-<tr>
-<td>5</td>
-<td>c</td>
-<td>A</td>
-</tr>
-<tr>
-<td></td>
-<td>p</td>
-<td>AA</td>
-</tr>
-<tr>
-<td></td>
-<td>p</td>
-<td>AAA</td>
-</tr>
-<tr>
-<td></td>
-<td>p</td>
-<td>AAAA</td>
-</tr>
-<tr>
-<td></td>
-<td>p</td>
-<td>AAAAA</td>
-</tr>
-<tr>
-<td>6</td>
-<td>c</td>
-<td>A</td>
-</tr>
-<tr>
-<td></td>
-<td>p</td>
-<td>AA</td>
-</tr>
-<tr>
-<td></td>
-<td>c</td>
-<td>AA</td>
-</tr>
-<tr>
-<td></td>
-<td>p</td>
-<td>AAAAA</td>
-</tr>
-<tr>
-<td></td>
-<td>p</td>
-<td>AAAAAA</td>
-</tr>
-</tbody>
-</table>
-<p>当n为质数， 所需最少步骤为n; 当n不是质数， 所需步骤为 n的质因数相加之和。比如6 = 2 x 3;它所需最小步骤 2+3 = 5</p>
-<h2 id="Solution-1：-质因数分解"><a href="#Solution-1：-质因数分解" class="headerlink" title="Solution 1： 质因数分解"></a>Solution 1： 质因数分解</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">minSteps</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> ans = <span class="number">0</span>, d = <span class="number">2</span>;</span><br><span class="line">    <span class="keyword">while</span> (n &gt; <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">while</span> (n % d == <span class="number">0</span>)  &#123;</span><br><span class="line">            ans += d;</span><br><span class="line">            n /= d;</span><br><span class="line">        &#125;</span><br><span class="line">        d++;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="Solution-2"><a href="#Solution-2" class="headerlink" title="Solution 2:"></a>Solution 2:</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">minSteps</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (n &lt;= <span class="number">1</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">if</span> (n &lt;= <span class="number">5</span>) <span class="keyword">return</span> n;</span><br><span class="line">    <span class="comment">// n&gt;1的操作，前两步骤都是copy &amp; paste, 从'A'变成 'AA', 所以 cur_len == 2, res == 2, 上次copy的字符数量 == 1, 如果下一次要copy &amp; paste, 要一次copy'AA' 2个字符  </span></span><br><span class="line">    <span class="keyword">int</span> cur_len = <span class="number">2</span>, res = <span class="number">2</span>, next_cp_num = <span class="number">2</span>, copy_num = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">while</span> (cur_len &lt; n) &#123;</span><br><span class="line">        <span class="keyword">if</span> ((n - cur_len) % next_cp_num == <span class="number">0</span>) &#123;</span><br><span class="line">           <span class="comment">// copy + paste</span></span><br><span class="line">           cur_len += next_cp_num;</span><br><span class="line">           copy_num = next_cp_num;</span><br><span class="line">           <span class="comment">// copy + paste; 2 steps</span></span><br><span class="line">           res += <span class="number">2</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// paste the characters copied last time </span></span><br><span class="line">            cur_len += copy_num;</span><br><span class="line">            <span class="comment">// only paste, 1 step</span></span><br><span class="line">            res += <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 题目要求：Copy操作要Copy所有字符</span></span><br><span class="line">        next_cp_num = cur_len;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; updateMatrix(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; matrix) &#123;</span><br><span class="line">    <span class="keyword">if</span> (matrix.empty()) <span class="keyword">return</span> &#123;&#125;;</span><br><span class="line">    <span class="keyword">int</span> n = (<span class="keyword">int</span>)matrix.size(), m = (<span class="keyword">int</span>)matrix[<span class="number">0</span>].size(), MAX_LEN = <span class="number">10002</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; ++i) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; m; ++j) &#123;</span><br><span class="line">            <span class="keyword">if</span> (matrix[i][j] != <span class="number">0</span>) &#123;</span><br><span class="line">                <span class="keyword">int</span> top = (i - <span class="number">1</span> &lt; <span class="number">0</span>) ? MAX_LEN : matrix[i<span class="number">-1</span>][j];</span><br><span class="line">                <span class="keyword">int</span> left = (j - <span class="number">1</span> &lt; <span class="number">0</span>) ? MAX_LEN : matrix[i][j<span class="number">-1</span>];</span><br><span class="line">                matrix[i][j] = <span class="number">1</span> + min(top, left);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">   </span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = n - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = m - <span class="number">1</span>; j &gt;= <span class="number">0</span>; j--) &#123;</span><br><span class="line">            <span class="keyword">if</span>(matrix[i][j] != <span class="number">0</span>) &#123;</span><br><span class="line">                <span class="keyword">int</span> right = (j + <span class="number">1</span> &gt;= m) ? MAX_LEN: matrix[i][j+<span class="number">1</span>];</span><br><span class="line">                <span class="keyword">int</span> bottom = (i + <span class="number">1</span> &gt;= n) ? MAX_LEN: matrix[i+<span class="number">1</span>][j];</span><br><span class="line">                matrix[i][j] = min(min(right, bottom) + <span class="number">1</span>, matrix[i][j]);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> matrix;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="时间复杂度-o-n-2"><a href="#时间复杂度-o-n-2" class="headerlink" title="时间复杂度 $o(n^2)$"></a>时间复杂度 $o(n^2)$</h3><h3 id="空间复杂度-o-1"><a href="#空间复杂度-o-1" class="headerlink" title="空间复杂度 $o(1)$"></a>空间复杂度 $o(1)$</h3><figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Runtime: <span class="number">184</span> ms, faster than <span class="number">96.53</span>% <span class="keyword">of</span> C++ online submissions <span class="keyword">for</span> <span class="number">01</span> Matrix.</span><br><span class="line">Memory Usage: <span class="number">20.9</span> MB, <span class="keyword">less than</span> <span class="number">91.39</span>% <span class="keyword">of</span> C++ online submissions <span class="keyword">for</span> <span class="number">01</span> Matrix.</span><br></pre></td></tr></table></figure>
+<p>有人问，为啥要两次遍历？ 不能像下面这么写吗？</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 错误的写法</span></span><br><span class="line"> <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; updateMatrix(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; matrix) &#123;</span><br><span class="line">       <span class="keyword">if</span> (matrix.empty()) <span class="keyword">return</span> &#123;&#125;;</span><br><span class="line">       <span class="keyword">int</span> n = (<span class="keyword">int</span>)matrix.size(), m = (<span class="keyword">int</span>)matrix[<span class="number">0</span>].size();</span><br><span class="line">       <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; ++i) &#123;</span><br><span class="line">           <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; m; ++j) &#123;</span><br><span class="line">               <span class="keyword">if</span> (matrix[i][j] != <span class="number">0</span>) &#123;</span><br><span class="line">                   <span class="keyword">int</span> top = (i - <span class="number">1</span> &lt; <span class="number">0</span>) ? INT32_MAX : matrix[i<span class="number">-1</span>][j];</span><br><span class="line">                   <span class="keyword">int</span> left = (j - <span class="number">1</span> &lt; <span class="number">0</span>) ? INT32_MAX : matrix[i][j<span class="number">-1</span>];</span><br><span class="line">                   <span class="keyword">int</span> right = (j + <span class="number">1</span> &gt;= m) ? INT32_MAX : matrix[i][j+<span class="number">1</span>];</span><br><span class="line">                   <span class="keyword">int</span> bottom = (i + <span class="number">1</span> &gt;= n) ? INT32_MAX : matrix[i+<span class="number">1</span>][j];</span><br><span class="line">                   matrix[i][j] = <span class="number">1</span> + min(min(top, left), min(right, bottom));</span><br><span class="line">               &#125;</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">return</span> matrix;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<p>问题在于，顺序遍历时候，bottom跟right还没更新为正确的值。比如下图，遍历到matrix[3][0]的时候，matrix[3, 1] 还是1， 而matrix[2][0] == 2; 结果就出错了。<br><figure class="highlight basic"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">0 </span><span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> </span><br><span class="line"><span class="symbol">1 </span><span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> </span><br><span class="line"><span class="symbol">1 </span><span class="number">1</span> <span class="number">1</span> <span class="number">0</span> <span class="number">0</span> </span><br><span class="line"><span class="symbol">1 </span><span class="number">1</span> <span class="number">1</span> <span class="number">1</span> <span class="number">0</span></span><br></pre></td></tr></table></figure></p>
     </div>
   </div>
   
@@ -350,7 +247,7 @@
         
           本文作者 : RongyanZheng <br>
         
-        原文链接 : <a href>https://suelan.github.io/2019/05/20/LeetCode-650-2-Keys-Keyboard/</a><br>
+        原文链接 : <a href>https://suelan.github.io/2019/05/23/LeetCode-542-01-Matrix-DP/</a><br>
         版权声明 : 本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！
         </blockquote>
       </div>
@@ -431,15 +328,9 @@
       <div class="nav-pre">
         <i class="iconfont icon-prev"></i>
         上一篇:
-        <a href="/2019/05/18/Semantic-Image-Synthesis-with-Spatially-Adaptive-Normalization/" target="_self">小白读论文:Semantic Image Synthesis with Spatially-Adaptive Normalization</a>
+        <a href="/2019/05/20/LeetCode-650-2-Keys-Keyboard/" target="_self">LeetCode:650. 2 Keys Keyboard</a>
       </div>
     
-    
-      <div class="nav-next">
-        下一篇:
-        <a href="/2019/05/23/LeetCode-542-01-Matrix-DP/" target="_self">LeetCode:542. 01 Matrix-DP</a>
-        <i class="iconfont icon-next"></i>
-      </div>
     
   </nav>
 
