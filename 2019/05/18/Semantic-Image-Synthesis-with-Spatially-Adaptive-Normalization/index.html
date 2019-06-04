@@ -220,10 +220,30 @@
   </div>
 
   
+    <div id="Semantic-Image-Synthesis-with-Spatially-Adaptive-Normalization" style="margin: 4rem 2px"></div>
+<script async>
+  (function(){
+    let playerTimer = setInterval(function(){
+      if(!window.APlayer){
+        return
+      }
+
+      new APlayer({
+        container: document.getElementById('Semantic-Image-Synthesis-with-Spatially-Adaptive-Normalization'),
+        theme: '#e96900',
+        listFolded: false,
+        audio: [{"name":"Movie","artist":"AniFace","url":"https://music.163.com/#/song?id=517533045","cover":"//p1.music.126.net/1mgvpnhpJYjMEoiuWokP6Q==/109951163212262464.jpg?param=130y130"}]
+      });
+      
+      clearInterval(playerTimer)
+    }, 10);
+  })()
+</script>
+  
 
   <div class="article-content">
     <div class="markdown-body">
-      <br><a href="https://www.youtube.com/watch?v=p5U4NgVGAwg&amp;feature=youtu.be" target="_blank" rel="noopener">GauGAN: Changing Sketches into Photorealistic Masterpieces</a> 3月的时候，英伟达发布了一个视频挺火的： 你只要粗略勾勒简单的线条，AI就能生成逼真的写实图片。<p></p>
+      <p><a href="https://www.youtube.com/watch?v=p5U4NgVGAwg&amp;feature=youtu.be" target="_blank" rel="noopener">GauGAN: Changing Sketches into Photorealistic Masterpieces</a> 3月的时候，英伟达发布了一个视频挺火的： 你只要粗略勾勒简单的线条，AI就能生成逼真的写实图片。</p>
 <p><img src="https://camo.githubusercontent.com/a295a79daea9d1dd0cb16b48055607d0f17258b2/68747470733a2f2f6e766c6162732e6769746875622e696f2f53504144452f2f696d616765732f6f6365616e2e676966" alt="68747470733a2f2f6e766c6162732e6769746875622e696f2f53504144452f2f696d616765732f6f6365616e2e676966"><br><a href="https://github.com/NVlabs/SPADE" target="_blank" rel="noopener">GitHub地址</a></p>
 <h2 id="任务："><a href="#任务：" class="headerlink" title="任务："></a>任务：</h2><p><strong>学习任务</strong> : 输入semantic segmentation mask, 合/img成 photorealistic images。 </p>
 <p><code>Semantic Image</code> 是啥叻？ 直观上理解，如下图： </p>
