@@ -244,8 +244,8 @@
   <div class="article-content">
     <div class="markdown-body">
       <p><a href="https://www.youtube.com/watch?v=p5U4NgVGAwg&amp;feature=youtu.be" target="_blank" rel="noopener">GauGAN: Changing Sketches into Photorealistic Masterpieces</a> 3月的时候，英伟达发布了一个视频挺火的： 你只要粗略勾勒简单的线条，AI就能生成逼真的写实图片。</p>
-<p><img src="https://camo.githubusercontent.com/a295a79daea9d1dd0cb16b48055607d0f17258b2/68747470733a2f2f6e766c6162732e6769746875622e696f2f53504144452f2f696d616765732f6f6365616e2e676966" alt="68747470733a2f2f6e766c6162732e6769746875622e696f2f53504144452f2f696d616765732f6f6365616e2e676966"><br><a href="https://github.com/NVlabs/SPADE" target="_blank" rel="noopener">GitHub地址</a></p>
-<h2 id="任务："><a href="#任务：" class="headerlink" title="任务："></a>任务：</h2><p><strong>学习任务</strong> : 输入semantic segmentation mask, 合/img成 photorealistic images。 </p>
+<p><img src="https://camo.githubusercontent.com/a295a79daea9d1dd0cb16b48055607d0f17258b2/68747470733a2f2f6e766c6162732e6769746875622e696f2f53504144452f2f696d616765732f6f6365616e2e676966" alt="68747470733a2f2f6e766c6162732e6769746875622e696f2f53504144452f2f696d616765732f6f6365616e2e676966"><br><a href="https://github.com/NVlabs/SPADE" target="_blank" rel="noopener">GitHub地址</a><br>那它是怎么实现的呢？ 这个项目用的是GAN算法。</p>
+<h2 id="GAN模型的任务："><a href="#GAN模型的任务：" class="headerlink" title="GAN模型的任务："></a>GAN模型的任务：</h2><p><strong>学习任务</strong> : 输入semantic segmentation mask, 合成 photorealistic images。 </p>
 <p><code>Semantic Image</code> 是啥叻？ 直观上理解，如下图： </p>
 <p><img src="/img/7c2b5608-840f-411f-bcd4-024df194b0de/31085460.png" alt="31085460.png"></p>
 <p><code>Image segmentation</code>呢？<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Image segmentation is a computer vision task in which we label specific regions of an image according to what&apos;s being shown. </span><br><span class="line">the goal of semantic image segmentation is to label each pixel of an image with a corresponding class of what is being represented.</span><br></pre></td></tr></table></figure></p>
@@ -260,7 +260,7 @@
 </ol>
 <p>$$\sigma^2 = \frac{1}{n} \sum_{i=1}^{n}(x_i - \mu)^2$$</p>
 <ol start="3">
-<li>再对输入特征做Normalization:<br>$$\frac{x}{\sigma^2}$$</li>
+<li>再对输入特征做Normalization:<br>$$\frac{x-u}{\sigma^2}$$</li>
 </ol>
 <p><strong>好处</strong>是，经过处理的input特征值分布更集中均匀， 如下图的第三个坐标系，<br><img src="/img/7c2b5608-840f-411f-bcd4-024df194b0de/826f032b.png" alt="826f032b.png"></p>
 <p>对于损失函数，<br>$$J(w, x) = \frac{1}{m}\sum_{i=1}^{m}L(\hat{y}, y)$$<br>用梯度下降训练W，B的时候，Normalization后，形状更圆一些，更容易优化。无论初始从哪个位置开始，你都可以用较大的步长,比较容易找到适合的w,b的值，使得J（w,b)的值最小。<br><img src="/img/7c2b5608-840f-411f-bcd4-024df194b0de/6ad7add2.png" alt="6ad7add2.png"></p>
