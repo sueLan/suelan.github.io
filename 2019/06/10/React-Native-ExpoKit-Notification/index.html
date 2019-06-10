@@ -8,12 +8,12 @@
   
   
   
-  <title>理解手机GPS定位原理 | 蓝容的Blog</title>
+  <title>React Native: ExpoKit模式配置Push Notification Notification | 蓝容的Blog</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
   
-    <meta name="keywords" content="LBS,">
+    <meta name="keywords" content="React Native,">
   
 
   <script>
@@ -197,24 +197,24 @@
 
 <div class="post">
   <h1 class="article-title">
-    <span>理解手机GPS定位原理</span>
+    <span>React Native: ExpoKit模式配置Push Notification Notification</span>
   </h1>
   <div class="article-top-meta">
     <span>
       发布 : 
-      2019-06-08
+      2019-06-10
     </span>
     
       <span>
         分类 : 
-          <a href="/categories/LBS/">
-            LBS
+          <a href="/categories/React-Native/">
+            React Native
           </a>
       </span>
     
     
       <span>
-        浏览 : <span class="article-timer" data-identity="理解GPS定位原理"></span>
+        浏览 : <span class="article-timer" data-identity="React-Native-ExpoKit-Notification"></span>
       </span>
     
   </div>
@@ -223,25 +223,33 @@
 
   <div class="article-content">
     <div class="markdown-body">
-      <p>本文取材自 TED教学视频<a href="https://www.youtube.com/watch?v=70cDSUI4XKE" target="_blank" rel="noopener">How does your smartphone know your location? - Wilton L. Virgo</a><br>我们的手机是如何准确定位的呢？ 答案在离我们2000多英里的卫星上。</p>
-<p>第一个问题： 为啥卫星上的时间对GPS定位如此重要？ 因为我们要知道手机跟卫星的距离。 每个卫星在不断对外广播信号。信号中记录自己的创建时间。</p>
-<p><img src="/img/a9bb4ba0-9918-4e5c-9fc0-3b9a28363e6b/48bce392.png" alt="48bce392.png"></p>
-<p>手机收到信号后，利用收到信号的到达时间， 计算自己跟卫星的距离: </p>
-<p>$$distance = c * \Delta T $$</p>
-<p>c: 光的速度<br>$\Delta T$: 信号传播的时间间隔 $time_{arrive} - time_{create}$</p>
-<p>但是c = 299,792,458 m/s, 非常大。 如果用秒做单位计算$\Delta T$， 地球上所有点，甚至有些远离我们的位置，计算出来的distance都是一样的值。 </p>
-<p><img src="/img/a9bb4ba0-9918-4e5c-9fc0-3b9a28363e6b/f8edfbb6.png" alt="f8edfbb6.png"></p>
-<p>所以我们需要非常非常非常精确的时钟计算时间. 于是原子钟粉墨登场. 就像机械钟靠嘀嗒嘀嗒摇摆来计时， 原子钟也有这种间隔时间固定的滴答滴答计时方式。 </p>
-<h2 id="原子钟"><a href="#原子钟" class="headerlink" title="原子钟"></a>原子钟</h2><p><img src="/img/a9bb4ba0-9918-4e5c-9fc0-3b9a28363e6b/782d2620.png" alt="782d2620.png"><br>原子钟依赖原子跃迁所释放或吸收的电磁波来计时。原子在一个轨道跑了一圈后，跃迁到另一个轨道的时候会以电磁波形式释放出能量。</p>
-<p><img src="/img/a9bb4ba0-9918-4e5c-9fc0-3b9a28363e6b/a68ec7af.png" alt="a68ec7af.png"></p>
-<p>能量计算公式： $\Delta E = h \nu$ $\Delta E$ 变化的能量; h是常量(h=6.626x$10^{-34}$ Js)。 $\nu$是频率。 比如铯原子钟，它的频率是个固定值 9,192,631,770Hz，你可以想象为一个每秒跑9billion圈的时钟。所以用原子钟可以每秒精确到 1/1billion。 </p>
-<p><img src="/img/a9bb4ba0-9918-4e5c-9fc0-3b9a28363e6b/ca6ea804.png" alt="0bc32fc3.png"><br>这张图的detector是用来检测probe laser固定频率发出的电磁波。</p>
-<p>有了精确的时间，我们可以知道手机跟卫星的距离。 以卫星为中心，distance为半径画圆(球)</p>
-<p><img src="/img/a9bb4ba0-9918-4e5c-9fc0-3b9a28363e6b/f58c51ad.png" alt="f58c51ad.png"></p>
-<p>如果多几个卫星，我们可以用几何公式计算出它们的空间交叉点</p>
-<p><img src="/img/a9bb4ba0-9918-4e5c-9fc0-3b9a28363e6b/293478f1.png" alt="293478f1.png"></p>
-<p><img src="/img/a9bb4ba0-9918-4e5c-9fc0-3b9a28363e6b/6cbd0ed3.png" alt="6cbd0ed3.png"></p>
-
+      <p>Expo sdk已经有一套Push Notifications的方案，接入方便, 但需要服务端配合接入对应sdk.而expo-server-sdk中默认使用Google Cloud Messaging 和 APNS； 因为Android国内无法用谷歌的服务，再加上没有服务端对应开发语言的sdk, 我们最后还是选了传统的方式。</p>
+<h2 id="Expo-Eject"><a href="#Expo-Eject" class="headerlink" title="Expo Eject"></a>Expo Eject</h2><p>用expo创建的RN项目已经不再有ios/ &amp; android/的工程配置文件夹。 所以我们要先用 <code>expo eject</code>命名生成iOS跟Android的工程配置文件, 。</p>
+<p><code>expo eject</code>会改变开发流程，比如，要运行一个项目，不止要<code>expo start</code>， 还要用Xcode或者AndroidStudio Run一个native项目。 所以真的要通读这个文档，仔细考虑要不要这么做<a href="https://docs.expo.io/versions/latest/expokit/eject/#__next" target="_blank" rel="noopener">Ejecting to ExpoKit - Expo Documentation</a></p>
+<ol>
+<li><p>首先，我们要check一下app.json对不对<a href="https://docs.expo.io/versions/latest/distribution/building-standalone-apps/#2-configure-appjson" target="_blank" rel="noopener">https://docs.expo.io/versions/latest/distribution/building-standalone-apps/#2-configure-appjson</a></p>
+</li>
+<li><p>接着，运行<code>expo eject</code>命令，会有如下提示, 我选第三个，ExpoKit。 ExpoKit是Objective-C 和Java库， 将native开发跟expo平台开发结合起来。</p>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">It&apos;s recommended to commit all your changes before proceeding,</span><br><span class="line">so you can revert the changes made by this command if necessary.</span><br><span class="line"></span><br><span class="line">? How would you like to eject your app?</span><br><span class="line">  Read more: https://docs.expo.io/versions/latest/expokit/eject/</span><br><span class="line">  React Native: I&apos;d like a regular React Native project.</span><br><span class="line">❯ ExpoKit: I&apos;ll create or log in with an Expo account to use React Native and the Expo SDK.</span><br><span class="line">  Cancel: I&apos;ll continue with my current project structure.</span><br></pre></td></tr></table></figure>
+<p>你会发现多了两个目录<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">rn-project/</span><br><span class="line">  - ios/</span><br><span class="line">  - android/</span><br></pre></td></tr></table></figure></p>
+<h2 id="运行Native工程"><a href="#运行Native工程" class="headerlink" title="运行Native工程"></a>运行Native工程</h2><p>React Native packager方面，要像以前那样，运行<code>expo start</code>。<br>接着配置native工程。以iOS为例: </p>
+<ol>
+<li>进入ios文件夹, pod install (如果遇到undefined method’native_target’, 请参考<a href="https://github.com/expo/expo/issues/2401d" target="_blank" rel="noopener">Issues · expo/expo · GitHub</a>, 将cocoapods降到1.5.3版本。 </li>
+<li><p>打开xcwordspace文件，正常buid &amp; run iOS项目</p>
+<p>app启动的时候，它会自动请求并加载JS bundle。如果我们修改了js文件，再保存，hot-update也生效的.</p>
+</li>
+</ol>
+<h2 id="配置-PushNotificationIOS"><a href="#配置-PushNotificationIOS" class="headerlink" title="配置 PushNotificationIOS"></a>配置 PushNotificationIOS</h2><p><a href="https://facebook.github.io/react-native/docs/pushnotificationios" target="_blank" rel="noopener">官方教程PushNotificationIOS · React Native</a> 很是麻烦，还容易报一堆这个那个找不到的错误。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">RCTPushNotificationManager.h not found</span><br><span class="line">React/RCTEventEmitter.h file not found</span><br></pre></td></tr></table></figure>
+<p>其实它本质上是xcodeproject要手动link RCTPushNotification lib，我们大可以直接修改Podfile文件，如下: </p>
+<ul>
+<li>最后一行，添加<code>RCTPushNotification</code></li>
+<li>再run一下<code>pod install</code></li>
+<li>重新<code>build</code>.</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">pod &apos;React&apos;,</span><br><span class="line">  :path =&gt; &quot;../node_modules/react-native&quot;,</span><br><span class="line">  :inhibit_warnings =&gt; true,</span><br><span class="line">  :subspecs =&gt; [</span><br><span class="line">    &quot;Core&quot;,</span><br><span class="line">    &quot;ART&quot;,</span><br><span class="line">    &quot;RCTActionSheet&quot;,</span><br><span class="line">    &quot;RCTAnimation&quot;,</span><br><span class="line">    &quot;RCTCameraRoll&quot;,</span><br><span class="line">    &quot;RCTGeolocation&quot;,</span><br><span class="line">    &quot;RCTImage&quot;,</span><br><span class="line">    &quot;RCTNetwork&quot;,</span><br><span class="line">    &quot;RCTText&quot;,</span><br><span class="line">    &quot;RCTVibration&quot;,</span><br><span class="line">    &quot;RCTWebSocket&quot;,</span><br><span class="line">    &quot;DevSupport&quot;,</span><br><span class="line">    &quot;CxxBridge&quot;,</span><br><span class="line">    &quot;RCTPushNotification&quot;</span><br><span class="line">  ]</span><br></pre></td></tr></table></figure>
     </div>
   </div>
   
@@ -252,7 +260,7 @@
         
           本文作者 : RongyanZheng <br>
         
-        原文链接 : <a href>https://suelan.github.io/2019/06/08/理解GPS定位原理/</a><br>
+        原文链接 : <a href>https://suelan.github.io/2019/06/10/React-Native-ExpoKit-Notification/</a><br>
         版权声明 : 本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！
         </blockquote>
       </div>
@@ -324,15 +332,9 @@
       <div class="nav-pre">
         <i class="iconfont icon-prev"></i>
         上一篇:
-        <a href="/2019/06/06/714-Best-Time-to-Buy-and-Sell-Stock-with-Transaction-Fee/" target="_self">714. Best Time to Buy and Sell Stock with Transaction Fee</a>
+        <a href="/2019/06/08/理解GPS定位原理/" target="_self">理解手机GPS定位原理</a>
       </div>
     
-    
-      <div class="nav-next">
-        下一篇:
-        <a href="/2019/06/10/React-Native-ExpoKit-Notification/" target="_self">React Native: ExpoKit模式配置Push Notification Notification</a>
-        <i class="iconfont icon-next"></i>
-      </div>
     
   </nav>
 
