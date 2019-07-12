@@ -8,12 +8,12 @@
   
   
   
-  <title>792. Number of Matching Subsequences | 蓝容的Blog</title>
+  <title>Gaussian Filter | 蓝容的Blog</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
   
-    <meta name="keywords" content="Hexo, theme-bmw">
+    <meta name="keywords" content="Algorithm,CV,">
   
 
   <script>
@@ -197,17 +197,24 @@
 
 <div class="post">
   <h1 class="article-title">
-    <span>792. Number of Matching Subsequences</span>
+    <span>Gaussian Filter</span>
   </h1>
   <div class="article-top-meta">
     <span>
       发布 : 
-      2019-07-06
+      2019-07-12
     </span>
+    
+      <span>
+        分类 : 
+          <a href="/categories/Algorithm/">
+            Algorithm
+          </a>
+      </span>
     
     
       <span>
-        浏览 : <span class="article-timer" data-identity="792-Number-of-Matching-Subsequences"></span>
+        浏览 : <span class="article-timer" data-identity="Gaussian-Filter"></span>
       </span>
     
   </div>
@@ -216,55 +223,20 @@
 
   <div class="article-content">
     <div class="markdown-body">
-      <h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a><a href="https://leetcode-cn.com/problems/number-of-matching-subsequences/" target="_blank" rel="noopener">题目</a></h2><h2 id="Solution-1"><a href="#Solution-1" class="headerlink" title="Solution 1"></a>Solution 1</h2><p>思路：存储 + 二分查找</p>
+      <p>高斯函数在学术领域运用的非常广泛。 写工程产品的时候，经常用它来去除图片或者视频的噪音，平滑图片, Blur处理。我们今天来看看高斯滤波, Gaussian Filter。<br><strong>1D的高斯函数</strong><br>一维的高斯函数（或者叫正态分布）方程跟图形如下:<br>$$G(x) = \frac{1}{\sqrt{2\pi\sigma^2}} e^{-\frac{x^2}{2\sigma^2}}$$<br><img src="https://upload-images.jianshu.io/upload_images/1126909-759a65c86f5fa7e6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>$\mu$是均值；$\sigma$ 是标准方差。它有个重要特点是 -$\sigma$ 到+$\sigma$ 之间的G(x)与x轴围成的面积占全部面积的68.2%.  -2$\sigma$ 到+2$\sigma$之间的面积占95%。-3$\sigma$ 到+3$\sigma$之间的面积占99.7%。<br>如果我们给-3$\sigma$ 到+3$\sigma$区间, 它几乎包括了所有可能的点。这个特性对Filter kernel的生成很重要。</p>
+<p><strong>2D的高斯函数</strong><br>$$G(x, y) = \frac{1}{\sqrt{2\pi\sigma^2}} e^{-\frac{x^2 + y^2}{2\sigma^2}}$$</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1126909-40ab7e86977aa773.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p><strong>所谓高斯滤波操作，其实就是用高斯函数对image做卷积计算</strong>。但一般图像在计算机中一般是离散的3D矩阵，而高斯函数是连续函数，所以我们要从连续高斯函数中采样生成离散的2D矩阵，即Gaussian Filter Kernel。 我们可以控制Kernal的size，让它的点都落在-3$\sigma$ 到+3$\sigma$区间内。</p>
+<h3 id="生成高斯kernel"><a href="#生成高斯kernel" class="headerlink" title="生成高斯kernel"></a>生成高斯kernel</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Function to create Gaussian filter; sigma is standard deviation</span></span><br><span class="line"><span class="function">Matrix <span class="title">getGaussian</span><span class="params">(<span class="keyword">int</span> height, <span class="keyword">int</span> width, <span class="keyword">double</span> sigma)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Matrix kernel(height, Array(width));</span><br><span class="line">    <span class="comment">// sum is for normalization </span></span><br><span class="line">    <span class="keyword">double</span> sum=<span class="number">0.0</span>;</span><br><span class="line">    <span class="keyword">int</span> i,j;</span><br><span class="line">    </span><br><span class="line">   <span class="comment">// generating the kernel </span></span><br><span class="line">    <span class="keyword">for</span> (i=<span class="number">0</span> ; i&lt;height ; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span> (j=<span class="number">0</span> ; j&lt;width ; j++) &#123;</span><br><span class="line">            <span class="comment">// using gaussian function to generate gaussian filter </span></span><br><span class="line">            kernel[i][j] = <span class="built_in">exp</span>(-(i*i+j*j)/(<span class="number">2</span>*sigma*sigma))/(<span class="number">2</span>*M_PI*sigma*sigma);</span><br><span class="line">            sum += kernel[i][j];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">   </span><br><span class="line">   <span class="comment">// normalising the Kernel </span></span><br><span class="line">    <span class="keyword">for</span> (i=<span class="number">0</span> ; i&lt;height ; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span> (j=<span class="number">0</span> ; j&lt;width ; j++) &#123;</span><br><span class="line">            kernel[i][j] /= sum;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> kernel;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><a href="https://gist.github.com/OmarAflak/aca9d0dc8d583ff5a5dc16ca5cdda86a" target="_blank" rel="noopener">代码来源</a><br>比如，我们用高斯函数生成了一个5x5， $\sigma$是1的高斯核2D矩阵:<br><img src="https://upload-images.jianshu.io/upload_images/1126909-89ecbc732fae6857.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"><br>它有几个特点： </p>
 <ol>
-<li>首先将字符一集对应的下标存储在26 * n的二维数组中。比如对字符串 ‘abcdea’存储为</li>
+<li>最中间的值最大，值向周围递减</li>
+<li>$\sigma$越大，高斯函数的峰越宽，临接的数值差越大</li>
 </ol>
-<table>
-<thead>
-<tr>
-<th>Char</th>
-<th>Index</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>0</td>
-<td>[0, 5]</td>
-</tr>
-<tr>
-<td>1</td>
-<td>[1]</td>
-</tr>
-<tr>
-<td>2</td>
-<td>[2]</td>
-</tr>
-<tr>
-<td>3</td>
-<td>[3]</td>
-</tr>
-<tr>
-<td>4</td>
-<td>[4]</td>
-</tr>
-<tr>
-<td>…</td>
-<td></td>
-</tr>
-<tr>
-<td>25</td>
-</tr>
-</tbody>
-</table>
-<p>对应代码: </p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; store(<span class="number">26</span>, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;());</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; S.size(); ++i) &#123;</span><br><span class="line">      <span class="comment">// 存储字母跟index</span></span><br><span class="line">      store[S[i] - <span class="string">'a'</span>].push_back(i);</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
-<ol>
-<li>对某个word，查找它的字符是否在二维数组中。</li>
-</ol>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">numMatchingSubseq</span><span class="params">(<span class="built_in">string</span> S, <span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt;&amp; words)</span> </span>&#123;</span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; store(<span class="number">26</span>, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;());</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; S.size(); ++i) &#123;</span><br><span class="line">        <span class="comment">// 存储字母跟index</span></span><br><span class="line">        store[S[i] - <span class="string">'a'</span>].push_back(i);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> res = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">auto</span> &amp;word: words) &#123;</span><br><span class="line">        <span class="keyword">int</span> x = <span class="number">-1</span>;</span><br><span class="line">        <span class="keyword">bool</span> found = <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">auto</span> c: word) &#123;</span><br><span class="line">            <span class="comment">// search</span></span><br><span class="line">            <span class="keyword">auto</span> it = upper_bound(store[c - <span class="string">'a'</span>].begin(), store[c - <span class="string">'a'</span>].end(), x);</span><br><span class="line">            <span class="keyword">if</span> (it == store[c - <span class="string">'a'</span>].end()) &#123;</span><br><span class="line">                found = <span class="literal">false</span>;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="comment">// 更新最新的下标位置</span></span><br><span class="line">                x = *it;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (found) res++;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="Solution-2"><a href="#Solution-2" class="headerlink" title="Solution 2"></a>Solution 2</h2><p>第二种思路，来自<a href="https://leetcode.com/problems/number-of-matching-subsequences/discuss/117634/Efficient-and-simple-go-through-words-in-parallel-with-explanation" target="_blank" rel="noopener">Stefan大神</a>。<br>这种思路，存储的是words中等待匹配的字符的index pair。比如 words = [“a”, “bb”, “acd”, “ace”]存储的结果是:<br>|  idx | pair |<br>| — | — |<br>| ‘a’ | [(0, 1), (2, 1), (3, 1)] |<br>| ‘b’ | [(1, 1)] |</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">numMatchingSubseq</span><span class="params">(<span class="built_in">string</span> S, <span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt;&amp; words)</span> </span>&#123;</span><br><span class="line">    <span class="built_in">vector</span>&lt;pair&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt;&gt; waiting[<span class="number">128</span>];</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; words.size(); i++)</span><br><span class="line">        waiting[words[i][<span class="number">0</span>]].emplace_back(i, <span class="number">1</span>);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">char</span> c : S) &#123;</span><br><span class="line">        <span class="keyword">auto</span> advance = waiting[c];</span><br><span class="line">        waiting[c].clear();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">auto</span> it : advance)</span><br><span class="line">            waiting[words[it.first][it.second++]].push_back(it);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> waiting[<span class="number">0</span>].size();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="对图片应用高斯Filter"><a href="#对图片应用高斯Filter" class="headerlink" title="对图片应用高斯Filter"></a>对图片应用高斯Filter</h3><p>对某个像素点image[i][j]，Fitler对原图对应的像素点做点乘，相加。 生成新的值。<br><img src="https://upload-images.jianshu.io/upload_images/1126909-f2398e2401a5ae93.gif?imageMogr2/auto-orient/strip" alt="https://www.youtube.com/watch?v=C_zFhWdM4ic"><br><a href="https://www.youtube.com/watch?v=C_zFhWdM4ic" target="_blank" rel="noopener">材料来源</a><br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Image <span class="title">applyFilter</span><span class="params">(Image &amp;image, Matrix &amp;filter)</span></span>&#123;</span><br><span class="line">    assert(image.size()==<span class="number">3</span> &amp;&amp; filter.size()!=<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> height = image[<span class="number">0</span>].size();</span><br><span class="line">    <span class="keyword">int</span> width = image[<span class="number">0</span>][<span class="number">0</span>].size();</span><br><span class="line">    <span class="keyword">int</span> filterHeight = filter.size();</span><br><span class="line">    <span class="keyword">int</span> filterWidth = filter[<span class="number">0</span>].size();</span><br><span class="line">    <span class="keyword">int</span> newImageHeight = height-filterHeight+<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">int</span> newImageWidth = width-filterWidth+<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">int</span> d,i,j,h,w;</span><br><span class="line"></span><br><span class="line">    Image newImage(3, Matrix(newImageHeight, Array(newImageWidth)));</span><br><span class="line">    </span><br><span class="line">   <span class="comment">// iter the image pixel</span></span><br><span class="line">    <span class="keyword">for</span> (d=<span class="number">0</span> ; d&lt;<span class="number">3</span> ; d++) &#123;</span><br><span class="line">        <span class="keyword">for</span> (i=<span class="number">0</span> ; i&lt;newImageHeight ; i++) &#123;</span><br><span class="line">            <span class="keyword">for</span> (j=<span class="number">0</span> ; j&lt;newImageWidth ; j++) &#123;</span><br><span class="line">                <span class="comment">// using filter convolute the image matrix</span></span><br><span class="line">                <span class="keyword">for</span> (h=i ; h&lt;i+filterHeight ; h++) &#123;</span><br><span class="line">                    <span class="keyword">for</span> (w=j ; w&lt;j+filterWidth ; w++) &#123;</span><br><span class="line">                        newImage[d][i][j] += filter[h-i][w-j]*image[d][h][w];</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> newImage;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>如下图，图片被平滑处理了。<br><img src="https://upload-images.jianshu.io/upload_images/1126909-c7b1627f1697a9c7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<h4 id="More"><a href="#More" class="headerlink" title="More:"></a>More:</h4><p><a href="https://gist.github.com/OmarAflak/aca9d0dc8d583ff5a5dc16ca5cdda86a" target="_blank" rel="noopener">https://gist.github.com/OmarAflak/aca9d0dc8d583ff5a5dc16ca5cdda86a</a></p>
 
     </div>
   </div>
@@ -276,7 +248,7 @@
         
           本文作者 : RongyanZheng <br>
         
-        原文链接 : <a href>https://suelan.github.io/2019/07/06/792-Number-of-Matching-Subsequences/</a><br>
+        原文链接 : <a href>https://suelan.github.io/2019/07/12/Gaussian-Filter/</a><br>
         版权声明 : 本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！
         </blockquote>
       </div>
@@ -328,6 +300,15 @@
     <div class="article-meta pull-left">
       <span>
         
+          <i class="iconfont icon-06tags"></i>标签: 
+          
+          <span class="span--tag">
+            <a href="/tags/CV/">
+              #CV
+            </a>
+          </span>
+          
+        
       </span>
     </div>
     <div class="article-meta pull-right">
@@ -348,15 +329,9 @@
       <div class="nav-pre">
         <i class="iconfont icon-prev"></i>
         上一篇:
-        <a href="/2019/06/14/1011-Capacity-To-Ship-Packages-Within-D-Days/" target="_self">1011. Capacity To Ship Packages Within D Days</a>
-      </div>
-    
-    
-      <div class="nav-next">
-        下一篇:
         <a href="/2019/07/10/PingPong/" target="_self">PingPong</a>
-        <i class="iconfont icon-next"></i>
       </div>
+    
     
   </nav>
 
