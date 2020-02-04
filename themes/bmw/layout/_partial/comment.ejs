@@ -1,0 +1,19 @@
+<a href="#comment" class="comment-anchor"></a>
+<div class="comment-title"><i class="iconfont icon-footprint"></i> Comments Here <i class="iconfont icon-footprint"></i></div>
+<div id="vcomments"></div>
+
+<script defer>
+  if( <%- theme.leancloud.comment %> ) {
+    let path = getRealPath()
+    new Valine({
+      el: "#vcomments",
+      appId: "<%- theme.leancloud.appid %>",
+      appKey: "<%- theme.leancloud.appkey %>",
+      notify: false,
+      verify: false,
+      avatar: "robohash",
+      placeholder: "Please fill in the correct email address for my response. ♪(^∇^*)",
+      path
+    });
+  }
+</script>

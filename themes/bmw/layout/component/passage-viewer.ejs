@@ -1,0 +1,99 @@
+<%
+const getRealPath = pathname => {
+  if(!pathname) {
+    pathname = window.location.pathname
+  }
+  let names = pathname.split("/")
+  for(let i = names.length - 1; i >= 0; --i) {
+    let name = names[i].trim()
+    if(name.length > 0 && name !== "/" && name !== "index.html") {
+      return name
+    }
+  }
+  return "/"
+}
+%>
+
+<div class="post">
+  <h1 class="article-title">
+    <span><%- page.title %></span>
+  </h1>
+  <div class="article-top-meta">
+    <span>
+      post ime : 
+      <%- page.date.format("YYYY-MM-DD") %>
+    </span>
+    <% if(page.categories && page.categories.length > 0) { %>
+      <span>
+        category : 
+          <a href="<%= url_for(page.categories.data[0].path)%>">
+            <%- page.categories.data[0].name %>
+          </a>
+      </span>
+    <% } %>
+    <% if(theme.leancloud.timer){ %>
+      <span>
+        read : <span class="article-timer" data-identity="<%- getRealPath(page.path) %>"></span>
+      </span>
+    <% } %>
+  </div>
+
+  <% if(theme.player && page.playlist){ %>
+    <%- partial("_partial/player", {playlist: page.playlist, id: getRealPath(page.path), listFolded: false, style: "margin: 4rem 2px"}) %>
+  <% } %>
+
+  <div class="article-content">
+    <div class="markdown-body">
+      <%- page.more %>
+    </div>
+  </div>
+  <% if(theme.copyright.enable){ %>
+    <div class="copy-right">
+      <div class="markdown-body">
+        <blockquote>
+        <% let psgAuthor = theme.copyright.author || config.author; %>
+        <% if(psgAuthor){ %>
+          Author : <%= psgAuthor %> <br/>
+        <% } %>
+        Link : <a href="<% url_for(page.path)%>"><%- page.permalink %></a><br>
+        License : <%- theme.copyright.license %>
+        </blockquote>
+      </div>
+    </div>
+  <% } %>
+  
+  <% if(theme.social_share.enable){ %>
+    <%- partial("_partial/social") %>
+  <% } %>
+
+  <% if(theme.reward.enable){ %>
+    <%- partial("_partial/reward") %>
+  <% } %>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+      <span>
+        <% if(page.tags && page.tags.length > 0){ %>
+          <i class="iconfont icon-06tags"></i>标签: 
+          <% for(let item of page.tags.data){ %>
+          <span class="span--tag">
+            <a href="<%= url_for(item.path)%>">
+              #<%- item.name %>
+            </a>
+          </span>
+          <% } %>
+        <% } %>
+      </span>
+    </div>
+    <div class="article-meta pull-right">
+    </div>
+  </div>
+</div>
+
+<% if(theme.toc){ %>
+  <aside id="sidebar">
+    <p id="sidebar-header"></p>
+    <ol id="sidebar-toc"></ol>
+  </aside>
+  <script async>setTimeout(generateToc, 10);</script>
+<% } %>

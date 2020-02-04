@@ -1,0 +1,105 @@
+<%
+const getRealPath = pathname => {
+  if(!pathname) {
+    pathname = window.location.pathname
+  }
+  let names = pathname.split("/")
+  for(let i = names.length - 1; i >= 0; --i) {
+    let name = names[i].trim()
+    if(name.length > 0 && name !== "/" && name !== "index.html") {
+      return name
+    }
+  }
+  return "/"
+}
+%>
+<div class="container home-index">
+  <% for(let psg of page.posts.data){ %>
+  <div class="post">
+    <h1 class="article-title">
+      <a href="<%- url_for(psg.path) %>">
+        <span><%- psg.title %></span>
+      </a>
+    </h1>
+    <!-- PC端文章信息 -->
+    <div class="article-top-meta pc-view">
+      <span>
+        post time : <%- psg.date.format("YYYY-MM-DD") %>
+      </span>
+    </div>
+    <!-- 移动端文章信息 -->
+    <div class="article-top-meta mobile-view">
+      <span>
+        post : <%- psg.date.format("YYYY-MM-DD") %>
+      </span>
+      <% if(psg.categories && psg.categories.length > 0) { %>
+        <span>
+        category :
+          <a href="<%= url_for(psg.categories.data[0].path)%>">
+            <%- psg.categories.data[0].name %>
+          </a>
+        </span>
+      <% } %>
+      <% if(theme.leancloud.timer){ %>
+        <span>
+          read : <span class="article-timer" data-identity="<%- getRealPath(psg.path) %>"></span>
+        </span>
+      <% } %>
+    </div>
+    <% if(theme.player && psg.playlist){ %>
+      <%- partial("_partial/player", {playlist: psg.playlist, id: getRealPath(psg.path), listFolded: false, style: 'margin: 4rem 2px -1rem'}) %>
+    <% } %>
+    <!-- 文章简介 -->
+    <div class="article-content">
+      <div class="markdown-body article-content--inner" v-html="mdToHtml(psg.summary)">
+        <%- psg.excerpt %>
+      </div>
+    </div>
+    <div class="article-footer">
+      <div class="article-meta pull-left">
+        <!-- 分类pc端可见 -->
+        <span class="pc-view">
+          <% if(psg.categories && psg.categories.length > 0) { %>
+            <i class="iconfont icon-tag"></i>category:
+            <a href="<%= url_for(psg.categories.data[0].path)%>">
+              <%- psg.categories.data[0].name %>
+            </a>
+          </span>
+          <% } %>
+        <span>
+          <% if(psg.tags && psg.tags.length > 0){ %>
+            <i class="iconfont icon-06tags"></i>tag:
+            <% for(let item of psg.tags.data){ %>
+              <span class="span--tag">
+                <a href="<%= url_for(item.path)%>">
+                  #<%- item.name %>
+                </a>
+              </span>
+            <% } %>
+          <% } %>          
+        </span>
+      </div>
+      <% if(theme.leancloud.timer){ %>
+        <div class="article-meta pull-right">
+          <span class="pc-view">
+            <i class="iconfont icon-view"></i>read: <span class="article-timer" data-identity="<%- getRealPath(psg.path) %>"></span>
+          </span>
+        </div>
+      <% } %>
+    </div>
+  </div>
+  <% } %>
+
+  <nav class="page-navigation">
+    <% if(page.prev !== 0){ %>
+      <a href="<%- url_for(page.prev_link)%>">上一页</a>
+    <% } %>
+    <% if(page.next !== 0){ %>
+      <a href="<%- url_for(page.next_link)%>">下一页</a>
+    <% } %>
+  </nav>
+
+  <% if(theme.leancloud.timer){ %>
+    <%- partial("_partial/timer") %>
+  <% } %> 
+</div>
