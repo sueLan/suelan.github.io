@@ -316,15 +316,16 @@ In `computeViewableItems`, it only go through the specific range of items, [firs
   is true for longer than `minimumViewTime` milliseconds (after an interaction if `waitForInteraction`
  is true):
  
-  - Occupying >= `viewAreaCoveragePercentThreshold` of the view area XOR fraction of the item
+1.  Occupying >= `viewAreaCoveragePercentThreshold` of the view area XOR fraction of the item
    visible in the view area >= `itemVisiblePercentThreshold`.
+ When it comes to the fraction of the item visible in the view area, 
+ there are 5 cases we need to care about when the height of a item is small than the viewportHeight
+    
+  ![partial](viewable-partial.png)
+  ![img](https://drive.google.com/open?id=1rpnpvqw-srEFax-DOm-dJW6Vv2A8JGKo)
+2. Entirely visible on screen when the height of a item is bigger than the viewportHeight. 
 
-   
-   ![3a915aee.png](/img/9af4f3b0-fe64-4a98-b94e-d456f65ae7cc/cc1f4f90.png)
-  - Entirely visible on screen
-
-
-![7c4f2df0.png](/img/9af4f3b0-fe64-4a98-b94e-d456f65ae7cc/a8e66aed.png)
+![7c4f2df0.png](entire-viewable.png)
 
 [ref](https://github.com/facebook/react-native/blob/84adc85523770ebfee749a020920e0b216cf69f8/Libraries/Lists/ViewabilityHelper.js#L64)
 
