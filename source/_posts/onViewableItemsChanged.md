@@ -322,7 +322,6 @@ In `computeViewableItems`, it only go through the specific range of items, [firs
  there are 5 cases we need to care about when the height of a item is small than the viewportHeight
     
   ![partial](viewable-partial.png)
-  ![img](https://drive.google.com/open?id=1rpnpvqw-srEFax-DOm-dJW6Vv2A8JGKo)
 2. Entirely visible on screen when the height of a item is bigger than the viewportHeight. 
 
 ![7c4f2df0.png](entire-viewable.png)
