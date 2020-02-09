@@ -47,7 +47,7 @@ Subcommands:
 Just see I can do a lot of things with these command. If wanting to know more about a specific subcommand, we can use `xcrun simctl help [subcommand]` to seek help. Like, `xcrun simctl help boot` 
 
 
-### simulator info 
+### Simulator info 
 
 use `xcrun simctl list` to see all the simulator information. We can get a list of device types, a list of info of runtime names, a list of device names. 
   
@@ -204,7 +204,7 @@ spwan command would work with log stream utility. We can pass a predicate and fi
 ```
 xcrun simctl spawn booted log stream --predicate 'senderImagePath CONTAINS "nsurlsessiond"'
 ```
-![spwan](spawn_log)
+![spwan](spawn_log.png)
 
 Also, we can use different predicates to filter what we want.  
 
@@ -233,7 +233,7 @@ Successfully wrote simctl diagnose archive to '/private/tmp/simctl_diagnose_2020
 
 ![diagnose](diagnose.png)
 
-### clone 
+### Clone 
 Clone is a very powerful command. See details in [wwdc2019/418](https://developer.apple.com/videos/play/wwdc2019/418/).  
 
 `xcrun simctl clone <device> <clone name>`.  You can copy your custom device using this command. 
