@@ -88,8 +88,8 @@ Use `xcrun simctl list device` to see the list of device info. Or use a device n
 
 ### Create a custom simulator
 
- `xcrun simctl create <name> <device type> <runtime>`
- For example, if I would like to create a iPhone 11 Pro Max with iOS 13.3, I can use the follow command.
+`xcrun simctl create <name> <device type> <runtime>`
+For example, if I would like to create a iPhone 11 Pro Max with iOS 13.3, I can use the follow command.
 
 ```shell 
 ➜ xcrun simctl create "ry" "iPhone 11 Pro Max" iOS13.3  
@@ -144,7 +144,7 @@ xcrun simctl launch booted com.apple.example -MyDefaultKey YES
 
 If we use `--console-pty`,  launch command will connect the standard output and error of the application to the terminal line.
 
- ```
+```
 ➜  xcrun simctl launch --console-pty booted com.rong.lan.CubeTransitionAnimationDemo
 
 com.rong.lan.CubeTransitionAnimationDemo: 98045
@@ -152,12 +152,13 @@ com.rong.lan.CubeTransitionAnimationDemo: 98045
 2020-02-09 10:38:28.594 3DCubeTransitionAnimationDemo[98045:931065] timer current tx -281.000332
 2020-02-09 10:38:28.611 3DCubeTransitionAnimationDemo[98045:931065] timer current tx -285.030635
 2020-02-09 10:38:28.627 3DCubeTransitionAnimationDemo[98045:931065] timer current tx -289.060938
- ``` 
+``` 
 
  Use `xcrun simctl terminate <device> <bundle>` to terminate an application by identifier on a device.
 ### Container Path 
 
 `xcrun simctl simctl get_app_container <device> <app bundle identifier> [<container>]`  command is used to get the path of the installed app's container.  
+
 ```
 container   Optionally specify the container. Defaults to app.
   app                 The .app bundle
@@ -165,7 +166,9 @@ container   Optionally specify the container. Defaults to app.
   groups              The App Group containers
   <group identifier>  A specific App Group container
 ``` 
+
 For example
+
 ```
 ➜ xcrun simctl get_app_container booted com.rong.lan.CubeTransitionAnimationDemo 
 ~/Library/Developer/CoreSimulator/Devices/BE9A72F0-5793-447B-BEC4-63A73242BED5/data/Containers/Bundle/Application/135A7B46-DE38-47EC-9871-D1F3615E9CE5/3DCubeTransitionAnimationDemo.app
@@ -174,8 +177,6 @@ For example
 ```
 
 ### Spawn 
-
-#### Change the user defaults  
 
 Spawn command will pause xspawn, a process inside the simulator environment. 
 
