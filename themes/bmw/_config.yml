@@ -42,7 +42,7 @@ social_share:
 reward: 
   enable: true
   meta: The best way out is going througn # 提示文字
-  button_meta: 赞赏 ☕️☕️ # 按钮文字
+  button_meta: 赞赏 ☕️ # 按钮文字
   qrcodes: 
     # 支持多个支付方式
     # src: 二维码位置
