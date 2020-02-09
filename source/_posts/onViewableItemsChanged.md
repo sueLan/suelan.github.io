@@ -173,10 +173,10 @@ If you define [viewabilityConfigCallbackPairs](https://facebook.github.io/react-
 
 ```
 
-Here, we should pay attention to `ViewabilityHelper`, which is `
+Here, `ViewabilityHelper` is `
 a utility class for calculating viewable items based on the viewabilityConfig and metrics, like scroll position and layout.
 `
-For a `VirtualizedList`, there would be multiple `ViewabilityHelper` objects in `_viewabilityTuples`,  containing different `viewabilityConfig` to handle different viewability conditions.  
+For a `VirtualizedList`, there would be several  `ViewabilityHelper` objects in `_viewabilityTuples`,  containing different `viewabilityConfig` to handle different viewability conditions.  
 
 There are some important props in `ViewabilityHelper`. 
 
@@ -194,7 +194,7 @@ class ViewabilityHelper {
 
 ```
 
-There is a func `_updateViewableItems`,  which is called in many scenarios, like `onScroll` method. It will call `viewabilityHelper.onUpdate` to calculate the viewable items. 
+There is a func `_updateViewableItems` called in many scenarios, like `onScroll` method. It will call `viewabilityHelper.onUpdate` to calculate the viewable items. 
 
 ```js
 _updateViewableItems(data: any) {
@@ -294,13 +294,12 @@ In `computeViewableItems`, it only go through the specific range of items, from 
   is true for longer than `minimumViewTime` milliseconds (after an interaction if `waitForInteraction`
  is true):
  
-1.  Occupying >= `viewAreaCoveragePercentThreshold` of the view area XOR fraction of the item
-   visible in the view area >= `itemVisiblePercentThreshold`.
- When it comes to the fraction of the item visible in the view area, 
- there are 5 cases we need to care about when the height of a item is small than the viewportHeight. RN use `Math.min(bottom, viewportHeight) - Math.max(top, 0)` to calculate the viewable length. 
+1. the fraction of the item visible in the view area >= `itemVisiblePercentThreshold`.
+When it comes to the fraction of the item visible in the view area, 
+ there are following cases we need to care about. RN use `Math.min(bottom, viewportHeight) - Math.max(top, 0)` to calculate the viewable length. 
     
   ![partial](viewable-partial.png)
-2. Entirely visible on screen when the height of a item is bigger than the viewportHeight. 
+1. Entirely visible on screen when the height of a item is bigger than the viewportHeight. 
 
 ![7c4f2df0.png](entire-viewable.png)
 
