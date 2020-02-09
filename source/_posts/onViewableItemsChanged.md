@@ -116,7 +116,6 @@ let offset = this._selectOffset(e.nativeEvent.contentOffset);
 let dOffset = offset - this._scrollMetrics.offset;
 
 // ...
-
  this._scrollMetrics = {
       contentLength,
       dt,
@@ -129,30 +128,7 @@ let dOffset = offset - this._scrollMetrics.offset;
 
 ```
 
-
-```js
-_selectLength(
-    metrics: $ReadOnly<{
-      height: number,
-      width: number,
-      ...
-    }>,
-  ): number {
-    return !this.props.horizontal ? metrics.height : metrics.width;
-}
-
-_selectOffset(
-    metrics: $ReadOnly<{
-      x: number,
-      y: number,
-      ...
-    }>,
-  ): number {
-    return !this.props.horizontal ? metrics.y : metrics.x;
-}
-
-```
-
+If this is a vertical VirtualizedList, we get these layout info from `nativeEvent` event. The  `layout.layoutMeasurement.height` is the `viewportHeight`, `visibleLength`, the height of viewable region.  
 
 ![5d152b82.png](/img/9af4f3b0-fe64-4a98-b94e-d456f65ae7cc/5d152b82.png)
 
@@ -176,7 +152,7 @@ type ViewabilityHelperCallbackTuple = {
 };
 ```
 
-If a developer defines [viewabilityConfigCallbackPairs](https://facebook.github.io/react-native/docs/flatlist#viewabilityconfigcallbackpairs),  each `viewabilityConfig` will be used to initialize a `ViewabilityHelper` object. 
+If you define [viewabilityConfigCallbackPairs](https://facebook.github.io/react-native/docs/flatlist#viewabilityconfigcallbackpairs),  each `viewabilityConfig` will be used to initialize a different `ViewabilityHelper` object. 
 
 [ref code](https://github.com/facebook/react-native/blob/84adc85523770ebfee749a020920e0b216cf69f8/Libraries/Lists/VirtualizedList.js#L743). 
 
@@ -197,7 +173,7 @@ If a developer defines [viewabilityConfigCallbackPairs](https://facebook.github.
 
 ```
 
-Here, we should pay attention on `ViewabilityHelper`, which is `
+Here, we should pay attention to `ViewabilityHelper`, which is `
 a utility class for calculating viewable items based on the viewabilityConfig and metrics, like scroll position and layout.
 `
 For a `VirtualizedList`, there would be multiple `ViewabilityHelper` objects in `_viewabilityTuples`,  containing different `viewabilityConfig` to handle different viewability conditions.  
@@ -243,13 +219,14 @@ _updateViewableItems(data: any) {
 - `this._scrollMetrics.visibleLength` is used as `viewportHeight`
 - `this._createViewToken` is used to construct a `ViewToken` object, which contains `item` data, `index`, `key` and viewability of the `item`. 
 
-- [this._getFrameMetrics](1864) will get frame of the cell by index from the `this._frames` map, and its shape is 
+- [this._getFrameMetrics](1864) is a function to get frame of the cell by index from  `this._frames` map. 
 
 ```js
+// The map storing the cell layout info
 { [cellKey]: {
       // offset of the item cell
       offset: number, 
-      // length of the item cell in the scrolling direction 
+      // length of the item cell. width or height determined by the direction of the VirtualizedList
       length: number, 
       index: number,
       inLayout: boolean,
@@ -257,7 +234,7 @@ _updateViewableItems(data: any) {
 }
 ```
 
-- The shape of the `this.state` is
+- Inside `this.state`, we know the range of the rendered items by  `first` and `last` value. 
 
 ```js
 type State = {
@@ -275,7 +252,7 @@ In `onUpdate` method, it calls `computeViewableItems` to get `viewableIndices`
 
 #### computeViewableItems
 
-In `computeViewableItems`, it only go through the specific range of items, [first, last]. If a item is viewable, it will be stored in an array named `viewableIndices`. 
+In `computeViewableItems`, it only go through the specific range of items, from `${first}` to `${last}`. If a item is viewable, it will be stored in an array named `viewableIndices`. 
 
 ```js
   for (let idx = first; idx <= last; idx++) {
@@ -283,9 +260,9 @@ In `computeViewableItems`, it only go through the specific range of items, [firs
       if (!metrics) {
         continue;
       }
-      // The top postion of current item cell, relative to the screen 
+      // The top of current item cell, relative to the screen 
       const top = metrics.offset - scrollOffset;
-      // The bottom position of current item cell 
+      // The bottom of current item cell 
       const bottom = top + metrics.length;
       if (top < viewportHeight && bottom > 0) {
         firstVisible = idx;
@@ -308,18 +285,19 @@ In `computeViewableItems`, it only go through the specific range of items, [firs
     return viewableIndices;
   }
 ```
+
 ![layout.png](/img/9af4f3b0-fe64-4a98-b94e-d456f65ae7cc/3252d60e.png)
 
-### 4. The condition for viewable item 
+### 4. What kind of item is viewable? 
 
- An item is said to be in a "viewable" state when any of the following
+ An item is said to be viewable when any of the following
   is true for longer than `minimumViewTime` milliseconds (after an interaction if `waitForInteraction`
  is true):
  
 1.  Occupying >= `viewAreaCoveragePercentThreshold` of the view area XOR fraction of the item
    visible in the view area >= `itemVisiblePercentThreshold`.
  When it comes to the fraction of the item visible in the view area, 
- there are 5 cases we need to care about when the height of a item is small than the viewportHeight
+ there are 5 cases we need to care about when the height of a item is small than the viewportHeight. RN use `Math.min(bottom, viewportHeight) - Math.max(top, 0)` to calculate the viewable length. 
     
   ![partial](viewable-partial.png)
 2. Entirely visible on screen when the height of a item is bigger than the viewportHeight. 
@@ -338,9 +316,12 @@ function _isViewable(
   itemLength: number,
 ): boolean {
   if (_isEntirelyVisible(top, bottom, viewportHeight)) {
+    // Entirely visible 
     return true;
   } else {
+    // Get viewable height of this item cell 
     const pixels = _getPixelsVisible(top, bottom, viewportHeight);
+    // Get the viewable percentage of this item cell 
     const percent =
       100 * (viewAreaMode ? pixels / viewportHeight : pixels / itemLength);
     return percent >= viewablePercentThreshold;
@@ -366,8 +347,8 @@ function _isEntirelyVisible(
 ```
 [code here](https://github.com/facebook/react-native/blob/84adc85523770ebfee749a020920e0b216cf69f8/Libraries/Lists/ViewabilityHelper.js#L300)
 
-### Timer and Schedule 
-Inside [onUpdate func in ViewabilityHelper](https://github.com/facebook/react-native/blob/84adc85523770ebfee749a020920e0b216cf69f8/Libraries/Lists/ViewabilityHelper.js#L228), if the user defines `minimumViewTime` value, the `_onUpdateSync` should be scheduled to be called, using `setTimeout`.
+### 5.Timer and Schedule 
+Inside [onUpdate func in ViewabilityHelper](https://github.com/facebook/react-native/blob/84adc85523770ebfee749a020920e0b216cf69f8/Libraries/Lists/ViewabilityHelper.js#L228), if we define `minimumViewTime` value, the `_onUpdateSync` should be scheduled to be called, using `setTimeout`.
 
 ```js
  this._viewableIndices = viewableIndices;
@@ -402,9 +383,9 @@ And, in the [_onUpdateSync](https://github.com/facebook/react-native/blob/84adc8
 ```
 
 
-## Calculate changed items 
+### 6. How to get changed items 
 
-There is a `preItems` array, it stores the previous visible items. Now we have a `nextItems` array, we got to know how to the `changed` array by extract the changed items. 
+There is a `preItems`  map, it stores the previous visible items. Now we have a `nextItems` map, we got to know how to the `changed` array by extract the changed items. 
 
 For example, if scrolling down, some viewable items will become out of the screen, some hidden items will become viewable. 
 ![99830c30.png](/img/9af4f3b0-fe64-4a98-b94e-d456f65ae7cc/99830c30.png)
@@ -420,6 +401,7 @@ _onUpdateSync(
       this._viewableIndices.includes(ii),
     );
     const prevItems = this._viewableItems;
+    // Using map, so the time complexity would be o(n) 
     const nextItems = new Map(
       viewableIndicesToCheck.map(ii => {
         const viewable = createViewToken(ii, true);
