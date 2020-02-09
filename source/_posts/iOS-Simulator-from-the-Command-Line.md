@@ -1,6 +1,6 @@
 ---
 title: iOS Simulator from the Command Line
-date: 2020-02-09 12:44:41
+date: 2020-02-05 12:44:41
 categories:
     - iOS 
 tags:
@@ -51,7 +51,7 @@ Just see I can do a lot of things with these command. If wanting to know more ab
 
 use `xcrun simctl list` to see all the simulator information. We can get a list of device types, a list of info of runtime names, a list of device names. 
   
-```shell
+```
 == Device Types ==
 iPhone 11 Pro (com.apple.CoreSimulator.SimDeviceType.iPhone-11-Pro)
 iPhone 11 Pro Max (com.apple.CoreSimulator.SimDeviceType.iP
@@ -66,8 +66,8 @@ iPhone 11 Pro Max (34C9AC6A-577D-4CEF-8B10-20011DCFBA27) (Shutdown)
 
 Use `xcrun simctl list device` to see the list of device info. Or use a device name to get paired devices' info, like name, uuid, and status. For example,  
 
-```shell
-➜  xcrun simctl list devices "iPhone 11 Pro Max"
+```
+xcrun simctl list devices "iPhone 11 Pro Max"
 ```
 
 ```
@@ -83,30 +83,35 @@ Use `xcrun simctl list device` to see the list of device info. Or use a device n
     iPhone 11 Pro Max (F4B573E0-4106-4FF2-ADA8-16DCC053026C) (Shutdown) (unavailable, runtime profile not found)
 -- Unavailable: com.apple.CoreSimulator.SimRuntime.iOS-13-2 --
     iPhone 11 Pro Max (B63C96BD-1CE2-499B-8387-3B8AEBF50931) (Creating) (unavailable, runtime profile not found)
-```    
+```
+
 
 
 ### Create a custom simulator
 
+
 `xcrun simctl create <name> <device type> <runtime>`
 For example, if I would like to create a iPhone 11 Pro Max with iOS 13.3, I can use the follow command.
 
-```shell 
-➜ xcrun simctl create "ry" "iPhone 11 Pro Max" iOS13.3  
+```
+xcrun simctl create "ry" "iPhone 11 Pro Max" iOS13.3  
 BE9A72F0-5793-447B-BEC4-63A73242BED5 
-``` 
+```
+
+
 
 The `uuid` of the new simulator is `BE9A72F0-5793-447B-BEC4-63A73242BED5`, which is output in standard out. And errors comes to standard error. 
 
-> Tips: you should use available runtime, or you will get a error of `invalid runtime: xxx`. 
+> Tips: you should use available runtime, or you will get an error of `invalid runtime: xxx`. 
 
 If in shell scrip, we can capture the new device's name using environment variable:
 
 ```
-➜ NEW_DEVICE=$(xcrun simctl create "Test Phone" "iPhone XR" iOS13.0)
-➜ echo "🤖 Created ${NEW_DEVICE}"
+NEW_DEVICE=$(xcrun simctl create "Test Phone" "iPhone XR" iOS13.0)
+echo "🤖 Created ${NEW_DEVICE}"
 🤖 Created BE9A72F0-5793-447B-BEC4-63A73242BED5
 ```
+
 Another way to create a simulator using GUI is to go to `Window` -> `Devices and Simulators` 
 
 ![create](create.png)
@@ -120,6 +125,7 @@ Boot a device using `$uuid`
 Use `simctl shutdown <device>` to shutdown a device. 
 
 ### Install/Uninstall app 
+
 `xcrun simctl install <device> <path>`. We use this command to install an app on a device. 
 
 ```
@@ -139,8 +145,9 @@ Launch command is used to launch a application in your simulator device.
 
 ```
 xcrun simctl launch booted com.apple.example -MyDefaultKey YES
-``` 
- `com.apple.example` is bundle id of the application. 
+```
+
+`com.apple.example` is bundle id of the application. 
 
 If we use `--console-pty`,  launch command will connect the standard output and error of the application to the terminal line.
 
@@ -152,7 +159,8 @@ com.rong.lan.CubeTransitionAnimationDemo: 98045
 2020-02-09 10:38:28.594 3DCubeTransitionAnimationDemo[98045:931065] timer current tx -281.000332
 2020-02-09 10:38:28.611 3DCubeTransitionAnimationDemo[98045:931065] timer current tx -285.030635
 2020-02-09 10:38:28.627 3DCubeTransitionAnimationDemo[98045:931065] timer current tx -289.060938
-``` 
+```
+
 
  Use `xcrun simctl terminate <device> <bundle>` to terminate an application by identifier on a device.
 ### Container Path 
@@ -165,7 +173,8 @@ container   Optionally specify the container. Defaults to app.
   data                The application's data container
   groups              The App Group containers
   <group identifier>  A specific App Group container
-``` 
+```
+
 
 For example
 
@@ -188,7 +197,7 @@ Here, we use `defaults` utils, because we already have a booted device `BE9A72F0
 `com.example.app` is bundle id of my application. We reset `ResetDatabase` to YES. 
 This is a handy way to change the user defaults for the application before its running.  
 
-#### Log Stream 
+### Log Stream 
 
 spwan command would work with log stream utility. We can pass a predicate and filter the log output. Here the predicate is `senderImagePath CONTAINS "nsurlsessiond"`. We can debug something wrong with URL session. 
 
@@ -198,10 +207,13 @@ xcrun simctl spawn booted log stream --predicate 'senderImagePath CONTAINS "nsur
 ![spwan](spawn_log)
 
 Also, we can use different predicates to filter what we want.  
+
 ```
 xcrun simctl spawn booted log stream — predicate ‘processImagePath endswith “xxx”’
 xcrun simctl spawn booted log stream — predicate ‘eventMessage contains “error” and messageType == info’
-``` 
+
+```
+
 
 ### Dignose 
 
@@ -218,9 +230,10 @@ Gathering 15 crash reports...
 Compressing Archive...
 Successfully wrote simctl diagnose archive to '/private/tmp/simctl_diagnose_2020_02_09.10-10-56+0800.tar.gz'
 ```
+
 ![diagnose](diagnose.png)
 
-## clone 
+### clone 
 Clone is a very powerful command. See details in [wwdc2019/418](https://developer.apple.com/videos/play/wwdc2019/418/).  
 
 `xcrun simctl clone <device> <clone name>`.  You can copy your custom device using this command. 
@@ -233,15 +246,16 @@ Clone is a very powerful command. See details in [wwdc2019/418](https://develope
 ➜ xcrun simctl shutdown all 
 ➜ xcrun simctl clone ry ry-1  
 ➜ xcrun simctl clone ry ry-2 
-➜ xcrun simctl boot ry-1 && xcrun simctl boot ry-2      
+➜ xcrun simctl boot ry-1 && xcrun simctl boot ry-2 
 ```
+
 
 Two new devices are created with the same contents. 
 
 ![clone](clone.png)
 
 
-## Other useful commands
+### Other useful commands
 
 ```
 // Open a URL in a device.

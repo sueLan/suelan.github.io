@@ -1,5 +1,5 @@
 ---
-title: 'React Native: ExpoKit模式配置Push Notification Notification'
+title: React Native: ExpoKit模式配置Push Notification 
 date: 2019-06-10 18:44:33
 categories:
  - React Native 
