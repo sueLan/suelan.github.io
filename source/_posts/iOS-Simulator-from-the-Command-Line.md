@@ -51,29 +51,24 @@ Just see I can do a lot of things with these command. If wanting to know more ab
 
 use `xcrun simctl list` to see all the simulator information. We can get a list of device types, a list of info of runtime names, a list of device names. 
   
-```
+```shell
 == Device Types ==
-iPhone 11 (com.apple.CoreSimulator.SimDeviceType.iPhone-11)
 iPhone 11 Pro (com.apple.CoreSimulator.SimDeviceType.iPhone-11-Pro)
-iPhone 11 Pro Max (com.apple.CoreSimulator.SimDeviceType.iPhone-11-Pro-Max)
+iPhone 11 Pro Max (com.apple.CoreSimulator.SimDeviceType.iP
 
 == Runtimes ==
-iOS 12.4 (12.4 - 16G73) - com.apple.CoreSimulator.SimRuntime.iOS-12-4 
 iOS 13.3 (13.3 - 17C45) - com.apple.CoreSimulator.SimRuntime.iOS-13-3 
-tvOS 13.3 (13.3 - 17K446) - com.apple.CoreSimulator.SimRuntime.tvOS-13-3 
-watchOS 6.1 (6.1.1 - 17S445) - com.apple.CoreSimulator.SimRuntime.watchOS-6-1 
 
 == Devices ==
 -- iOS 13.3 --
-iPhone 11 Pro (707DDBF0-13D4-4C2D-B87F-4276EB340E21) (Shutdown) 
 iPhone 11 Pro Max (34C9AC6A-577D-4CEF-8B10-20011DCFBA27) (Shutdown) 
 ```
 
 Use `xcrun simctl list device` to see the list of device info. Or use a device name to get paired devices' info, like name, uuid, and status. For example,  
 
-```
+```shell
 ➜  xcrun simctl list devices "iPhone 11 Pro Max"
-````
+```
 
 ```
 == Devices ==
@@ -91,20 +86,22 @@ Use `xcrun simctl list device` to see the list of device info. Or use a device n
 ```    
 
 
- ### Create a custom simulator
+### Create a custom simulator
 
  `xcrun simctl create <name> <device type> <runtime>`
  For example, if I would like to create a iPhone 11 Pro Max with iOS 13.3, I can use the follow command.
 
- ```shell 
-➜  suelan.github.io git:(hexo-source) ✗ xcrun simctl create "ry" "iPhone 11 Pro Max" iOS13.3  
+```shell 
+➜ xcrun simctl create "ry" "iPhone 11 Pro Max" iOS13.3  
 BE9A72F0-5793-447B-BEC4-63A73242BED5 
 ``` 
+
 The `uuid` of the new simulator is `BE9A72F0-5793-447B-BEC4-63A73242BED5`, which is output in standard out. And errors comes to standard error. 
 
 > Tips: you should use available runtime, or you will get a error of `invalid runtime: xxx`. 
 
 If in shell scrip, we can capture the new device's name using environment variable:
+
 ```
 ➜ NEW_DEVICE=$(xcrun simctl create "Test Phone" "iPhone XR" iOS13.0)
 ➜ echo "🤖 Created ${NEW_DEVICE}"
@@ -113,11 +110,10 @@ If in shell scrip, we can capture the new device's name using environment variab
 Another way to create a simulator using GUI is to go to `Window` -> `Devices and Simulators` 
 
 ![create](create.png)
-
    
- ### Boot a simulator 
+### Boot a simulator 
 
-1. Boot a device using `$uuid` 
+Boot a device using `$uuid` 
 
 `xcrun simctl boot BE9A72F0-5793-447B-BEC4-63A73242BED5` 
 
@@ -226,7 +222,7 @@ Successfully wrote simctl diagnose archive to '/private/tmp/simctl_diagnose_2020
 ## clone 
 Clone is a very powerful command. See details in [wwdc2019/418](https://developer.apple.com/videos/play/wwdc2019/418/).  
 
-`xcrun simctl clone <device> <clone name>`.  You can copy your custom devices using this command. 
+`xcrun simctl clone <device> <clone name>`.  You can copy your custom device using this command. 
 
 ```
 // boot base simulator ry
