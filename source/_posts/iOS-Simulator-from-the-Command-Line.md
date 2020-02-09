@@ -1,6 +1,6 @@
 ---
 title: iOS Simulator from the Command Line
-date: 2020-02-04 16:44:41
+date: 2020-02-09 12:44:41
 categories:
     - iOS 
 tags:
