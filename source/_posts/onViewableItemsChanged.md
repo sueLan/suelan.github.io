@@ -8,7 +8,7 @@ categories: React Native
 
 ## What is onViewableItemsChanged
 
-`onViewableItemsChanged` is a props in [VirtualizedList](https://facebook.github.io/react-native/docs/flatlist#onviewableitemschanged) and it's subclass [FlatList]((https://facebook.github.io/react-native/docs/flatlist#onviewableitemschanged)). When we scroll a FlatList, the items showed on the screen change. This function is called telling what current `viewableItems` are and what `changed` items are. 
+`onViewableItemsChanged` is a props in [VirtualizedList](https://facebook.github.io/react-native/docs/flatlist#onviewableitemschanged) and [FlatList]((https://facebook.github.io/react-native/docs/flatlist#onviewableitemschanged)). When we scroll a FlatList, the items showed on the screen change. This function is called telling what current `viewableItems` are and what `changed` items are. 
 
 This function should be used together with [viewabilityConfig](https://facebook.github.io/react-native/docs/virtualizedlist#viewabilityconfig). A specific `onViewableItemsChanged` will be called when its corresponding `ViewabilityConfig`'s conditions are met.
 
@@ -290,7 +290,7 @@ In `computeViewableItems`, it only go through the specific range of items, from 
 
 ### 4. What kind of item is viewable? 
 
- An item is said to be viewable when any of the following
+ An item is said to be viewable when any of the following conditions
   is true for longer than `minimumViewTime` milliseconds (after an interaction if `waitForInteraction`
  is true):
  
