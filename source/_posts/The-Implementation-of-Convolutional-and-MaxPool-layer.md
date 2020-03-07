@@ -1,12 +1,13 @@
 ---
-title: The Architecture of YOLO-Tiny Neural Network
+title: YOLO - From Configuration File to Convolutional Layers
 date: 2019-05-08 22:19:05
 categories: 
     - Neural Network 
 tags:
     - YOLO 
 ---
- Now, let's see how Darknet construct a nerual network. See at `detector.c` `test_detector` function, it construct a network by parsing  the `xxx.cfg` file and `xxx.weights` file. In my case, they are yolo3-tiny.cfg and yolo3-tiny.weights 
+
+ Let's firstly see how `Darknet` construct a neural network. See at `detector.c` `test_detector` function, it construct a network by parsing  the `xxx.cfg` file and `xxx.weights` file. In my case, they are yolo3-tiny.cfg and yolo3-tiny.weights 
  <!-- more --> 
 
 
@@ -66,7 +67,7 @@ Now, let's see how Darknet construct a nerual network. See  `detector.c` `test_d
 
 ### Sections in the file 
 
-parse the yolo.cfg file here 
+The code to parse the yolo.cfg file is here:
 
 ```c
 list *read_cfg(char *filename)
@@ -145,7 +146,7 @@ learning_rate=0.001
 
 #### `[net]`
 
-In section '[net]', `batch=1` is a option stored in `kvp`(option_list.c line 70) struct. Its key is batch, value is 1. Then this kvp object will be inserted into a node list (see it at option_list.c line76 & list.c line 40).
+In section '[net]', `batch=1` is a option stored in `kvp`(option_list.c line 70) structure. Its key is batch, value is 1. Then this kvp object will be inserted into a node list (see it at option_list.c line76 & list.c line 40).
 After parsing the yolo3-tiny.cfg file, We will get a section list; its size is 25. Because there are 25 \'[\' tags in yolo3-tiny.cfg
 
 
@@ -310,7 +311,7 @@ stride=2
 
  
  ```
- This `[maxpool]` sections comes after the `[convolutional]` section. Its input size(416 x 416 x 16) equal to the ouput size of the former layer (416 x 416 x  16). The filter size is 2 x 2, stride is 2. Each time, the filter would move 2 steps, for a 4x4x1 input volume, its output is 2x2x1 volume. 
+ This `[maxpool]` sections comes after the `[convolutional]` section. Its input size(416 x 416 x 16) equal to the output size of the former layer (416 x 416 x  16). The filter size is 2 x 2, stride is 2. Each time, the filter would move 2 steps, for a 4x4x1 input volume, its output is 2x2x1 volume. 
 ![e65fb56d.png](/img/995676c2-24ed-4165-8224-0bc01148242a/e65fb56d.png)
 ```
 9 == max(1, 3, 2, 9)
@@ -328,7 +329,7 @@ $$ n_H . n_W . n_c$$
 
 **output volume size**: 
 
-$$(\frac{n_H + pading-f}{stride} + 1) . (\frac{n_W + padding-f}{stride} +1) . n_c$$
+$$(\frac{n_H + padding-f}{stride} + 1) . (\frac{n_W + padding-f}{stride} +1) . n_c$$
  
 $f$: the width or height of a filter
  
