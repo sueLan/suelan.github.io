@@ -22,12 +22,23 @@ When the plugin starts, it will inject all the `NSURLConnectionDelegate` classes
 
 ## Swizzle 
 
+The key idea is to swizzle any classes that implement one of the selectors in `URLSession` and `NSURLConnectionDelegate` , and get chance to get the request and response data. 
+
+The process is like this: 
+
+1. find out selectors in `URLSession` and `NSURLConnectionDelegate`  which are related to network activities. 
+2. Retrieve all the class definitions that have been registered with the Objective-C runtime. The Objective-C runtime library automatically registers all the classes defined in your source code. 
+3. Find any class that implements one of the above selectors
+4. Inject this class
+    
+
+
 ```objective-c
 + (void)injectIntoAllNSURLConnectionDelegateClasses {
   // Only allow swizzling once.
   static dispatch_once_t onceToken;
   dispatch_once(&onceToken, ^{
-    // 1. Swizzle any classes that implement one of these selectors.  
+    // 1. 🌟 Swizzle any classes that implement one of these selectors.  
    const SEL selectors[] = {
       @selector(connectionDidFinishLoading:),
       @selector(connection:willSendRequest:redirectResponse:),
@@ -49,17 +60,17 @@ When the plugin starts, it will inject all the `NSURLConnectionDelegate` classes
 
     const int numSelectors = sizeof(selectors) / sizeof(SEL);
 
-    // 2. Retrieve all the class definitions that have been registered with the Objective-C runtime. The Objective-C runtime library automatically registers all the classes defined in your source code. 
+    // 2. 🌟 Retrieve all the class definitions that have been registered with the Objective-C runtime. The Objective-C runtime library automatically registers all the classes defined in your source code. 
  
     Class* classes = NULL;
-    // 2.1 You can pass NULL to obtain the total number of registered class definitions without actually retrieving any class definitions.
+    // 2.1 🌟 You can pass NULL to obtain the total number of registered class definitions without actually retrieving any class definitions.
     int numClasses = objc_getClassList(NULL, 0);
 
     if (numClasses > 0) {
-        // 2.2 An array of Class values. Each Class value points to one class definition
+        // 2.2 🌟 An array of Class values. Each Class value points to one class definition
       classes = (__unsafe_unretained Class*)malloc(sizeof(Class) * numClasses);
       numClasses = objc_getClassList(classes, numClasses);
-      // 3. Find any class that implements one of the above selectors
+      // 3. 🌟 Find any class that implements one of the above selectors
       for (NSInteger classIndex = 0; classIndex < numClasses; ++classIndex) {
         Class className = classes[classIndex];
 
@@ -82,7 +93,7 @@ When the plugin starts, it will inject all the `NSURLConnectionDelegate` classes
             // Find a target method in this class 
             if (method_getName(methods[methodIndex]) ==
                 selectors[selectorIndex]) {
-              // 4. Inject this class  
+              // 4. 🌟 Inject this class  
               [self injectIntoDelegateClass:className];
               matchingSelectorFound = YES;
               break;
@@ -117,14 +128,14 @@ For example, how to inject `connection:willSendRequest:redirectResponse:`?
 + (void)injectWillSendRequestIntoDelegateClass:(Class)cls {
   SEL selector = 
   @selector(connection:willSendRequest:redirectResponse:);
-  // Selector with `_flex_swizzle_` prefix
+  //  🌟 Selector with `_flex_swizzle_` prefix
   SEL swizzledSelector = [FLEXUtility swizzledSelectorForSelector:selector];
 
   Protocol* protocol = @protocol(NSURLConnectionDataDelegate);
   if (!protocol) {
     protocol = @protocol(NSURLConnectionDelegate);
   }
-  // Get the original method description
+  // 🌟 Get the original method description
   struct objc_method_description methodDescription =
       protocol_getMethodDescription(protocol, selector, NO, YES);
 
@@ -134,7 +145,7 @@ For example, how to inject `connection:willSendRequest:redirectResponse:`?
       NSURLRequest* request,
       NSURLResponse* response);
 
-  // If selector `connection:willSendRequest:redirectResponse:` is not a instance method in this class, use this block as the implementation for swizzledSelector
+  // 🌟 If selector `connection:willSendRequest:redirectResponse:` is not a instance method in this class, use this block as the implementation for swizzledSelector
   NSURLConnectionWillSendRequestBlock undefinedBlock = ^NSURLRequest*(
       id<NSURLConnectionDelegate> slf,
       NSURLConnection* connection,
