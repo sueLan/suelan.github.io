@@ -1,7 +1,13 @@
 ---
 title: A glimpse of iOS Memory Deep Dive
 date: 2020-05-03 08:04:59
+categories: 
+  - iOS 
+  - Debug 
+  
 tags:
+  - Memory 
+  - WWDC
 ---
 
 This is an pretty good session about iOS memory. [iOS Memory Deep Dive - WWDC 2018 - Videos - Apple Developer](https://developer.apple.com/videos/play/wwdc2018/416/) 
@@ -137,6 +143,8 @@ There are  two regions here, the last row is summary info. The secong CG Image r
 vmmap --verbose PlanetPics.memgraph | grep " CG image"
 ```
 ![14c0b2ff.png](f30bdfea-25ac-4eb9-af3e-278a74a85022/14c0b2ff.png)
+
+
 
 And we will more regions.   
 

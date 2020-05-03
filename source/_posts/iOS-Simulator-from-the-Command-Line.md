@@ -3,8 +3,10 @@ title: iOS Simulator from the Command Line
 date: 2020-02-05 12:44:41
 categories:
     - iOS 
+    - Debug
 tags:
     - Simulator
+    - WWDC
 ---
 
 `xcrun simctl` is command utils to control iOS simulator, just like  [adb](https://developer.android.com/studio/command-line/adb?hl=en) for Android. Sometimes, in CI server script, We need these simulator-integration command to interact with simulators and run test cases. 
