@@ -10,13 +10,15 @@ tags:
   - WWDC
 ---
 
-This is an pretty good session about iOS memory. [iOS Memory Deep Dive - WWDC 2018 - Videos - Apple Developer](https://developer.apple.com/videos/play/wwdc2018/416/) 
+This is an pretty good session about iOS memory. [iOS Memory Deep Dive - WWDC 2018 - Videos - Apple Developer](https://developer.apple.com/videos/play/wwdc2018/416/). I saw it and took some notes here. 
 
-Not all memory is created equal. There are dirty memory, clean memory, compressed memory in iOS system. 
+> Not all memory is created equal. 
 
-## Page 
+There are dirty memory, clean memory, compressed memory in iOS system. We have to know the differences between them. 
 
-Typically 16KB in size and system gives it to you. 
+## Page  
+
+Page is typically 16KB in size and operating system gives it to you when your app requests memory.  
 
 ```
 memory in use = number of pages x page size 
@@ -24,7 +26,7 @@ memory in use = number of pages x page size
 
 ![b576f28d.png](f30bdfea-25ac-4eb9-af3e-278a74a85022/b576f28d.png)
 
-Some pages can hold multiple objects, and somes objects
+Some pages can hold multiple objects, and some objects
 can span multiple pages. 
 
 
@@ -54,7 +56,7 @@ What does Memory compressor do?
 - Decompresses pages upon access
 
 
-Berfore being compressed: 
+Before being compressed: 
 
 
 ![cdb635fb.png](f30bdfea-25ac-4eb9-af3e-278a74a85022/cdb635fb.png)
@@ -116,14 +118,12 @@ We should mainly focuse on these two part, dirty and compressed memory when anal
 
 
 
-`vmmap` helps to show some dirty memory info of your app. In general, we should look for the big numbers for the size. 
+`vmmap` helps to show some dirty memory info of your app. In general, we should look for the big number for the size. 
 There are `virtual size`, `resident size`, `dirty size`, `swapped size` columns here. 
 
 According to this [session](https://developer.apple.com/videos/play/wwdc2018/416/), we can ignore the `virtual size`, because it is memory requested by the app, while not neccessarily be used.  `swapped size` is related to compressed memory. So we should care more about `dirty size` and `swapped size`.
 
 #### An example of using vmmap to debug a memory issue
-
-This example comes from [session](https://developer.apple.com/videos/play/wwdc2018/416/).
 
 First, we can use summary info to look for the big numbers in `virtual size` and `swapped size` colomn. Here, we find `CG Image` takes much more memory than others. 
 
@@ -148,17 +148,17 @@ vmmap --verbose PlanetPics.memgraph | grep " CG image"
 
 And we will more regions.   
 
-> It turns out that vmmap, by default, if it finds contiguous regions, it collapses. A general rule. the later region was created, the later my app's life cycle it happened. Chance are this later region is more closely tied to whatever casued that memory pike. 
+> It turns out that vmmap, by default, if it finds contiguous regions, it collapses. A general rule. the later region was created, the later my app's life cycle it happened. Chance are this later region is more closely tied to whatever caused that memory pike. 
 
 So, we start to look at the last region. We can use the start memory address of the last region and search it in the memory graph in XCode.
 
 ![5d389834.png](f30bdfea-25ac-4eb9-af3e-278a74a85022/5d389834.png)
 
-Or use `leak` to get the trace tree. By scaning these info, we would find more clues. 
+Or use `leak` to get the trace tree. By scanning these info, we would find more clues. 
 
 ![f63287f5.png](f30bdfea-25ac-4eb9-af3e-278a74a85022/f63287f5.png)
 
-Here, using `malloc_history` to see the backtrace for this object, we found the related code creating this particular VM memory. 
+Here, using `malloc_history` to see the back trace for this object, we found the related code creating this particular VM memory. 
 
 ![d8143352.png](f30bdfea-25ac-4eb9-af3e-278a74a85022/d8143352.png)
 
@@ -181,7 +181,7 @@ It not only shows the cycle, but also the root object of the cycle.
 - root object
 ![fbc1d8bb.png](f30bdfea-25ac-4eb9-af3e-278a74a85022/fbc1d8bb.png)
 
-## heap 
+### heap 
 
 - Shows objects allocated on the heap; 
 - useful for indentifying large objects in memory adn what allocated it. 
@@ -203,7 +203,7 @@ heap App.memgraph -sortBySize
 
 ### malloc_history
 
-In some cases, we not only want to know the memory size, but also want to know the how it created. So, here comes the malloc_history command.
+In some cases, we not only want to know the memory size, but also want to know the how it created. So, here comes the `malloc_history` command.
 
 - enable the malloc_stack logging
 
