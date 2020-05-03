@@ -9,18 +9,18 @@ tags:
   - Image
 ---
 
-Memory is a finite and shared resouces in mobile system, while image 
+Memory is a finite and shared resources in mobile system, while image 
 Memory use is related to the dimensions of the images, not the file size.
 
-## The momory use of an RGBA image 
+## The memory use of an image using sRGB space
 
-Take the following image as an intance, its file size is 590KB, with dimension 2048 x 1536 pixel.
+Take the following image as an instance, its file size is 590KB, with dimension 2048 x 1536 pixel.
 ![83dca9cf.png](28bfb5ac-c3fa-4575-a1b1-72fcbacc9069/83dca9cf.png)
 
 
 #### 4 byetes for each pixel in RGBA 
 
-By this [article](https://www.objc.io/issues/3-views/moving-pixels-onto-the-screen/), each pixel in RGBA image needs 32bit, 4 bytes, in memory when it's decoded. Because in RGBA, the range of each channel value is from 0 to 255, which needs 8 bits to represent the value. 
+By this [article](https://www.objc.io/issues/3-views/moving-pixels-onto-the-screen/), each pixel in sRGB image needs 32bit, 4 bytes, in memory when it's decoded. Because in sRGB, there are Red, Green, Blue 3 channels and Alpha. The range of each channel value is from 0 to 255, which needs 8 bits to represent the value. 
 
 ```
   A   R   G   B   A   R   G   B   A   R   G   B  
@@ -54,7 +54,7 @@ We only need 590KB to load a image, while we need
 ### Wide format 
 
 - 8 bytes per pixel 
-- super accurate colors. Because they use 8bytes, 16 bits, for each channel. It means the range of each channel value is  [0, 2^16 - 1].  In the meantime, double the image size.  
+- super accurate colors. Because they use 8bytes, 16 bits, for each channel. In the meantime, double the image size.  
 - Only useful with wide color display. We don't want to use it when we don't need to. 
 - Wide color capture cameras since iPhone 7
   
