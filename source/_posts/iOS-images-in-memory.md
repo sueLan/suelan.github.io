@@ -109,7 +109,37 @@ Use ImageIO
 
 The bad is that you have to specify some options. 
 
+## Resize image effectively
 
+This is a function of resizing image without reading it into the memory, using ImageIO.  
+
+```swfit
+func resize(url: NSURL, maxPixelSize: Int) -> CGImage? {
+    let imgSource = CGImageSourceCreateWithURL(url, nil)
+    guard let imageSource = imgSource else {
+        return nil
+    }
+
+    var scaledImage: CGImage?
+    let options: [NSString: Any] = [
+            // The maximum width and height in pixels of a thumbnail.
+            kCGImageSourceThumbnailMaxPixelSize: maxPixelSize,
+            kCGImageSourceCreateThumbnailFromImageAlways: true,
+            // Should include kCGImageSourceCreateThumbnailWithTransform: true in the options dictionary. Otherwise, the image result will appear rotated when an image is taken from camera in the portrait orientation.
+            kCGImageSourceCreateThumbnailWithTransform: true
+    ]
+    scaledImage = CGImageSourceCreateThumbnailAtIndex(imageSource, 0, options as CFDictionary)
+
+    return scaledImage
+}
+
+
+let filePath = Bundle.main.path(forResource:"large_leaves_70mp", ofType: "jpg")
+
+let url = NSURL(fileURLWithPath: filePath ?? "")
+
+let image = resize(url: url, maxPixelSize: 600)
+```
 
 ## Optimizing when in the background
 
