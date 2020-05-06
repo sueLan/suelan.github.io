@@ -139,8 +139,11 @@ Then, we use `grep` to get more info about `CG Image`.
 
 There are  two regions here, the last row is summary info. The secong CG Image region takes more takes more dirty and swapped memory. So we have to see more infomation of this region by using `--verbose` option.
 
+All these commands can work with other shell commands, like redirecting the output stream a `output.txt` file. 
+
+
 ```
-vmmap --verbose PlanetPics.memgraph | grep " CG image"
+vmmap --verbose PlanetPics.memgraph | grep " CG image" | > output.txt
 ```
 ![14c0b2ff.png](f30bdfea-25ac-4eb9-af3e-278a74a85022/14c0b2ff.png)
 
@@ -194,7 +197,7 @@ heap App.memgraph -addresses all | <classes-pattern>
 
 
 ```
-heap App.memgraph -sortBySize
+heap App.memgraph -sortBySize | > ~/output.txt
 ```
 
 
@@ -220,3 +223,6 @@ malloc_history App.memgraph [address]
 ### Which tool to pick 
 
 ![d68340ee.png](f30bdfea-25ac-4eb9-af3e-278a74a85022/d68340ee.png)
+
+
+Use `vmmap` and `heap` to find some objects or regions with big number,  use `leak` to see references between objects, like finding circular reference; use `malloc_history` to see how it is created.  
