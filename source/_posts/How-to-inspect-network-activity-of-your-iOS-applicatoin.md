@@ -4,9 +4,9 @@ date: 2020-04-25 23:52:00
 categories:
     - iOS 
     - Network
-    - Debug
 tags:
     - Flipper 
+    - Debug
 ---
 
 Recently, Facebook launched [Flipper](https://github.com/facebook/flipper), A desktop debugging platform for mobile developers.  And there is an embedded network plugin, `FlipperKitNetworkPlugin` ,  which works as an inspector of network activities in our application. Let's figure out how it can achieve that. 

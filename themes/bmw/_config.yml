@@ -59,7 +59,7 @@ reward:
 copyright: 
   enable: true
   author: RY Zheng 
- # license: 'MIT'
+  license: 'MIT'
 
 # 页脚信息 
 # start: 建站时间. 格式：YYYY-MM-DD

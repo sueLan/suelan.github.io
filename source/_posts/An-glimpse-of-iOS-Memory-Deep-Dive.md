@@ -3,11 +3,13 @@ title: A glimpse of iOS Memory Deep Dive
 date: 2020-05-03 08:04:59
 categories: 
   - iOS 
-  - Debug 
   
 tags:
   - Memory 
   - WWDC
+  - Image
+  - Debug 
+
 ---
 
 This is an pretty good session about iOS memory. [iOS Memory Deep Dive - WWDC 2018 - Videos - Apple Developer](https://developer.apple.com/videos/play/wwdc2018/416/). I saw it and took some notes here. 
