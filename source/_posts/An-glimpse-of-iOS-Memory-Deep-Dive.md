@@ -228,3 +228,7 @@ malloc_history App.memgraph [address]
 
 
 Use `vmmap` and `heap` to find some objects or regions with big number,  use `leak` to see references between objects, like finding circular reference; use `malloc_history` to see how it is created.  
+
+## Related: 
+
+- [iOS-images-in-memory](https://suelan.github.io/2020/05/03/iOS-images-in-memory/)

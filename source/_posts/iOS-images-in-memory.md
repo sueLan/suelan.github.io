@@ -80,7 +80,7 @@ If we've downloaded images from the network or we've `loaded` them from disk. A 
 - You app may be terminated by the system
 - Cause `CPU peak`, and then has negative impact on battery life and responsiveness.
 
-### Decoding 
+## Decoding 
 
 > Decoding is an operation that will convert the JPEG or PNG or other encoded image data into per pixel image information. 
 
