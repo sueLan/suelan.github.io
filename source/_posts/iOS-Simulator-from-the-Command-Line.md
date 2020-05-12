@@ -45,6 +45,10 @@ Subcommands:
         diagnose            Collect diagnostic information and logs.
         logverbose          enable or disable verbose logging for a device
         status_bar          Set or clear status bar overrides
+        ui                  Get or Set UI options
+        push                Send a simulated push notification
+        privacy             Grant, revoke, or reset privacy and permissions
+        keychain            Manipulate a device's keychain
 ```
 Just see I can do a lot of things with these command. If wanting to know more about a specific subcommand, we can use `xcrun simctl help [subcommand]` to seek help. Like, `xcrun simctl help boot` 
 
@@ -87,7 +91,26 @@ xcrun simctl list devices "iPhone 11 Pro Max"
     iPhone 11 Pro Max (B63C96BD-1CE2-499B-8387-3B8AEBF50931) (Creating) (unavailable, runtime profile not found)
 ```
 
+### Get device environment variable 
 
+`xcrun simctl getenv` is for printing an environment variable from a running device. 
+
+```
+Usage: simctl getenv <device> <variable name>
+```
+
+
+Take the follow command as an example, the `SIMULATOR_UDID` environment variable contains the UDID of the simulated device. But it doesn't work for physical device. 
+
+```
+xcrun simctl getenv booted SIMULATOR_UDID
+9362BF90-132F-4894-A057-CEBFEC9C1FB6
+```
+
+We can add more environment variables by ourselves in schema for debugging use. 
+![](environment_variable.png)
+
+[Launch Arguments & Environment Variables](https://nshipster.com/launch-arguments-and-environment-variables/)
 
 ### Create a custom simulator
 
@@ -256,6 +279,144 @@ Two new devices are created with the same contents.
 
 ![clone](clone.png)
 
+
+### Push Notification to simulator 
+
+```
+➜  ~ xcrun simctl push 
+Send a simulated push notification
+Usage: simctl push <device> [<bundle identifier>] (<json file> | -)
+
+        bundle identifier
+             The bundle identifier of the target application
+             If the payload file contains a 'Simulator Target Bundle' top-level key this parameter may be omitted.
+             If both are provided this argument will override the value from the payload.
+        json file
+             Path to a JSON payload or '-' to read from stdin. The payload must:
+               - Contain an object at the top level.
+               - Contain an 'aps' key with valid Apple Push Notification values.
+               - Be 4096 bytes or less.
+
+Only application remote push notifications are supported. VoIP, Complication, File Provider, and other types are not supported.
+
+```
+
+
+### Manipulate a device's keychain 
+
+```
+➜  ~ xcrun simctl keychain
+Manipulate a device's keychain
+Usage: simctl keychain <device> <action> [arguments]
+
+    add-root-cert [path]
+        Add a certificate to the trusted root store.
+
+    add-cert [path]
+        Add a certificate to the keychain.
+
+    reset
+        Reset the keychain.
+```
+
+### Privacy and Permissions 
+
+These commands could be very useful when you are developing some features and have to test the permissions.  
+
+```
+➜  ~ xcrun simctl privacy                                         
+Grant, revoke, or reset privacy and permissions
+Usage: simctl privacy <device> <action> <service> [<bundle identifier>]
+
+        action
+             The action to take:
+                 grant - Grant access without prompting. Requires bundle identifier.
+                 revoke - Revoke access, denying all use of the service. Requires bundle identifier.
+                 reset - Reset access, prompting on next use. Bundle identifier optional.
+             Some permission changes will terminate the application if running.
+        service
+             The service:
+                 all - Apply the action to all services.
+                 calendar - Allow access to calendar.
+                 contacts-limited - Allow access to basic contact info.
+                 contacts - Allow access to full contact details.
+                 location - Allow access to location services when app is in use.
+                 location-always - Allow access to location services at all times.
+                 photos-add - Allow adding photos to the photo library.
+                 photos - Allow full access to the photo library.
+                 media-library - Allow access to the media library.
+                 microphone - Allow access to audio input.
+                 motion - Allow access to motion and fitness data.
+                 reminders - Allow access to reminders.
+                 siri - Allow use of the app with Siri.
+        bundle identifier
+             The bundle identifier of the target application.
+
+Examples:
+        reset all permissions: privacy <device> reset all
+        grant test host photo permissions: privacy <device> grant photos com.example.app.test-host
+```
+For example,
+
+```
+➜  ~ xcrun simctl privacy booted grant location com.facebook.flipper
+➜  ~ xcrun simctl privacy booted grant photos com.facebook.flipper
+```
+
+### Switch the appearance style in a device between light and dark.
+
+```
+xcrun simctl ui booted appearance dark
+xcrun simctl ui booted appearance light
+```
+
+### StatsBar override 
+
+`Usage: simctl status_bar <device> [list | clear | override <override arguments>]`
+
+It seems it can support a lot of overrides variables in status bar. But I have figure out the scenarios to use them. 
+
+```
+➜  ~ xcrun simctl status_bar                                    
+Set or clear status bar overrides
+Usage: simctl status_bar <device> [list | clear | override <override arguments>]
+
+Supported Operations:
+    list
+        List existing overrides.
+
+    clear
+        Clear all existing status bar overrides.
+
+    override <override arguments>
+        Set status bar override values, according to these flags.
+        You may specify any combination of these flags (at least one is required):
+
+        --time <string>
+             Set the date or time to a fixed value.
+             If the string is a valid ISO date string it will also set the date on relevant devices.
+        --dataNetwork <dataNetworkType>
+             If specified must be one of 'wifi', '3g', '4g', 'lte', 'lte-a', or 'lte+'.
+        --wifiMode <mode>
+             If specified must be one of 'searching', 'failed', or 'active'.
+        --wifiBars <int>
+             If specified must be 0-3.
+        --cellularMode <mode>
+             If specified must be one of 'notSupported', 'searching', 'failed', or 'active'.
+        --cellularBars <int>
+             If specified must be 0-4.
+        --operatorName <string>
+             Set the cellular operator/carrier name. Use '' for the empty string.
+        --batteryState <state>
+             If specified must be one of 'charging', 'charged', or 'discharging'.
+        --batteryLevel <int>
+             If specified must be 0-100.
+```
+
+```
+// change the `dataNetwork` from `wifi` to `4g`
+➜  ~ xcrun simctl status_bar booted override --dataNetwork '4g'
+```
 
 ### Other useful commands
 
