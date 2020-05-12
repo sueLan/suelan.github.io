@@ -282,6 +282,34 @@ Two new devices are created with the same contents.
 
 ### Push Notification to simulator 
 
+1. Create a `.apns` file, `ExamplePush.apns` 
+
+```
+{
+    "Simulator Target Bundle": "com.facebook.flipper",
+    "aps": {
+        "alert": "This is a simulated notification!",
+        "badge": 3,
+        "sound": "default"
+    }
+}
+```
+
+[valid Apple Push Notification values](https://developer.apple.com/documentation/usernotifications/setting_up_a_remote_notification_server/generating_a_remote_notification)
+
+2. Drag and drop an APNs file onto the target simulator. 
+
+> The file must be a JSON file with a valid Apple Push Notification Service payload, including the “aps” key. It must also contain a top-level “Simulator Target Bundle” with a string value matching the target application‘s bundle identifier. --  https://stackoverflow.com/a/60085404/4026902
+
+
+
+Or, we use command lines. 
+
+```
+xcrun simctl push booted com.facebook.flipper ExamplePush.apns
+```
+
+
 ```
 ➜  ~ xcrun simctl push 
 Send a simulated push notification
