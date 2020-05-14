@@ -463,3 +463,4 @@ xcrun simctl io <device> recordVideo <file>
 > https://developer.apple.com/videos/play/wwdc2019/418/
 > https://www.iosdev.recipes/simctl/
 > https://nshipster.com/simctl/ 
+> https://developer.apple.com/documentation/xcode_release_notes/xcode_11_4_release_notes

@@ -41,7 +41,7 @@ social_share:
 # 是否开启 打赏功能
 reward: 
   enable: true
-  meta: The best way out is going througn # 提示文字
+  meta: Buy me a cup of coffee # 提示文字
   button_meta: 赞赏 ☕️ # 按钮文字
   qrcodes: 
     # 支持多个支付方式
@@ -66,7 +66,7 @@ copyright:
 # more: 自定义页脚信息(支持HTML)
 footer: 
   start: '2019-03-10'
-  more: The best way out is always through
+  more: To see a World in a Grain of Sand;And a Heaven in a Wild Flower; Hold Infinity in the palm of your hand; And Eternity in an hour
 
 # 如何开启 评论&统计 插件：https://godbmw.com/passages/2018-11-15-theme-bmw-docs-zh/
 # 请申请自己的 appid 和 appkey，并且替换下面的 appid 和 appkey
@@ -125,6 +125,6 @@ friends:
     nickname: 蓝 # 昵称
     avatar:  https://suelan.github.io/img/avatar.jpeg # 头像链接
     site: https://www.jianshu.com/u/23bd8d4cc8bf # 站点地址
-    meta: The best way out is always through # 站点描述
+    meta: To see a World in a Grain of Sand;And a Heaven in a Wild Flower; Hold Infinity in the palm of your hand; And Eternity in an hour 
     
    

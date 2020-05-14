@@ -1,10 +1,11 @@
 # Site
 title: RY 's Blog
-subtitle: The best way out is always through
+subtitle: To see a World in a Grain of Sand;And a Heaven in a Wild Flower; Hold Infinity in the palm of your hand; And Eternity in an hour
+
 author: RY Zheng
 language: en 
 timezone: Asia/Singapore
-keywords: iOS, yolo, react-native, simulator, onViewableItemsChanged
+keywords: iOS, react-native, simulator, onViewableItemsChanged
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
