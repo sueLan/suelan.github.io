@@ -69,12 +69,11 @@ So, we can also use `transform` style to set the anchor point. For example, the 
 
 ## react-native-anchor-point
 
-In this [package](https://github.com/sueLan/react-native-anchor-point), I provides a util function `withAnchorPoint`, to inject the above code into your `transform` object. It works well with the original way you use transform and. So, you don't have to use `ref` to set the `transformOrigin`. 
+In this [package](https://github.com/sueLan/react-native-anchor-point), I provides a function `withAnchorPoint`, to inject the above code into your `transform` object. It works well with the original way you use transform and. So, you don't have to use `ref` to set the `transformOrigin` any more. This would make the `3d transform` in React Native easier to implement. 
 
 ![](./rotateZ.gif)
 ![](./rotateXY.gif)
 ![](./rotate.gif)
-
 
 ## Ref
 
