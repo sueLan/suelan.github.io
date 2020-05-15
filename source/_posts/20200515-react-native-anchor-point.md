@@ -1,7 +1,6 @@
 ---
-title: React Native Anchor point for 3D Transform
+title: Anchor point for 3D Transform in React Native
 date: 2020-05-15 11:07:07
-tags:
 categories: 
   - React Native
 tags:
