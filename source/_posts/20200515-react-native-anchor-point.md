@@ -79,4 +79,3 @@ In this [package](https://github.com/sueLan/react-native-anchor-point), I provid
 - [react-native-foldview](https://github.com/jmurzy/react-native-foldview)
 - [RN How to set the anchor point of a view.](https://stackoverflow.com/a/60632809/4026902)
 - https://pages.mtu.edu/~shene/COURSES/cs3621/NOTES/geometry/geo-tran.html
-- https://github.com/zehfernandes/react-native-3dcube-navigation
