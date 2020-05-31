@@ -106,16 +106,12 @@ nav:
         path: "https://github.com/sueLan"
         blank: true
       -
-        name: "Linkedin"
-        path: "https://www.linkedin.com/in/rongyanzheng/"
+        name: StackOverflow
+        path: "https://stackoverflow.com/users/4026902/ry-zheng"
         blank: true
       -
         name: Jian Shu
         path: "https://www.jianshu.com/u/23bd8d4cc8bf"
-        blank: true
-      -
-        name: Ali yun
-        path: "https://yq.aliyun.com/users/gi7dnrwlx2mya"
         blank: true
 
 

@@ -36,9 +36,9 @@ function transformOrigin(matrix, origin) {
   MatrixMath.multiplyInto(matrix, matrix, untranslate);
 }
 ```
-`reuseTranslate3dCommand`, in the [react-native source code](https://github.com/facebook/react-native/blob/a1ac2518a364ebcd3cc024a22229cadc1791e1c4/Libraries/Utilities/MatrixMath.js#L95), replace the 12th, 13th, 14th element in the matrix by parameters, z, y, z. 
+`reuseTranslate3dCommand`, in the [react-native source code](https://github.com/facebook/react-native/blob/a1ac2518a364ebcd3cc024a22229cadc1791e1c4/Libraries/Utilities/MatrixMath.js#L95), replace the 12th, 13th, 14th element in the matrix by parameters, z, y, z to achieve `translation` effect. 
 
-This function called in [processTransform.js#L79](https://github.com/facebook/react-native/blob/a1ac2518a364ebcd3cc024a22229cadc1791e1c4/Libraries/StyleSheet/processTransform.js#L79) to archive `translation` in a view. 
+This function called in [processTransform.js#L79](https://github.com/facebook/react-native/blob/a1ac2518a364ebcd3cc024a22229cadc1791e1c4/Libraries/StyleSheet/processTransform.js#L79), in which, RN generates a transform matrix based on `transform object` we provide. ()[https://github.com/facebook/react-native/blob/a1ac2518a364ebcd3cc024a22229cadc1791e1c4/Libraries/StyleSheet/processTransform.js#L43]
 
 ### What `transformOrigin` does is to
 ```
@@ -76,6 +76,7 @@ In this [package](https://github.com/sueLan/react-native-anchor-point), I provid
 
 ## Ref
 
+- [Matrices](http://www.opengl-tutorial.org/beginners-tutorials/tutorial-3-matrices/)
 - [react-native-foldview](https://github.com/jmurzy/react-native-foldview)
 - [RN How to set the anchor point of a view.](https://stackoverflow.com/a/60632809/4026902)
 - https://pages.mtu.edu/~shene/COURSES/cs3621/NOTES/geometry/geo-tran.html
