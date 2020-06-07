@@ -38,7 +38,8 @@ function transformOrigin(matrix, origin) {
 ```
 `reuseTranslate3dCommand`, in the [react-native source code](https://github.com/facebook/react-native/blob/a1ac2518a364ebcd3cc024a22229cadc1791e1c4/Libraries/Utilities/MatrixMath.js#L95), replace the 12th, 13th, 14th element in the matrix by parameters, z, y, z to achieve `translation` effect. 
 
-This function called in [processTransform.js#L79](https://github.com/facebook/react-native/blob/a1ac2518a364ebcd3cc024a22229cadc1791e1c4/Libraries/StyleSheet/processTransform.js#L79), in which, RN generates a transform matrix based on `transform object` we provide. ()[https://github.com/facebook/react-native/blob/a1ac2518a364ebcd3cc024a22229cadc1791e1c4/Libraries/StyleSheet/processTransform.js#L43]
+This function called in [processTransform.js#L79](https://github.com/facebook/react-native/blob/a1ac2518a364ebcd3cc024a22229cadc1791e1c4/Libraries/StyleSheet/processTransform.js#L79), in which, RN generates a transform matrix based on `transform object` we provide. 
+[https://github.com/facebook/react-native/blob/a1ac2518a364ebcd3cc024a22229cadc1791e1c4/Libraries/StyleSheet/processTransform.js#L43]
 
 ### What `transformOrigin` does is to
 ```
@@ -46,6 +47,7 @@ This function called in [processTransform.js#L79](https://github.com/facebook/re
 2. apply rotation
 3. translate the view back by -x, -y, -z on the x-axis, y-axis, z-axis 
 ```
+
 
 ### Plain Code
 
@@ -65,6 +67,10 @@ So, we can also use `transform` style to set the anchor point. For example, the 
   }
 
 ```
+
+> Remember that RN generates only one single transform matrix, based on `transform object` we provide, [here](https://github.com/facebook/react-native/blob/a1ac2518a364ebcd3cc024a22229cadc1791e1c4/Libraries/StyleSheet/processTransform.js#L43). There are some transform matrix knowledge involved. [ref: tutorial-3-matrices](http://www.opengl-tutorial.org/beginners-tutorials/tutorial-3-matrices/)
+
+ 
 
 ## react-native-anchor-point
 
