@@ -8,15 +8,30 @@ tags:
 ---
 
 ## What is Anchor Point 
+Web developers may be familiar with `transform-origin` in css. While in iOS, there is something similar called `anchor point`. 
 
-Anchor point in a view is a point in the unit coordinate space, about which all geometric manipulations to the view occur. 
+`Anchor point` in a view is a point in the unit coordinate space, about which all geometric manipulations to the view occur. 
 
 > Defines the anchor point of the layer's bounds rectangle. Animatable. 
 > You specify the value for this property using the unit coordinate space. The default value of this property is (0.5, 0.5), which represents the center of the layer’s bounds rectangle. `All geometric manipulations to the view occur about the specified point`. For example, applying a rotation transform to a layer with the default anchor point causes the layer to rotate around its center. Changing the anchor point to a different location would cause the layer to rotate around that new point.                -- [Apple dev](https://developer.apple.com/documentation/quartzcore/calayer/1410817-anchorpoint)
 
 By default, the anchor point for the rotation is the center of the view. That means the rotation of a view is based on its center. Inspired by this [article](https://commitocracy.com/implementing-foldview-in-react-native-e970011f98b8#.k95f793qe), which teaches us how to rotate a view based from the origin point, I got an important clue to implement the anchor point.  
 
-### transformOrigin
+### Why do we need anchor point in react-native
+
+1. Currently, there is no public API in react-native providing the ability to set `transform-origin` or `anchor-point`. So you will find it is difficult to do some fancy 3D transform animations. For example, [cube animation](https://www.npmjs.com/package/react-native-cube-transition) has some flaws: 
+    - There is a gap between the views when translating views in Android 
+    - The angle is not correct, less than 90 degrees, make the animation wired. It is not a cube, if you try to adjust the angle, you will break all the things. 
+    - part of the view is clipped, not rendering on the screen. 
+![image2020-5-27_17-17-21](https://user-images.githubusercontent.com/7471672/84166299-4c06dd00-aaa7-11ea-8c48-4e401c756767.png)
+
+Actually, I use this function to solve all these issues. But it is code for company, I can't make it public. The key thing is to set anchor point as (1, 0.5) for the left view and (0, 0.5) for the right view. 
+![image](https://user-images.githubusercontent.com/7471672/84166384-63de6100-aaa7-11ea-8102-9de5bee4cf18.png)
+
+2. Beside, for this foldview animation [foldview-in-react-native](https://commitocracy.com/implementing-foldview-in-react-native-e970011f98b8), one of the most import things is to use [`transformOrigin`](https://github.com/jmurzy/react-native-foldview/blob/892f89569cd851867602ce7412852515dccc7e5f/src/transformUtil.js#L3). But, this function works with `transform matrix`, and isn't easy to use. So, I made `react-native-anchor-point`. It looks simple and tricky, but actually very powerful. With it, you can use the transform API in react-native to achieve many fancy animations.
+
+
+### transformOrigin in react-native-foldview
 
 > “Since the transform origin of a view is at its horizontal and vertical center by default, to rotate it in x-space along the bottom, we need to first shift our view’s origin on the y-axis by 50% of the view’s height, then apply rotation, then shift it back to the original center.” — [@jmurzy](https://commitocracy.com/implementing-foldview-in-react-native-e970011f98b8)
 
@@ -36,12 +51,13 @@ function transformOrigin(matrix, origin) {
   MatrixMath.multiplyInto(matrix, matrix, untranslate);
 }
 ```
-`reuseTranslate3dCommand`, in the [react-native source code](https://github.com/facebook/react-native/blob/a1ac2518a364ebcd3cc024a22229cadc1791e1c4/Libraries/Utilities/MatrixMath.js#L95), replace the 12th, 13th, 14th element in the matrix by parameters, z, y, z to achieve `translation` effect. 
-
-This function called in [processTransform.js#L79](https://github.com/facebook/react-native/blob/a1ac2518a364ebcd3cc024a22229cadc1791e1c4/Libraries/StyleSheet/processTransform.js#L79), in which, RN generates a transform matrix based on `transform object` we provide. 
+Here
+-  `reuseTranslate3dCommand` in the [react-native source code](https://github.com/facebook/react-native/blob/a1ac2518a364ebcd3cc024a22229cadc1791e1c4/Libraries/Utilities/MatrixMath.js#L95), is to replace the 12th, 13th, 14th element in the matrix by parameters, z, y, z to achieve `translation` effect. 
+- `reuseTranslate3dCommand` is called in [processTransform.js#L79](https://github.com/facebook/react-native/blob/a1ac2518a364ebcd3cc024a22229cadc1791e1c4/Libraries/StyleSheet/processTransform.js#L79), in which, RN generates a transform matrix based on `transform object` we provide. 
 [https://github.com/facebook/react-native/blob/a1ac2518a364ebcd3cc024a22229cadc1791e1c4/Libraries/StyleSheet/processTransform.js#L43]
 
 ### What `transformOrigin` does is to
+
 ```
 1. translate the view by x, y, z on the x-axis, y-axis, z-axis 
 2. apply rotation
@@ -51,7 +67,7 @@ This function called in [processTransform.js#L79](https://github.com/facebook/re
 
 ### Plain Code
 
-So, we can also use `transform` style to set the anchor point. For example, the following code sets the anchor point of the view as (0, 0.5). This will make the rotate base on the left side of the view. 
+After understanding the above things, we know we can can use `transform` style to set the anchor point. For example, the following code sets the anchor point of the view as (0, 0.5). This will make the rotate base on the left side of the view. 
 
 ```javascript
    const transform = {
@@ -67,10 +83,10 @@ So, we can also use `transform` style to set the anchor point. For example, the 
   }
 
 ```
+![](./d32bef61.png)
 
-> Remember that RN generates only one single transform matrix, based on `transform object` we provide, [here](https://github.com/facebook/react-native/blob/a1ac2518a364ebcd3cc024a22229cadc1791e1c4/Libraries/StyleSheet/processTransform.js#L43). There are some transform matrix knowledge involved. [ref: tutorial-3-matrices](http://www.opengl-tutorial.org/beginners-tutorials/tutorial-3-matrices/)
+Remember that RN generates only one single transform matrix, based on `transform object` we provide, [here](https://github.com/facebook/react-native/blob/a1ac2518a364ebcd3cc024a22229cadc1791e1c4/Libraries/StyleSheet/processTransform.js#L43). So, finally, the above code will be converted into a transform matrix, with which the rendering system can render a view with a given layout and shape.  There are some transform matrix knowledge involved. [ref: tutorial-3-matrices](http://www.opengl-tutorial.org/beginners-tutorials/tutorial-3-matrices/)
 
- 
 
 ## react-native-anchor-point
 
@@ -79,6 +95,22 @@ In this [package](https://github.com/sueLan/react-native-anchor-point), I provid
 ![](./rotateZ.gif)
 ![](./rotateXY.gif)
 ![](./rotate.gif)
+
+And it works well with the react-native `transform` API 
+
+```
+import { withAnchorPoint } from 'react-native-anchor-point';
+
+getTransform = () => {
+    let transform = {
+        transform: [{ perspective: 400 }, { rotateX: rotateValue }],
+    };
+    // inject the anchor point here
+    return withAnchorPoint(transform, { x: 0.5, y: 0 }, { width: CARD_WIDTH, height: CARD_HEIGHT });
+};
+    
+<Animated.View style={[styles.blockBlue, this.getTransform()]} />
+```
 
 ## Ref
 
