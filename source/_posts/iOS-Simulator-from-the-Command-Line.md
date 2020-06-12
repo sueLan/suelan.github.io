@@ -349,7 +349,7 @@ Usage: simctl keychain <device> <action> [arguments]
 
 ### Privacy and Permissions 
 
-These commands could be very useful when you are developing some features and have to test the permissions.  
+These commands, introduced in Xcode 11.4,  could be very useful when you are developing some features and have to test the permissions.  
 
 ```
 ➜  ~ xcrun simctl privacy                                         
