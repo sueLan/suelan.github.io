@@ -183,7 +183,7 @@ How does Clang do to avoid these redundant and heavy job?
 
 ### Clang module  
 
-To speed up the building,  by using module, Clang can only parse the header only and store the information `in the disk`, then `reuse the cache` next time. 
+To speed up the building,  by using module, Clang can parse the header only once and store the information `in the disk`, then `reuse the cache` next time. 
 
  In order to achieve this, Clang module should have  properties. 
 
