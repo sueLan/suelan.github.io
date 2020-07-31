@@ -280,7 +280,7 @@ Two new devices are created with the same contents.
 ![clone](clone.png)
 
 
-### Push Notification to simulator 
+### Push Notification to simulator
 
 1. Create a `.apns` file, `ExamplePush.apns` 
 
@@ -295,7 +295,7 @@ Two new devices are created with the same contents.
 }
 ```
 
-[valid Apple Push Notification values](https://developer.apple.com/documentation/usernotifications/setting_up_a_remote_notification_server/generating_a_remote_notification)
+[valid Apple Push Notification values](https://developer.apple.com/documentation/usernotifications/setting_up_a_remote_notification_server/generating_a_remote_notification). Noted that the `Target Bundle` should be the same as the `bundle identifier`  
 
 2. Drag and drop an APNs file onto the target simulator. 
 
@@ -329,7 +329,6 @@ Only application remote push notifications are supported. VoIP, Complication, Fi
 
 ```
 
-
 ### Manipulate a device's keychain 
 
 ```
@@ -345,6 +344,10 @@ Usage: simctl keychain <device> <action> [arguments]
 
     reset
         Reset the keychain.
+```
+
+```
+xcrun simctl keychain booted add-root-cert myCA.cer
 ```
 
 ### Privacy and Permissions 
@@ -390,6 +393,9 @@ For example,
 ➜  ~ xcrun simctl privacy booted grant location com.facebook.flipper
 ➜  ~ xcrun simctl privacy booted grant photos com.facebook.flipper
 ```
+
+and use `revoke` to revoke the permissions. 
+
 
 ### Switch the appearance style in a device between light and dark.
 
@@ -446,6 +452,51 @@ Supported Operations:
 ➜  ~ xcrun simctl status_bar booted override --dataNetwork '4g'
 ```
 
+```
+xcrun simctl status_bar booted override --time 15:42 --cellularBars 1 --dataNetwork '3g' --wifiMode 'failed' --batteryState 'charging'
+```
+![status bar](status_bar_test.png)
+
+and use `clear` option to clear all the settings.
+
+```
+xcrun simctl status_bar booted clear
+```
+
+https://developer.apple.com/videos/play/wwdc2020/10647/
+
+### Record Video 
+
+We can run `xcrun simctl io --help` to see more. 
+
+```
+xcrun simctl io <device> recordVideo <file>
+```
+
+```
+xcrun simctl io booted recordVideo video.mp4
+```
+This command records the content of the screen of the current booted simulator, and save it to the video.mp4 file.  To stop recording, we have to use `ctl+c` in the terminal. 
+
+```
+xcrun simctl io booted recordVideo  -f video.mp4
+```
+`recordVideo` cannot save recorded video output into a file that already exists unless we use  `-f` flag to override the existing file. 
+
+```
+xcrun simctl io booted recordVideo video.mp4 --codec h264 --mask ignored video.mp4
+```
+ - By default, codec type is `hevc`. 
+ - Ignore the mask when the mask is rendered black because of compatibility issues. 
+
+
+And we can also capture the out of the external display of the simulator. 
+```
+xcrun simctl io booted recordVideo --display external external.mp4 
+```
+
+![](record_video.gif)
+
 ### Other useful commands
 
 ```
@@ -455,7 +506,6 @@ simctl openurl <device> <URL>
 xcrun simctl addmedia <device> <file1> <file2>
 // Set up a device IO operation. screenshot or recordVideo 
 xcrun simctl io <device> screenshot <output.png>
-xcrun simctl io <device> recordVideo <file>
 
 ```
 
