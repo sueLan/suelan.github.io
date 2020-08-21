@@ -11,7 +11,7 @@ tags:
 
 ## Basic Knowledge 
 
-> When functions (routines) call other functions (subroutines), they may need to pass arguments to them. The called subroutines access these arguments as *parameters*. Conversely, some subroutines pass a *result* or return value to their callers. In the ARMv6 environment, arguments may be passed on the runtime stack or in registers; in addition, some vector arguments are also passed passed in registers. Results are returned in registers or in memory. To efficiently pass values between callers and callees, GCC follows strict rules when it generates a program’s object code. - [ARMv6](https://developer.apple.com/library/archive/documentation/Xcode/Conceptual/iPhoneOSABIReference/Articles/ARMv6FunctionCallingConventions.html#//apple_ref/doc/uid/TP40009021-SW8)
+
 
 ### Registers 
 
@@ -49,6 +49,8 @@ Another stack frame layout graph comes from [Procedure Call Standard for the ARM
 ![image-20200805222941420](image-20200805222941420.png)
 
 ### Passing Arguments
+
+> When functions (routines) call other functions (subroutines), they may need to pass arguments to them. The called subroutines access these arguments as *parameters*. Conversely, some subroutines pass a *result* or return value to their callers. In the ARMv6 environment, arguments may be passed on the runtime stack or in registers; in addition, some vector arguments are also passed passed in registers. Results are returned in registers or in memory. To efficiently pass values between callers and callees, GCC follows strict rules when it generates a program’s object code. - [ARMv6](https://developer.apple.com/library/archive/documentation/Xcode/Conceptual/iPhoneOSABIReference/Articles/ARMv6FunctionCallingConventions.html#//apple_ref/doc/uid/TP40009021-SW8)
 
 The base standard provides for passing arguments in general-purpose registers (r0-r7)
 
