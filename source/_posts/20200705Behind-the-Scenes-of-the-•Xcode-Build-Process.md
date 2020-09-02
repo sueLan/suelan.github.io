@@ -109,7 +109,7 @@ The answer is to handle the dependency properly so that the build system can ord
 
 > `Header map` is used by the Xcode build system to know where the header files are.
 
-In Objective-C, a header file is a promise, saying that the implementation exists somewhere else. If you only update the `header` file, adding a new function A,  without implementation of the function in `m` file, you broke your promise. Then you use function A in class B.   This doesn't break during compile time, because compiler trusts the promise, saying that there is a function A symbole exists, but during link,  we usually got `symbol undefined` error. 
+In Objective-C, a header file is a promise, saying that the implementation exists somewhere else. If you only update the `header` file, adding a new function A,  without implementation of the function in `m` file, you broke your promise. Then you use function A in class B.   This doesn't break during compile time, because compiler trusts the promise, saying that there is a function A symbol exists, but during link,  we usually got `symbol undefined` error. 
 
 ### 1. How does Clang find your header files? 
 
@@ -137,10 +137,9 @@ First, Clang will start searching the header in header map files.
 
 In the header map, for the first two keys `PetKit.h` and `Cat.h` , it just simply append the framework name, make them as `PetKit/PetKit.h` and `PetKit/Cat.h`. This keep existing projects working when you use `import <Cat.h>` or `import Cat.h`,  but there might be issues down the road with Clang modules.  So it is recommended that you always `specify the framework name` when you include a public or private header file from your own framework. 
 
-#### Suggestions:  
+#### Suggestion for importing headers explicitly in your source code to help Clang find the header:  
 
 - Always explicit a framework name when you introduce a public and private header 
-
 - always add the header to the project 
 - Always use unique name for header avoid shadowing other headers 
 
@@ -257,13 +256,13 @@ When compiling Objective-C files,  the compiler compiles each file separately an
 
 ### Generating interface 
 
-- check how your Objective-C header will be imported into Swift
+- How your Objective-C header will be imported into Swift
 
   In this `PetViewController.h`, you use the button in the top-left corner of the source editor, see `generated interface`. 
 
   ![image-20200710110626097](image-20200710110626097.png)
 
-- To use Swfit in Objective-C 
+- To use Swift in Objective-C 
 
   ![image-20200710112907949](image-20200710112907949.png)
 
@@ -273,7 +272,7 @@ When compiling Objective-C files,  the compiler compiles each file separately an
   - Compiler ties Objective-C class to mangled Swift class name. The Objective-C name includes the module name `PetWall` . This is to prevent conflict when two modules define class with same name
   - You can also use `@objc(Name`) to provide custom name — but must not conflict!
 
-- To use in other Swift targets
+- To use Swift in other Swift targets
 
   - Must firstly import other modules to see their declarations, because in Swift, a module is a distributable unit of declarations.
 
@@ -281,13 +280,23 @@ When compiling Objective-C files,  the compiler compiles each file separately an
 
   - In Xcode each `Swift target` produces `a separate module`, so your app target does.
 
-  - Serialized, binary representation of module’s declarations, which will be deserialised by compiler  to check the types when you use them. So this `swfitmodule` is a bit like `like a generated Objective-C header`. But instead of text, it's a binary representation. Besides, it does include the names and types of `private declarations` so that we can refer to them in the debugger. In addition, it includes the `bodies of inlineable`functions`,  like `static inline function`s in Objective-C  header
+### swfitmodule vs header
+  `swfitmodule` file is serialized, binary representation of module’s declarations, which will be deserialised by compiler  to check the types when you use them. So this `swfitmodule` is a bit like `like a generated Objective-C header`. But instead of text, it's a binary representation. Besides, it does include the names and types of `private declarations` so that we can refer to them in the debugger. In addition, it includes the `bodies of inlineable`functions`,  like `static inline function`s in Objective-C  header
 
     ![image-20200710113202143](image-20200710113202143.png) 
 
   ![image-20200709100603559](image-20200709100603559.png)
 
    For incremental builds, the compiler produces partial Swift module files and then `merges` them into a single `swift module` file, and  a single Objective-C header. 
+
+### In summary:
+
+- Swift uses Objective-C declarations by Bridging header.
+- Objective-C uses Swift declarations by Generated header.
+- In Objective-C Clang find where the header file is by header map files.  
+- In Swift, `swfitmodule` is a bit like like a generated Objective-C header
+
+![](generated_header.png)
 
 ## Linker 
 
