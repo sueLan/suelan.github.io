@@ -76,9 +76,9 @@ About stack and stack pointer, see more in.
 
 ### Addressing Mode
 
-As a beginners, we may want to know  how the addresses caculated from the figures within the square brackets
+As a beginner, I want to know how the addresses are calculated from the figures within the square brackets
 
-Here, we may have know something about  `addressing modes`. There are several addressing modes that define how the address is formed according to [document s about ARMv8 instructions set](https://developer.arm.com/architectures/learn-the-architecture/armv8-a-instruction-set-architecture/loads-and-stores-addressing)  
+Here, we have to know something about  `addressing modes`. There are several addressing modes that define how the address is formed according to [document s about ARMv8 instructions set](https://developer.arm.com/architectures/learn-the-architecture/armv8-a-instruction-set-architecture/loads-and-stores-addressing)  
 
 - **Base register** - The simplest form of addressing is a single register. Base register is an X register that contains the full, or absolute, virtual address of the data being accessed, as you can see in this figure:
 
@@ -190,7 +190,7 @@ bl	_objc_autoreleasePoolPush
 
 #### Unconditional branch instructions 
 
->  There are two types of unconditional branch instructions; `B` which means Branch and `BR` which means Branch with Register. 
+> There are two types of unconditional branch instructions; `B` which means Branch and `BR` which means Branch with Register. 
 
 The unconditional branch instruction `B <label`> performs a direct, PC-relative, branch to <label>.
 
