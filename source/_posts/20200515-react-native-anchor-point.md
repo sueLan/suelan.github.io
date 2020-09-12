@@ -7,7 +7,10 @@ tags:
   - Animation
 ---
 
+In react-native, sometimes, you may want to rotate a view basing one a specific point instead of the center of the view. Like the cube animation in the instagram stories. Some people think you need a extra `transformZ` property to achieve that. But, actually, you don't need that. What you need is `Anchor Point`. 
+
 ## What is Anchor Point 
+
 Web developers may be familiar with `transform-origin` in css. While in iOS, there is something similar called `anchor point`. 
 
 `Anchor point` in a view is a point in the unit coordinate space, about which all geometric manipulations to the view occur. 

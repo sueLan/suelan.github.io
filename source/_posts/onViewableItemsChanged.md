@@ -6,6 +6,8 @@ tags: Dive into React Native
 categories: React Native
 ---
 
+If you want to get viewable items in the [FlatList], you had better take a look at the `onViewableItemsChanged` prop. For example, suppose you have a video list, and you want automatically play the video when the video is appearing on the screen for a few seconds. In iOS, there is [visibleCells](https://developer.apple.com/documentation/uikit/uicollectionview/1618056-visiblecells) in `UITableView` to achieve this. In React Native, I am glad to tell you that `FlatList` has a more powerful property, `onViewableItemsChanged`. `This article would help you better understand how to use the `onViewableItemsChanged` prop in the [FlatList], and how it works under the hood.
+
 ## What is onViewableItemsChanged
 
 `onViewableItemsChanged` is a prop in [VirtualizedList](https://facebook.github.io/react-native/docs/virtualizedlist#onviewableitemschanged) and [FlatList](https://facebook.github.io/react-native/docs/flatlist#onviewableitemschanged). When you scroll a FlatList, the items showing on the FlatList change. Then, this function is called, telling you what current `viewableItems` are and what `changed` items are. 
