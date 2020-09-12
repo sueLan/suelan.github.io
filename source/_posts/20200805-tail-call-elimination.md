@@ -9,9 +9,10 @@ tags:
 
 ---
 
+> Tail call optimization, callee reusing the stack of the caller, is currently supported on x86/x86-64, PowerPC, and WebAssembly. It is performed on x86/x86-64 and PowerPC - [lldb](http://llvm.org/docs/CodeGenerator.html#tail-call-optimization)
+
+
 ## Basic Knowledge 
-
-
 
 ### Registers 
 

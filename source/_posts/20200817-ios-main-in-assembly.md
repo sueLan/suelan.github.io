@@ -63,16 +63,48 @@ Lfunc_begin0:
 	sub	sp, sp, #48             ; =48
 ```
 
-It sets up a call frame on the stack. in AArch64 the stack-pointer must be 128-bit aligned; here is 48*8-bit.
+It sets up a call frame on the stack. Here `sp` refers to the register for stack-pointer. In AArch64 the stack-pointer must be 128-bit aligned; here is 48*8-bit.
 
 ![image-20200807093341883](image-20200807093341883.png)
 
-About stack and stack pointer, see more in. 
+#### Registers 
 
+> Processor operations mostly involve processing data. This data can be stored in memory and accessed from thereon. However, reading data from and storing data into memory slows down the processor, as it involves complicated processes of sending the data request across the control bus and into `the memory storage unit` and getting the data through the same channel. To speed up the processor operations, the processor includes some `internal memory storage locations`, called **registers**.
+>
+> The registers store data elements for processing without having to access the memory. A limited number of registers are built into the processor chip. -- https://www.tutorialspoint.com/assembly_programming/assembly_registers.htm 
+
+In ARM 64, the following graph shows the registers' roles.
+
+![image-20200805000244292](image-20200805000244292.png)
+
+- The first eight registers, r0-r7, are used to pass argument values into a subroutine and to return result values from a function. 
+- The frame record for the innermost frame (belonging to the most recent routine invocation) shall be pointed to by the `Frame Pointer register` (FP). The lowest addressed double-word shall point to the `previous frame record` and the highest addressed double-word shall contain the value passed in LR on entry to the current function. 
+
+#### Stack Structure
+
+> The stack is a `contiguous area of memory` that may be used for storage of local variables and for passing additional arguments to subroutines when there are insufficient argument registers available.The stack implementation is *full-descending*, with `the current extent of the stack` held in the special-purpose register `SP`.   --[Procedure Call Standard for the ARM 64-bit Architecture (AArch64)- AArch64 ABI release 1.0](https://developer.arm.com/documentation/ihi0055/b/)
+
+The ARM environment uses a stack that—at the point of function calls—is grows downward, and contains local variables and a function’s parameters. The stack is  aligned at the point of function calls.  Figure 1 shows the stack before and during a subroutine call. 
+
+![img](https://developer.apple.com/library/archive/documentation/Xcode/Conceptual/iPhoneOSABIReference/art/arm_stack.jpg)
+
+ Stack frames contain the following areas:
+
+- *The parameter area* stores the arguments the caller passes to the called function or stores space for them, depending on the type of each argument and the availability of registers. This area resides in the caller’s stack frame.
+- *The linkage area* contains the address of the caller’s next instruction.
+- *The saved frame pointer* (optional) contains the base address of the caller’s stack frame.
+- The *local storage area* contains the subroutine’s local variables and the values of the registers that must be restored before the called function returns. See [Register Preservation](https://developer.apple.com/library/archive/documentation/Xcode/Conceptual/iPhoneOSABIReference/Articles/ARMv6FunctionCallingConventions.html#//apple_ref/doc/uid/TP40009021-SW4) for details.
+- The *saved registers area* contains the values of the registers that must be restored before the called function returns. See [Register Preservation](https://developer.apple.com/library/archive/documentation/Xcode/Conceptual/iPhoneOSABIReference/Articles/ARMv6FunctionCallingConventions.html#//apple_ref/doc/uid/TP40009021-SW4) for details.
+
+In this environment, the stack frame size is not fixed.
+
+Another stack frame layout graph comes from [Procedure Call Standard for the ARM 64-bit Architecture (AArch64)- AArch64 ABI release 1.0](https://developer.arm.com/documentation/ihi0055/b/)
+
+![image-20200805222941420](image-20200805222941420.png)
+
+About stack and stack pointer, see more in. 
 - [Using the Stack in AArch32 and AArch64](https://community.arm.com/developer/ip-products/processors/b/processors-ip-blog/posts/using-the-stack-in-aarch32-and-aarch64)
 - [Using the Stack in AArch64: Implementing Push and Pop](https://community.arm.com/developer/ip-products/processors/b/processors-ip-blog/posts/using-the-stack-in-aarch64-implementing-push-and-pop)
-
-
 
 ### Addressing Mode
 
