@@ -2,7 +2,7 @@
 title: XMPP Overview
 date: 2019-03-26 09:58:25
 categories: 
-    - NetWork
+    - Network
 tags:
     - XMPP
 ---

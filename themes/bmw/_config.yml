@@ -35,7 +35,7 @@ player: true
 # 是否开启 分享功能: https://github.com/overtrue/share.js
 social_share:
   enable: true
-  sites: qzone, qq, weibo, wechat, douban, google, facebook, twitter
+  sites: google, facebook, twitter, weibo, wechat, douban 
   disabled: 
 
 # 是否开启 打赏功能
@@ -49,7 +49,7 @@ reward:
     # meta: 二维码提示信息
     -
       src: /img/donate.jpeg
-      meta: "感谢鼓励"
+      meta: "Thank you"
  
 
 
@@ -110,7 +110,7 @@ nav:
         path: "https://stackoverflow.com/users/4026902/ry-zheng"
         blank: true
       -
-        name: Jian Shu
+        name: Jian Shu | Chinese
         path: "https://www.jianshu.com/u/23bd8d4cc8bf"
         blank: true
 
@@ -118,7 +118,7 @@ nav:
 # 友链详细信息：支持多个友链
 friends:
   -
-    nickname: 蓝 # 昵称
+    nickname: 蓝容
     avatar:  https://suelan.github.io/img/avatar.jpeg # 头像链接
     site: https://www.jianshu.com/u/23bd8d4cc8bf # 站点地址
     meta: To see a World in a Grain of Sand;And a Heaven in a Wild Flower; Hold Infinity in the palm of your hand; And Eternity in an hour 

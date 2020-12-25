@@ -4,8 +4,8 @@ date: 2020-12-24 21:31:27
 tags:
   - Dive into React Native
 categories: 
-  - React Native
-  - iOS
+  - [iOS, React Native]
+updated: 2020-12-25  
 ---
 
  In react native, it is so intuitive to display different types of images. The [Image Component](https://reactnative.dev/docs/image) can display network images, static resources, temporary local images, and images from local disk. 

@@ -4,8 +4,7 @@ date: 2020-12-23 21:50:17
 tags:
   - Dive into React Native
 categories: 
-  - React Native
-  - iOS
+  - [iOS, React Native]
 ---
 
 [Native Modules](https://reactnative.dev/docs/native-modules-ios) is one of the key part of React Native which enables JavasScript to call methods in iOS or Android native implementation.

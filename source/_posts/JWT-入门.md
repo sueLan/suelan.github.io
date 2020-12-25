@@ -2,7 +2,7 @@
 title: JWT 入门
 date: 2019-04-03 10:40:16
 categories: 
-    - NetWork
+    - Network
 tags:
     - Auth
 ---
