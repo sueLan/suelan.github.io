@@ -3,8 +3,6 @@ title: 'XMPP(5): 消息'
 date: 2019-04-09 15:16:35
 categories: 
     - XMPP
-tags:
-    - XMPP 
 ---
 
  

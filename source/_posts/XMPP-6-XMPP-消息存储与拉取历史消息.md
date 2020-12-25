@@ -3,8 +3,6 @@ title: 'XMPP(6):XMPP-消息存储与拉取历史消息'
 date: 2019-04-10 22:09:53
 categories: 
     - XMPP
-tags:
-    - XMPP
 ---
 
 

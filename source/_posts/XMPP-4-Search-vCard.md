@@ -3,8 +3,6 @@ title: 'XMPP(4):Search 和 vCard'
 date: 2019-03-31 15:35:51
 categories: 
     - XMPP
-tags:
-    - XMPP 
 ---
 `jabber:iq:search`协议用来查找用户信息。
 

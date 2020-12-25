@@ -3,8 +3,6 @@ title: 'XMPP(2):注册账户'
 date: 2019-03-29 10:05:17
 categories: 
     - XMPP
-tags:
-    - XMPP
 ---
 
 

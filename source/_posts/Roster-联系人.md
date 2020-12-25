@@ -3,8 +3,6 @@ title: XMPP(3):Roster&联系人
 date: 2019-03-31 11:49:32
 categories: 
     - XMPP
-tags: 
-    - XMPP
 ---
 
 
