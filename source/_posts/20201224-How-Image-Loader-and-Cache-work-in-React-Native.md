@@ -23,21 +23,51 @@ Let me begin with an activity diagram about **React/Image** module.
 
 ![](ActivityReactNative.jpg)
 
-There are several classes playing important roles in image render and cache in react native. **RCTImageView** is the iOS native implementation for **Image component**. It inherits `RCTView` and hold a `UIImageView` to render the image. `RCTImageView` is created by `RCTUIManager`. The size of `UIImageView` will be used to downscale the image when decoding the image. The size of `UIImageView` comes from the style prop in `Image` component in JavaScript side or calculated by `Yoga`. When setting property for Image component in RN or other events triggering the image loading, `RCTImageView` calls `RCTImageLoader` to get the cached image or download image. `RCTImageLoader` is the controller for the workflow of image downloading, decoding, which depends on `RCTNetwork` to fetch the image remotely. But before trying to download an image, `RCTImageLoader` will try to check [if there is cached image](https://github.com/facebook/react-native/blob/1ee406b9ccbecc52dff3e77d65c6d9b4837e6dab/Libraries/Image/RCTImageLoader.mm#L606). So here comes `RCTImageCache`, which is for Image Cache in react native iOS. 
+There are several classes playing important roles in image render and cache in react native. **RCTImageView** is the iOS native implementation for **Image component**. It inherits `RCTView` and hold a `UIImageView` to render the image. `RCTImageView` is created by `RCTUIManager`. The `UIImageView` size comes from the style prop in `Image` component in JavaScript side or calculated by `Yoga`. When setting property for Image component in RN or other events triggering the image loading, `RCTImageView` calls `RCTImageLoader` to get the cached image or download image. `RCTImageLoader` is the controller for the workflow of image downloading, decoding. It depends on `RCTNetwork` to fetch the image remotely.  Before trying to download an image, `RCTImageLoader` will try to check [if there is cached image](https://github.com/facebook/react-native/blob/1ee406b9ccbecc52dff3e77d65c6d9b4837e6dab/Libraries/Image/RCTImageLoader.mm#L606) and to reuse the cached image. So here comes `RCTImageCache`, which is for Image Cache in react native iOS. 
 
 ## **RCTImageCache**
 
-At first, keep in mind that **RCTImageCache** uses [NSCache](https://developer.apple.com/documentation/foundation/nscache) to store images, which is defined to have only [20MB](https://github.com/facebook/react-native/blob/00456211e591930f28a08356141fc8bec52fe3e5/Libraries/Image/RCTImageCache.m#L41) cache capacity in React Native iOS.
+First of all, keep in mind that **RCTImageCache** uses [NSCache](https://developer.apple.com/documentation/foundation/nscache) to cache images. `NSCache` object used `RCTImageCache` has only [20MB](https://github.com/facebook/react-native/blob/00456211e591930f28a08356141fc8bec52fe3e5/Libraries/Image/RCTImageCache.m#L41) cache capacity in React Native iOS.
 
-### How to add images into NSCache? 
+### How images added into NSCache? 
 
 #### 1. expiration time 
 
-After successfully downloading the images, **RCTImageLoader** decodes the image using [decodeImageData:size:scale:clipped:resizeMode:completionBlock](https://github.com/facebook/react-native/blob/9500eb8867d25896b1611903a64fac8d81984bf6/Libraries/Image/RCTImageLoader.mm#L935), then it [adds the decoded image to cache](https://github.com/facebook/react-native/blob/00456211e591930f28a08356141fc8bec52fe3e5/Libraries/Image/RCTImageLoader.mm#L806). In this phase, it extract the **expiration time** from the Http Response header. See more in the diagram to see how it get the expire time. The **max-age** is the top priority to decide expiration time for an image here. 
+After successfully downloading the images, **RCTImageLoader** decodes the image using [decodeImageData:size:scale:clipped:resizeMode:completionBlock](https://github.com/facebook/react-native/blob/9500eb8867d25896b1611903a64fac8d81984bf6/Libraries/Image/RCTImageLoader.mm#L935), then it [adds the decoded image to cache](https://github.com/facebook/react-native/blob/00456211e591930f28a08356141fc8bec52fe3e5/Libraries/Image/RCTImageLoader.mm#L806). In this step, it extracts the **expiration time** from the Http Response header. See more in the diagram to see how it get the expire time. The **max-age** is the top priority to decide expiration time for an image here. 
 
-**2. Bitmap size For Image**
+<img src="stale_time.png" style="zoom:50%;" />
 
-Before adding the image into the **NSCache**. **RCTImageCache** checks if the size of the decoded image bigger than 2MB. Any decoded images bigger than 2MB won't be added into **NSCache**. The formula to calculate the size is like this. 
+#### 2. The cost of image in NSCache
+
+Another key point is that **RCTImageCache** uses [`setObject:forKey:cost:` API](https://developer.apple.com/documentation/foundation/nscache/1416399-setobject?language=objc). 
+
+> The `cost` value is used to compute a sum encompassing the costs of all the objects in the cache. When memory is limited or when the total cost of the cache eclipses the maximum allowed total cost, the cache could begin an eviction process to remove some of its elements.
+
+#### 3. using Bitmap size as cost
+
+```Objective-c
+
+static const NSUInteger RCTMaxCachableDecodedImageSizeInBytes = 2097152; // 2 MB
+
+- (void)addImageToCache:(UIImage *)image
+                 forKey:(NSString *)cacheKey
+{
+  if (!image) {
+    return;
+  }
+  // calculate the bitmap size 
+  NSInteger bytes = image.reactDecodedImageBytes;
+  // checks if the size of the decoded image bigger than 2MB. Any decoded image occupying more than 2MB memory won't be added into **NSCache**.  
+  if (bytes <= RCTMaxCachableDecodedImageSizeInBytes) {
+    [self->_decodedImageCache setObject:image
+                                 forKey:cacheKey
+                                   cost:bytes];
+  }
+}
+```
+
+
+Before adding an image into the **NSCache**. **RCTImageCache** firstly calculate the bitmap size using the following formula
 
 ```objective-c
 static NSInteger RCTImageBytesForImage(UIImage *image)
@@ -47,7 +77,7 @@ static NSInteger RCTImageBytesForImage(UIImage *image)
 }
 ```
 
-For a RGBA format image, each pixels needs 4 bytes to represent the RGBA value, which contains 4 channels and the value for each channel varies from 0 to 255.
+For a `RGBA` format image, each pixel needs 4 bytes to represent the RGBA value, which contains 4 channels. We know that the value for each channel varies from 0 to 255.  So we need 8 bits, or 1 bytes to store it.
 
 ```
 A   R   G   B   A   R   G   B   A   R   G   B  
@@ -55,42 +85,31 @@ A   R   G   B   A   R   G   B   A   R   G   B
 0  233  2  100  4  155 255  7   8   9   10  11
 ```
 
-The `size` of the `UIImage` is using `points` as the unit. So for the `310*165` `UIImage` object, it totally uses `310*scale*165*scale*4` pixels. 
+Beside, Image.scale is the scale factor. Multiplying the logical size of the image (stored in the size property) by value, you get the dimensions of the image in pixels. So for the `310*165` `UIImage` object, it totally uses `310*scale*165*scale*4` pixels. 
 
-> An important point here is that the **RCTImageBytesForImage** isn't always equal to the true bitmap size in memory after decoding images. Because **RCTImageLoader** will take the size and the resize mode of the **RCTImageView** into consideration when decoding. [Source code here.](https://github.com/facebook/react-native/blob/00456211e591930f28a08356141fc8bec52fe3e5/Libraries/Image/RCTImageUtils.m#L256)
+An important point here is that the **reactDecodedImageBytes** isn't always equal to the true bitmap size in memory after decoding images. Because **RCTImageLoader** will take the size and the resize mode of the **UIImageView** into consideration. [Source code here.](https://github.com/facebook/react-native/blob/00456211e591930f28a08356141fc8bec52fe3e5/Libraries/Image/RCTImageUtils.m#L256). When decoding, it downscale the downloaded image and display the downsized image to fit the image view size. This means `reactDecodedImageBytes` used as image cost in NSCache could be bigger than the actual size of finally displaying image. 
 
+So briefly speaking, for each image added into the `NSCache`, its cost is the bitmap size instead of the file size. `JPG` or `PNG` is kind of compressed format, which has much smaller size. Remember `NSCache` has `20MB` **totalCostLimit** in react native. In addition, bitmap size is much bigger than file size. It is so easy to exceed the totalCostLimit for `NSCache`, and then to trigger the eviction process to remove some of the images. 
 
+#### 4. The unknown storage and eviction policy in NSCache 
 
-**3. The cost of image in NSCache**
+In the official doc  [NSCache](https://developer.apple.com/documentation/foundation/nscache) , it says `NSCache` is to temporarily store transient key-value pairs, and doesn't mention whether it uses `disk cache` or not. I added a log to see if it get `image` from the `NSCache` when launching my App without `network`. It does get a few cached images. So far, I think we can say that `NSCache` does have `disk cache` , but the proportion of disk cache is so small that we got a few cached images and the hit rate doesn't improve a lot even when I improve the `totalCostLimit` of NSCache. 
 
-Another key point is that **RCTImageCache** here uses [`setObject:forKey:cost:` API](https://developer.apple.com/documentation/foundation/nscache/1416399-setobject?language=objc). 
-
-> The `cost` value is used to compute a sum encompassing the costs of all the objects in the cache. When memory is limited or when the total cost of the cache eclipses the maximum allowed total cost, the cache could begin an eviction process to remove some of its elements.
-
-So, for each image added into the NSCache, its costs is the bitmap size calculated using the above fomula, instead of the file size. JPG or PNG is kind of compressed format, which has much smaller size. Remember NSCache has **totalCostLimit** as 20MB in react native.  And Bitmap size is much bigger than file size. It is so easy to exceed the totalCostLimit for NSCache, and then to trigger the eviction process to remove some of the images. 
-
-
-
-**4. The unknown storage and eviction policy in NSCache** 
-
-In the official doc  [NSCache](https://developer.apple.com/documentation/foundation/nscache) , it says NSCache is to temporarily store transient key-value pairs, and doesn't mention whether it uses `disk cache` or not. I added a log to see if it get `image` from the `NSCache` when launching Shopee without `network`. It does get a few cached images. So we can say that NSCache does have `disk cache` , but the proportion of disk cache is so small that we got a few cached images and the hit rate doesn't improve a lot even when I improve the `totalCostLimit` of NSCache a lot. 
-
-So when you are in HomePage and scroll down, then scroll back to see the Home Banners, then keep the HomePage idle, you can see it keeps fetching and decoding the same images repeatedly when the home banners keeps displaying images automatically repeatedly. Because in this case, the NSCache uses up its capacity and keep eviting images. However, this eviction process is not in a guaranteed order. Seems it doesn't simply apply LRU here. 
-
+So if your react native app is kind of image-heavy app. Sometimes, when you are in the scroll view full of displaying images. When you scroll down, then scroll back, you can see it fetching and decoding images, even if some of them were rendered just now but moved out of the screen later. Because in this case, the `NSCache` uses up its cache capacity and keep evicting images. Moreover, this eviction process isn't in a guaranteed order. Seems it doesn't simply apply `LRU` policy here. 
 
 
 ### How to get images from cache
 
-The method to get images from **NSCache** looks quite relatively simple. [ imageForUrl:size:scale:resizeMode](https://github.com/facebook/react-native/blob/00456211e591930f28a08356141fc8bec52fe3e5/Libraries/Image/RCTImageCache.m#L79). 
+The method to get images from `NSCache` looks relatively simple. [ imageForUrl:size:scale:resizeMode](https://github.com/facebook/react-native/blob/00456211e591930f28a08356141fc8bec52fe3e5/Libraries/Image/RCTImageCache.m#L79). 
 
-1. get the key for cached image by using **url, size, scale, resizeMode.** As long as these 4 factors not changed, the key for the cached image won't be changed. 
+1. get the key for cached image by using **url, size, scale, resizeMode.** As long as these 4 factors not changed next time, the key for the cached image won't be changed, and you can reuse this image
 2. check if the cached image is expired. If it is, remove the image from the cache. 
 
 ### How to replace RCTImageCache with your own cache implementation
 
-Let your own cache implementation conform `RCTImageCache` protocol. And then `setImageCache` in `RCTImageLoader` 
+Let your own cache implementation conform `RCTImageCache` protocol. And then `setImageCache` in `RCTImageLoader`.
 
-```objective-c
+```Objective-c
 /**
  * Allows developers to set their own caching implementation for
  * decoded images as long as it conforms to the RCTImageCache
@@ -100,12 +119,9 @@ Let your own cache implementation conform `RCTImageCache` protocol. And then `se
 ```
 
 
-
 ## Concurrent Loading and Decoding Tasks 
 
-`RCTImageLoader` maintains queues to schedule image loading and decoding tasks.  The following property controls the number of conccurent tasks for image loading and decoding. 
-
-
+`RCTImageLoader` maintains queues to schedule image loading and decoding tasks.  The following property controls the number of concurrent tasks for image loading and decoding. 
 
 ```objective-c
 /**
