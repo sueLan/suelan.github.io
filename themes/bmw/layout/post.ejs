@@ -66,13 +66,13 @@
     <% if(page.next){ %>
       <div class="nav-pre">
         <i class="iconfont icon-prev"></i>
-        Previous Article:
+        previous:
         <a href="<%= url_for(page.next.path)%>" target="_self"><%- page.next.title %></a>
       </div>
     <% } %>
     <% if(page.prev){ %>
       <div class="nav-next">
-        Nex Article:
+        next:
         <a href="<%= url_for(page.prev.path)%>" target="_self"><%- page.prev.title %></a>
         <i class="iconfont icon-next"></i>
       </div>

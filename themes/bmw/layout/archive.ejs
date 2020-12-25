@@ -1,4 +1,18 @@
 <div class="container">
+  <% var rmd_paths = []%>
+  <% for(var line in site.data.rmd_post) { %>
+    <%
+      let path = site.data.rmd_post[line]
+      rmd_paths.push(path)
+    %>
+  <% } %>
+
+  <% for (var psg of site.posts.data) { %>
+    <% if (rmd_paths.includes(psg.path)) {%>
+      <%- partial("component/rmd_article_slice", {psg: psg}) %>
+    <%} %>
+<%  } %>
+
   <%- partial('/component/timeline') %>
   <nav class="page-navigation">
     <% if(page.prev !== 0){ %>

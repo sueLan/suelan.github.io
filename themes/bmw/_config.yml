@@ -87,7 +87,7 @@ nav:
     name: Home 
     path: /
   -
-    name: Archives
+    name: Popular 
     path: /archives/
   -
     name: Categories 
