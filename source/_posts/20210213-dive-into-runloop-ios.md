@@ -191,7 +191,7 @@ https://developer.apple.com/documentation/corefoundation/cfrunloopactivity
 
 ###  Run Loop Sequence of Events
 
-According to [apple doc](https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/Multithreading/RunLoopManagement/RunLoopManagement.html#//apple_ref/doc/uid/10000057i-CH16-SW1),  when runloop running  in a thread, it processes pending events and generates notifications for attached observers.  Briefly, it works as the follow digram shows. 
+According to [apple doc](https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/Multithreading/RunLoopManagement/RunLoopManagement.html#//apple_ref/doc/uid/10000057i-CH16-SW1),  when runloop running  in a thread, it processes pending events and generates notifications for attached observers.  Briefly, it works as the follow diagram shows. 
 
 ![image-20210209142244931](image-20210209142244931.png)
 
