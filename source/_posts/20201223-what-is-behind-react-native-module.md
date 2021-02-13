@@ -390,11 +390,13 @@ JSValueRef call(
           }
       )
   );
-```   
+```
+
 Then [ `callNativeModules` in `JSToNativeBridge`](https://github.com/facebook/react-native/blob/17a8737ecb68f61a14f54bf0e2efeb618f97d326/ReactCommon/jsiexecutor/jsireact/JSIExecutor.cpp#L390) is invoked.
 
 4. The [callNativeModules in `JSToNativeBridge`](https://github.com/facebook/react-native/blob/17a8737ecb68f61a14f54bf0e2efeb618f97d326/ReactCommon/cxxreact/NativeToJsBridge.cpp#L54) firstly parses the `JSON` data to get the `moduleIds`, `methodIds` and `params`, etc.  [source code here](https://github.com/facebook/react-native/blob/17a8737ecb68f61a14f54bf0e2efeb618f97d326/ReactCommon/cxxreact/MethodCall.cpp#L38).  After constructing `MethodCall` structure, which holds `moduleId`, `methodId`, `arguments`, `callId`, [`callNativeModules` in `ModuleRegistry.cpp`](https://github.com/facebook/react-native/blob/17a8737ecb68f61a14f54bf0e2efeb618f97d326/ReactCommon/cxxreact/ModuleRegistry.cpp#L220)  is called.
-  ```c++
+   
+```c++
    // This is always populated
   std::vector<std::unique_ptr<NativeModule>> modules_;
 
@@ -409,8 +411,9 @@ Then [ `callNativeModules` in `JSToNativeBridge`](https://github.com/facebook/re
   }
   modules_[moduleId]->invoke(methodId, std::move(params), callId);
   }
-  ``` 
-  `moduleId` is used to look up the `NativeModule` object in a list of modules.  `NativeModule` list is set up in `CxxBridge` initialization phases, which basically is a vector holding module information in C++ realm, transformed from `_moduleDataByID` array in Objc realm. As we know `_moduleDataByID` is a list of  `RCTModuleData` holding registered `RCTBridgeModule` and its instance. 
+```
+
+`moduleId` is used to look up the `NativeModule` object in a list of modules.  `NativeModule` list is set up in `CxxBridge` initialization phases, which basically is a vector holding module information in C++ realm, transformed from `_moduleDataByID` array in Objc realm. As we know `_moduleDataByID` is a list of  `RCTModuleData` holding registered `RCTBridgeModule` and its instance. 
 
 5. It goes to `invoke` in the [`RCTNativeModule.mm`]( https://github.com/facebook/react-native/blob/17a8737ecb68f61a14f54bf0e2efeb618f97d326/React/CxxModule/RCTNativeModule.mm#L106), which has module info in its private variable `RCTModuleData` object. 
 
@@ -440,7 +443,8 @@ id result = [method invokeWithBridge:bridge module:moduleData.instance arguments
 
 >  An `NSInvocation` object contains all the elements of an Objective-C message: a target, a selector, arguments, and the return value.
 
-​        7.1.  [parse MethodSignature](https://github.com/facebook/react-native/blob/17a8737ecb68f61a14f54bf0e2efeb618f97d326/React/Base/RCTModuleMethod.mm#L204) to init `NSInvocation`.
+​
+7.1.  [parse MethodSignature](https://github.com/facebook/react-native/blob/17a8737ecb68f61a14f54bf0e2efeb618f97d326/React/Base/RCTModuleMethod.mm#L204) to init `NSInvocation`.
 
 ```objective-c
 _selector = NSSelectorFromString(RCTParseMethodSignature(_methodInfo->objcName, &arguments));
@@ -451,7 +455,7 @@ NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:methodSig
 invocation.selector = _selector;  
 ```
 
-​        7.2, trigger the method in the module  
+7.2, trigger the method in the module  
 
 ```objective-c
  [_invocation invokeWithTarget:module];
