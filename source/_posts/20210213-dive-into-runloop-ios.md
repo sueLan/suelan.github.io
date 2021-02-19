@@ -4,6 +4,10 @@ date: 2021-02-13 20:20:54
 categories: 
   - iOS
 ---
+## Background 
+
+Sometimes, you may want to collect on-device performance metrics in main thread to know how our App performs and help you find more clues to  analyse performance issue. [MetricKit](MetricKit) is a useful utility framework to achieve that. It starts accumulating reports for your app after being called for the first time and delivers reports at most once per day. The reports contain the metrics from the past 24 hours and any previously undelivered daily reports. Then, you can go to `Xcode->Organizer->Metric` panel to check these info. However, you may want your in-house App Performance Monitoring framework to gain more controls on when to collect metrics, or how to upload it, or collect what you want. Earlier days, `Tencent` launched a [iOS framework called matrix](https://github.com/Tencent/matrix) to monitor App performance metrics. When I explore this library, I saw they use `CFRunLoop` to detect hitch in the thread, like main thread. This intrigued me. So I investigated `CFRunLoop` to learn more. 
+
 
 ## What is RunLoop in iOS? 
 
@@ -199,7 +203,7 @@ The implementation is in `CFRunLoopRunSpecific` and `__CFRunLoopRun` in `CFRunlo
 
 ### Use case in App Performance Monitoring  
 
-`Tencent` launched a [iOS framework called matrix](https://github.com/Tencent/matrix) to monitor App performance metrics. In this library, it leverages the Run Loop notifications to record timestamp when these notifications sent. 
+ In [Tencent matrix](https://github.com/Tencent/matrix), it leverages the Run Loop notifications to record timestamp when these notifications sent. 
 
 1. create and add RunLoopObserver to current RunLoop [CFRunLoopAddObserver](https://github.com/Tencent/matrix/blob/c7fd99237af189fb060f90d1272350db19182dbf/matrix/matrix-iOS/Matrix/WCCrashBlockMonitor/CrashBlockPlugin/Main/BlockMonitor/WCBlockMonitorMgr.mm#L831)
 
@@ -225,10 +229,10 @@ static void myRunLoopCallback(CFRunLoopObserverRef observer, CFRunLoopActivity a
         case kCFRunLoopBeforeTimers:
              NSLog(@"[RY]kCFRunLoopBeforeTimers called %@", @(getCurrentMilliTimestamp() - monitor.runloopMilliTimestamp));
              self.runloopMilliTimestamp = getCurrentMilliTimestamp();
-						 self.isRunloopRunning = YES;
-         		 break;
+             self.isRunloopRunning = YES;
+             break;
         case kCFRunLoopBeforeSources:
-         		 self.isRunloopRunning = YES;
+             self.isRunloopRunning = YES;
              break;
         case kCFRunLoopBeforeWaiting:
              self.isRunloopRunning = NO;

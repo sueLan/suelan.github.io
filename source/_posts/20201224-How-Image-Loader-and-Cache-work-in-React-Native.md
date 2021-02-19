@@ -45,7 +45,7 @@ Another key point is that **RCTImageCache** uses [`setObject:forKey:cost:` API](
 
 #### 3. using Bitmap size as cost
 
-```Objective-c
+```c++
 
 static const NSUInteger RCTMaxCachableDecodedImageSizeInBytes = 2097152; // 2 MB
 
@@ -69,7 +69,7 @@ static const NSUInteger RCTMaxCachableDecodedImageSizeInBytes = 2097152; // 2 MB
 
 Before adding an image into the **NSCache**. **RCTImageCache** firstly calculate the bitmap size using the following formula
 
-```objective-c
+```c++
 static NSInteger RCTImageBytesForImage(UIImage *image)
 {
   NSInteger singleImageBytes = image.size.width * image.size.height * image.scale * image.scale * 4;
@@ -109,7 +109,7 @@ The method to get images from `NSCache` looks relatively simple. [ imageForUrl:s
 
 Let your own cache implementation conform `RCTImageCache` protocol. And then `setImageCache` in `RCTImageLoader`.
 
-```Objective-c
+```c++
 /**
  * Allows developers to set their own caching implementation for
  * decoded images as long as it conforms to the RCTImageCache
@@ -123,7 +123,7 @@ Let your own cache implementation conform `RCTImageCache` protocol. And then `se
 
 `RCTImageLoader` maintains queues to schedule image loading and decoding tasks.  The following property controls the number of concurrent tasks for image loading and decoding. 
 
-```objective-c
+```c++
 /**
  * The maximum number of concurrent image loading tasks. Loading and decoding
  * images can consume a lot of memory, so setting this to a higher value may
