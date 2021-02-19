@@ -15,7 +15,7 @@ updated: 2020-12-25
 ```
 
 However, there are actually lots of stories behind this simple line of code.
-Today, I would like to explore image loader and image cache in react native, and talk something about how they work under the hood.
+Today, I would like to explore image loader and image cache in react native, and talk something about how they work under the hood. After reading this, you will find some limits in the image component shipped from react-native and may want to use other tech solutions for better image display. 
 
 ## Overview of React/Image module
 
