@@ -8,7 +8,7 @@ favicon:
 
 # RSS文件位置
 rss: 
-
+  /rss/atom.xml
 # 自定义样式文件位置
 custom_style: 
 

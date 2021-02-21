@@ -130,3 +130,4 @@ feed:
   order_by: -date
   autodiscovery: true
   template:
+    - ./source/rss/atom.xml
