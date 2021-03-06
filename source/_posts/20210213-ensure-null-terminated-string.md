@@ -3,6 +3,8 @@ title: Ensure Null-Terminated JS Bundle in React Native
 date: 2021-02-13 23:05:59
 tags:
   - Dive into React Native
+categories: 
+  - React Native
 ---
 
 ## Description
