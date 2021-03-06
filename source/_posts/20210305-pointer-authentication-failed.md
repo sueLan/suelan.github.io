@@ -1,5 +1,5 @@
 ---
-title: [Crash] Pointer Authentication Failures or invalid memory accesses
+title: Crash - Pointer Authentication Failures or invalid memory accesses
 date: 2021-03-05 23:34:51
 tags:
   - iOS

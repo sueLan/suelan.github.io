@@ -110,9 +110,6 @@ nav:
         name: Jian Shu | Chinese
         path: "https://www.jianshu.com/u/23bd8d4cc8bf"
         blank: true
-  - 
-    name: RSS 
-    path: /rss/atom.xml
        
 
 # 友链详细信息：支持多个友链

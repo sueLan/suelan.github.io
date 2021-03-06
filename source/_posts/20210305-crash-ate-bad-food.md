@@ -1,5 +1,5 @@
 ---
-title:  [Crash] ate bad food (0x8badf00d)
+title:  Crash - ate bad food (0x8badf00d)
 date: 2021-03-05 23:33:37
 tags:
   - iOS
