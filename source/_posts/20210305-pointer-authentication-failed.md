@@ -174,10 +174,10 @@ Then, i checked the backtrace again.  It actually happens in the phase of Bridge
 }
 ```
 
-This code comes from `React Native 0.61` , what this function basically does is to 
+This snippet of code comes from `React Native 0.61` , what this function basically does is to 
 
-1. Init JSThread and . If you are insterested in `CFRunloop` as well, can take a look at my another [article](https://suelan.github.io/2021/02/13/20210213-dive-into-runloop-ios/)
-2. Initialize native modules 
+1. Init JSThread and . If you are interested in `CFRunloop` as well, can take a look at my another [article](https://suelan.github.io/2021/02/13/20210213-dive-into-runloop-ios/)
+2. Initialize native modules. If you are interested, see more in [what is behind react native native module](https://suelan.github.io/2020/12/23/20201223-what-is-behind-react-native-module/)
 3. create instance of  `facebook::react::Instance` class, and initialization in `JSThread`
 
 ```c++
@@ -215,7 +215,7 @@ void Instance::initializeBridge(
 
    
 
-Obviously, there are potential risk of multi-thread write issue for `Instance` object. It would be accessed from 
+Obviously, there are potential risk of multi-thread write for `Instance` object. It would be accessed from 
 
 - `com.facebook.react.JavaScript` thread. You can search `+[RCTCxxBridge runRunLoop]` in your crash report
 
