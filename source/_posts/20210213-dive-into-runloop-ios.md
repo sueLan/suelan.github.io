@@ -275,11 +275,17 @@ ers called 1.296875
 
 ```
 
-### Runloop in JSThread in React Native 
+### Runloop in React Native 
+
+#### make JSThread long-lived
 
 - [create the JSThread](https://github.com/facebook/react-native/blob/1bc06f18c613f9a85d5b631493a09682524016f2/React/CxxBridge/RCTCxxBridge.mm#L407), called `com.facebook.react.JavaScript`. In react native, this is a secondary thread besides main thread where JavaScript code runs, function calls to native implementation are made etc... 
-- [run the runloop in JSThread](https://github.com/facebook/react-native/blob/1bc06f18c613f9a85d5b631493a09682524016f2/React/CxxBridge/RCTCxxBridge.mm#L326) to make it long-lived 
+- [run the runloop explicitly in JSThread](https://github.com/facebook/react-native/blob/1bc06f18c613f9a85d5b631493a09682524016f2/React/CxxBridge/RCTCxxBridge.mm#L326) to make it long-lived 
 
+#### enqueue a block object on a given runloop
+
+- [use `CFRunLoopPerformBlock` to enqueue a block to `kCFRunLoopCommonModes` mode in current runloop](https://github.com/facebook/react-native/blob/1bc06f18c613f9a85d5b631493a09682524016f2/React/CxxBridge/RCTMessageThread.mm#L41). This function is similar to [Cocoa’s performSelector:onThread:withObject:waitUntilDone:](https://developer.apple.com/documentation/objectivec/nsobject/1414476-performselector?language=objc)
+- [wake up runloop. The block will be executed when the runloop runs in `kCFRunLoopCommonModes` mode ](https://github.com/facebook/react-native/blob/1bc06f18c613f9a85d5b631493a09682524016f2/React/CxxBridge/RCTMessageThread.mm#L48)
 
 ## See More 
 
