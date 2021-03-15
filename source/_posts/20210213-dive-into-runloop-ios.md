@@ -193,7 +193,7 @@ typedef CF_OPTIONS(CFOptionFlags, CFRunLoopActivity) {
 
 https://developer.apple.com/documentation/corefoundation/cfrunloopactivity 
 
-###  Run Loop Sequence of Events
+### Run Loop Sequence of Events
 
 According to [apple doc](https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/Multithreading/RunLoopManagement/RunLoopManagement.html#//apple_ref/doc/uid/10000057i-CH16-SW1),  when runloop running  in a thread, it processes pending events and generates notifications for attached observers.  Briefly, it works as the follow diagram shows. 
 
@@ -201,7 +201,9 @@ According to [apple doc](https://developer.apple.com/library/archive/documentati
 
 The implementation is in `CFRunLoopRunSpecific` and `__CFRunLoopRun` in `CFRunloop.c` . 
 
-### Use case in App Performance Monitoring  
+## Use case 
+
+### Detect hitch block in main thread 
 
  In [Tencent matrix](https://github.com/Tencent/matrix), it leverages the Run Loop notifications to record timestamp when these notifications sent. 
 
@@ -210,7 +212,7 @@ The implementation is in `CFRunLoopRunSpecific` and `__CFRunLoopRun` in `CFRunlo
 2. [record timestamp](https://github.com/Tencent/matrix/blob/c7fd99237af189fb060f90d1272350db19182dbf/matrix/matrix-iOS/Matrix/WCCrashBlockMonitor/CrashBlockPlugin/Main/BlockMonitor/WCBlockMonitorMgr.mm#L858) in callback function invoked when the observer runs
 3. [check timestamp diff](https://github.com/Tencent/matrix/blob/c7fd99237af189fb060f90d1272350db19182dbf/matrix/matrix-iOS/Matrix/WCCrashBlockMonitor/CrashBlockPlugin/Main/BlockMonitor/WCBlockMonitorMgr.mm#L612) to see if it is greater than threshold, [g_RunLoopTimeOut](https://github.com/Tencent/matrix/blob/c7fd99237af189fb060f90d1272350db19182dbf/matrix/matrix-iOS/Matrix/WCCrashBlockMonitor/CrashBlockPlugin/Main/BlockMonitor/WCBlockMonitorMgr.mm#L630)
 
-So, I did a small experiments. I added a RunLoop Observer to the runloop in main thread. Then calculate the time gap between `kCFRunLoopBeforeTimers` notification in two continuous loop. 
+I did a small experiment to better understand it. I added a RunLoop Observer to the runloop in main thread. Then calculate the time gap between `kCFRunLoopBeforeTimers` notification in two continuous loop. 
 
 ```c++
 // 1. create runloop observer 
@@ -251,7 +253,7 @@ static void myRunLoopCallback(CFRunLoopObserverRef observer, CFRunLoopActivity a
 ```
 
 Theoretically,  the time diff between  two continuous `kCFRunLoopBeforeTimers` notification should be within `16.67ms` to achieve smooth user experience in main thread, which means `RunLoop` runs 60 times per second. In the following log, one frame takes about `72ms` to executed. 
-However, since I put the logger in `kCFRunLoopBeforeTimers`, 
+However, since I put the logger in `kCFRunLoopBeforeTimers`, this may not be a hitch. It could be caused thread was sleeping while events come. 
 
 ```
  [RY]kCFRunLoopBeforeTimers called 3.628173828125
@@ -272,6 +274,14 @@ ers called 1.296875
  [RY]kCFRunLoopBeforeTimers called 0.43212890625
 
 ```
+
+### Runloop in JSThread in React Native 
+
+- [create the JSThread](https://github.com/facebook/react-native/blob/1bc06f18c613f9a85d5b631493a09682524016f2/React/CxxBridge/RCTCxxBridge.mm#L407), called `com.facebook.react.JavaScript`. In react native, this is a secondary thread besides main thread where JavaScript code runs, function calls to native implementation are made etc... 
+- [run the runloop in JSThread](https://github.com/facebook/react-native/blob/1bc06f18c613f9a85d5b631493a09682524016f2/React/CxxBridge/RCTCxxBridge.mm#L326) to make it long-lived 
+
+
+## See More 
 
 - https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/Multithreading/RunLoopManagement/RunLoopManagement.html#//apple_ref/doc/uid/10000057i-CH16-SW1
 - https://blog.ibireme.com/2015/05/18/runloop/
