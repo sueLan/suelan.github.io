@@ -53,8 +53,9 @@ Take `UIViewController` as an example, it swizzles `viewDidDisappear:` method, t
 `kHasBeenPoppedKey` tag here is set by [UINavigationController, code here](https://github.com/Tencent/MLeaksFinder/blob/master/MLeaksFinder/UINavigationController%2BMemoryLeak.m#L56). 
 
 ![image-20210319225704137](image-20210319225704137.png)
+As this pic demonstrates, if the view controller was released, the reference the block captured 2 seconds ago is `nil`. If this view controller isn't released, `strongSelf` here would be a valid base address to it. Then `MLeakFinder` will show an alter to warning users. 
 
-In `willDealloc` in `UIViewController`, it will run self.view's `willDealloc`; then check `subviews` Array. Basically, the view tree in this view controller will be traveled through and checked. 
+We have talked about view controller, how about views?  Well, in `willDealloc` method in `UIViewController`, MLeaksFinder will run self.view's `willDealloc`; then check `subviews` Array. Basically, the view tree in this view controller will be traversed through and checked. 
 
 ```c++
 @implementation UIView (MemoryLeak)
@@ -101,7 +102,8 @@ Ivar *class_copyIvarList(Class cls, unsigned int *outCount)
 1. get ivar list for current, its superclass, all the way up to its ancestor
 2. cache ivar list in a map, `<Class, NSArray<FBObjectReference>>`
 
-For a class like this
+For the following class, there are 4 strong references to others, 2 weak reference.   
+
 
 ```c++
 @interface _RCDTestClassWithMixedWeakAndStrongProperties : NSObject
@@ -113,13 +115,12 @@ For a class like this
 @property (nonatomic, weak) NSObject *object6;
 @end
 ```
-There are 4 strong references to others, 4 weak reference. 
 
-```
-  Ivar *ivars = class_copyIvarList(aCls, &count);
-```
+using  `class_copyIvarList`, we can see its Ivar list. Each pointer is 8-byte in memory in 64-bit device, we an see the `offset` for first ivar to the class base address is `8 bytes`; the second ivar is `16 bytes`, the third one is `24bytes`, etc. 
+
 <img src="image-20210320160316683.png" width="330" height="600">
-using 
+
+Then, use `class_getIvarLayout` to get ivar layout 
 
 ```objective-c
   const uint8_t *fullLayout = class_getIvarLayout(aCls);
@@ -164,7 +165,7 @@ Filter out the fourth and sixth ivar.
 <img src="image-20210320160316683.png" width="330" height="600">
 
 
-There are other interesting cases in the `FBClassStrongLayoutTests.mm` , the ivar type could be structure or block, and it could be weak as well. 
+There are other interesting cases in the [FBClassStrongLayoutTests.mm](https://github.com/facebook/FBRetainCycleDetector/blob/master/FBRetainCycleDetectorTests/FBClassStrongLayoutTests.mm), the ivar type could be structure or block, and it could be weak as well. 
 
 ### References to associated objects 
 
@@ -350,7 +351,7 @@ Finally get the index of the strong reference of current block by figuring out i
 
 ### Detect cycle
 
-To detect the cycle of objects, it is doing DFS over graph of objects.[ code here](https://github.com/facebook/FBRetainCycleDetector/blob/1ff2adee84a6ee94a1ae82526104a188774eb90a/FBRetainCycleDetector/Detector/FBRetainCycleDetector.mm#L89). To find the adjacent objects , FBRetainCycleDetector will combines the ivar list and associated objects. 
+To detect the cycle of objects, it is doing DFS over graph of objects.[ code here](https://github.com/facebook/FBRetainCycleDetector/blob/1ff2adee84a6ee94a1ae82526104a188774eb90a/FBRetainCycleDetector/Detector/FBRetainCycleDetector.mm#L89).  
 
 ![image-20201008115603415](image-20201008115603415.png)
 
