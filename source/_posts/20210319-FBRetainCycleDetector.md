@@ -142,13 +142,16 @@ static NSIndexSet *FBGetLayoutAsIndexesForDescription(NSUInteger minimumIndex, c
   NSUInteger currentIndex = minimumIndex;
 
   while (*layoutDescription != '\x00') {
-    int upperNibble = (*layoutDescription & 0xf0) >> 4;
+    // how many non-strong ivar 
+    int upperNibble = (*layoutDescription & 0xf0) >> 4; 
+    // how many strong ivar
     int lowerNibble = *layoutDescription & 0xf;
 
-    // Upper nimble is for skipping
+    // currentIndex is to track the first idx of strong ivar currently being analyzed from hexodecimal value
+    // Upper nimble is for skipping `non-strong` ivar
     currentIndex += upperNibble;
 
-    // Lower nimble describes count
+    // Lower nimble describes count of the strong ivar 
     [interestingIndexes addIndexesInRange:NSMakeRange(currentIndex, lowerNibble)];
     currentIndex += lowerNibble;
 
@@ -159,14 +162,30 @@ static NSIndexSet *FBGetLayoutAsIndexesForDescription(NSUInteger minimumIndex, c
 }
 ```
 
-Parsing layout get a index set for strong ivars. 
+| Idx  | Weak/strong |         |
+| ---- | ----------- | ------- |
+| 1    | strong      | object1 |
+| 2    | strong      | object2 |
+| 3    | strong      | object3 |
+| 4    | weak        | object4 |
+| 5    | strong      | object5 |
+| 6    | weak        | object6 |
+For the above case, the ivar layout is `"\x03\x11"`
+
+|      | upperNibble | lowerNibble | currentIndex | NSRange |
+| ---- | ----------- | ----------- | ------------ | ------- |
+| x03  | 0           | 3           | 1            | {1, 3}  |
+| x11  | 1           | 1           | 5            | {5, 1}  |
+
+
+
+Parsing ivar layout to filter out the 4th and 6th ivar and get a set of index range for strong ivar. The result is two range, {1, 3} and {5, 1} 
 
 ```
 <NSMutableIndexSet: 0x7fb7aea8ef40>[number of indexes: 4 (in 2 ranges), indexes: (1-3 5)]
 ```
 
-Filter out the fourth and sixth ivar. 
-<img src="image-20210320161003483.png" width="330" height="600">
+<img src="image-20210320161003483.png" width="330" height="530">
 
 
 There are other interesting cases in the [FBClassStrongLayoutTests.mm](https://github.com/facebook/FBRetainCycleDetector/blob/master/FBRetainCycleDetectorTests/FBClassStrongLayoutTests.mm), the ivar type could be structure or block, and it could be weak as well. 
@@ -276,7 +295,7 @@ We can see the variable `x` is appended at the end of `__block_literal_2` struct
 
 2. Case 2: Variables of `__block` storage class are imported as a pointer to an enclosing data structure. see [more here]([Imported  copy of  reference](https://clang.llvm.org/docs/Block-ABI-Apple.html#id5))
 
-From the above cases, we can see in the  descriptor structure `__block_descriptor_1`,  the `Block_size` field is sizeof(struct ` __block_literal_1`) . This is a very import field.  `FBRetainCycleDetector` uses it to get the number of pointers inside
+From the above cases, we can see in the  descriptor structure `__block_descriptor_2`,  the `Block_size` field is sizeof(struct ` __block_literal_2`) . This is a very import field.  `FBRetainCycleDetector` uses it to get the number of pointers inside
 
 ```c++
   void (*dispose_helper)(void *src) = blockLiteral->descriptor->dispose_helper;
@@ -287,7 +306,7 @@ From the above cases, we can see in the  descriptor structure `__block_descripto
 
 ```
 
-Let's take a look at a test case here. Supposed a block captures an object from out scope.
+Let's take a look at a test case here. Supposed a block captures an object from outside.
 
 ```c++
  NSObject *object = [NSObject new];
@@ -299,12 +318,30 @@ Let's take a look at a test case here. Supposed a block captures an object from 
   NSArray *retainedObjects = FBGetBlockStrongReferences((__bridge void *)(block));
 ```
 
-The value of `blockLiteral->descriptor->size` is 40, indicating the block 40 bytes in memory; in ARM64 device, the pointer size a `8` bytes.  So it needs 5 pointers to fill out the fake object. 
+The block literal is like this
 
+```
+struct BlockLiteral {
+  void *isa;  // initialized to &_NSConcreteStackBlock or &_NSConcreteGlobalBlock
+  int flags;
+  int reserved;
+  void (*invoke)(void *, ...);
+  struct BlockDescriptor *descriptor;
+  // imported variables
+  const void *someObject 
+};
+```
+![](block_literal_x.png)
 ```
 (lldb) p blockLiteral->descriptor->size
 (unsigned long) $0 = 40
 ```
+
+- The value of `blockLiteral->descriptor->size` is 40, indicating the block 40 bytes in memory;
+- `int` is 32 bit, `flags` and `reserved` will be put together into one word, 8 bytes in 64bit processor device. 
+- In ARM64 device, the pointer size a `8` bytes.  
+- So it needs 5 pointers to fill out the fake object. 
+
 
 >  We create an object that pretends to be a block we want to investigate. Because we know the block’s interface, we know where to look for references this block holds. In place of those references our fake object will have “release detectors.” Release detectors are small objects that are observing release messages sent to them. These messages are sent to strong references when an owner wants to relinquish ownership. We can check which detectors received such a message when we deallocate our fake object. Knowing which indexes said detectors are in the fake object, we can find actual objects that are owned by our original block.
 
