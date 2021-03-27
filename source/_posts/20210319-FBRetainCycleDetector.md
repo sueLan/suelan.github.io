@@ -99,11 +99,11 @@ Ivar *class_copyIvarList(Class cls, unsigned int *outCount)
 ```
 
 [`FBClassStrongLayout` here](https://github.com/facebook/FBRetainCycleDetector/blob/1ff2adee84a6ee94a1ae82526104a188774eb90a/FBRetainCycleDetector/Layout/Classes/FBClassStrongLayout.mm#L184)
-1. get ivar list for current, its superclass, all the way up to its ancestor
-2. cache ivar list in a map, `<Class, NSArray<FBObjectReference>>`
-
-For the following class, there are 4 strong references to others, 2 weak reference.   
-
+1. Because `class_copyIvarList` won't include instance variables declared by superclasses. This method has to get ivar list for current, its superclass, all the way up to its ancestoiicoder
+2. get strong ivar by analyzing ivar layout
+3. cache ivar list in a map, `<Class, NSArray<FBObjectReference>>`
+   
+Let's understand it deeper by taking an example. For the following class, there are 4 strong references to others, 2 weak reference.   
 
 ```c++
 @interface _RCDTestClassWithMixedWeakAndStrongProperties : NSObject
