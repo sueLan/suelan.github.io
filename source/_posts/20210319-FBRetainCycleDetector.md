@@ -185,7 +185,7 @@ Parsing ivar layout to filter out the 4th and 6th ivar and get a set of index ra
 <NSMutableIndexSet: 0x7fb7aea8ef40>[number of indexes: 4 (in 2 ranges), indexes: (1-3 5)]
 ```
 
-<img src="image-20210320161003483.png" width="330" height="530">
+<img src="image-20210320161003483.png" width="375" height="500">
 
 
 There are other interesting cases in the [FBClassStrongLayoutTests.mm](https://github.com/facebook/FBRetainCycleDetector/blob/master/FBRetainCycleDetectorTests/FBClassStrongLayoutTests.mm), the ivar type could be structure or block, and it could be weak as well. 
