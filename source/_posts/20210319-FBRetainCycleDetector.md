@@ -131,6 +131,8 @@ The full layout is
 ```
 "\x03\x11"
 ```
+- `\x03` indicates that there are zero non-strong ivar and 3 strong ivar, `_object1`, `_object2`, `_object3`. 
+- `x11` claims that there comes 1 non-strong ivar,  weak `_object4` in above declaration. And then follows 1 strong ivar `object5`
 
 ```c++
 static NSIndexSet *FBGetLayoutAsIndexesForDescription(NSUInteger minimumIndex, const uint8_t *layoutDescription) {
@@ -162,7 +164,7 @@ Parsing layout get a index set for strong ivars.
 ```
 
 Filter out the fourth and sixth ivar. 
-<img src="image-20210320160316683.png" width="330" height="600">
+<img src="image-20210320161003483.png" width="330" height="600">
 
 
 There are other interesting cases in the [FBClassStrongLayoutTests.mm](https://github.com/facebook/FBRetainCycleDetector/blob/master/FBRetainCycleDetectorTests/FBClassStrongLayoutTests.mm), the ivar type could be structure or block, and it could be weak as well. 
