@@ -131,8 +131,10 @@ The full layout is
 ```
 "\x03\x11"
 ```
-- `\x03` indicates that there are zero non-strong ivar and 3 strong ivar, `_object1`, `_object2`, `_object3`. 
-- `x11` claims that there comes 1 non-strong ivar,  weak `_object4` in above declaration. And then follows 1 strong ivar `object5`
+- In  hexadecimal figure `\x03`, the high bits represents the number of `non-strong` ivar, the lower bits represents the number of `strong ivar`. `\x03` indicates that there are zero non-strong ivar and 3 strong ivar, `_object1`, `_object2`, `_object3` in this case. 
+- `x11` claims that there comes 1 non-strong ivar,  weak `_object4` in above declaration; and then follows 1 strong ivar `object5`
+
+The following method is to parse ivar layout according to this rule and get a set of `NSRange` for index and length for strong ivars in this class. One range is `1 to 3` and the other is `5`. 
 
 ```c++
 static NSIndexSet *FBGetLayoutAsIndexesForDescription(NSUInteger minimumIndex, const uint8_t *layoutDescription) {
