@@ -210,7 +210,8 @@ The implementation is in `CFRunLoopRunSpecific` and `__CFRunLoopRun` in `CFRunlo
 1. create and add RunLoopObserver to current RunLoop [CFRunLoopAddObserver](https://github.com/Tencent/matrix/blob/c7fd99237af189fb060f90d1272350db19182dbf/matrix/matrix-iOS/Matrix/WCCrashBlockMonitor/CrashBlockPlugin/Main/BlockMonitor/WCBlockMonitorMgr.mm#L831)
 
 2. [record timestamp](https://github.com/Tencent/matrix/blob/c7fd99237af189fb060f90d1272350db19182dbf/matrix/matrix-iOS/Matrix/WCCrashBlockMonitor/CrashBlockPlugin/Main/BlockMonitor/WCBlockMonitorMgr.mm#L858) in callback function invoked when the observer runs
-3. [check timestamp diff](https://github.com/Tencent/matrix/blob/c7fd99237af189fb060f90d1272350db19182dbf/matrix/matrix-iOS/Matrix/WCCrashBlockMonitor/CrashBlockPlugin/Main/BlockMonitor/WCBlockMonitorMgr.mm#L612) to see if it is greater than threshold, [g_RunLoopTimeOut](https://github.com/Tencent/matrix/blob/c7fd99237af189fb060f90d1272350db19182dbf/matrix/matrix-iOS/Matrix/WCCrashBlockMonitor/CrashBlockPlugin/Main/BlockMonitor/WCBlockMonitorMgr.mm#L630)
+3. start a [monitor thread](https://github.com/Tencent/matrix/blob/c7fd99237af189fb060f90d1272350db19182dbf/matrix/matrix-iOS/Matrix/WCCrashBlockMonitor/CrashBlockPlugin/Main/BlockMonitor/WCBlockMonitorMgr.mm#L478), then [check periodically](https://github.com/Tencent/matrix/blob/c7fd99237af189fb060f90d1272350db19182dbf/matrix/matrix-iOS/Matrix/WCCrashBlockMonitor/CrashBlockPlugin/Main/BlockMonitor/WCBlockMonitorMgr.mm#L498)
+4. get the[timestamp diff](https://github.com/Tencent/matrix/blob/c7fd99237af189fb060f90d1272350db19182dbf/matrix/matrix-iOS/Matrix/WCCrashBlockMonitor/CrashBlockPlugin/Main/BlockMonitor/WCBlockMonitorMgr.mm#L612) to see if it is greater than threshold, [g_RunLoopTimeOut](https://github.com/Tencent/matrix/blob/c7fd99237af189fb060f90d1272350db19182dbf/matrix/matrix-iOS/Matrix/WCCrashBlockMonitor/CrashBlockPlugin/Main/BlockMonitor/WCBlockMonitorMgr.mm#L630)
 
 I did a small experiment to better understand it. I added a RunLoop Observer to the runloop in main thread. Then calculate the time gap between `kCFRunLoopBeforeTimers` notification in two continuous loop. 
 
@@ -253,7 +254,7 @@ static void myRunLoopCallback(CFRunLoopObserverRef observer, CFRunLoopActivity a
 ```
 
 Theoretically,  the time diff between  two continuous `kCFRunLoopBeforeTimers` notification should be within `16.67ms` to achieve smooth user experience in main thread, which means `RunLoop` runs 60 times per second. In the following log, one frame takes about `72ms` to executed. 
-However, since I put the logger in `kCFRunLoopBeforeTimers`, this may not be a hitch. It could be caused thread was sleeping while events come. 
+However, since I put the logger in `kCFRunLoopBeforeTimers`, this may not be a hitch. It could be caused thread was sleeping while there is no event come. 
 
 ```
  [RY]kCFRunLoopBeforeTimers called 3.628173828125
