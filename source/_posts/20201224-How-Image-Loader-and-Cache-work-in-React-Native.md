@@ -3,6 +3,7 @@ title: How Image Loader and Cache work in React Native
 date: 2020-12-24 21:31:27
 tags:
   - Dive into React Native
+  - Popular Article
 categories: 
   - [iOS, React Native]
 updated: 2020-12-25  

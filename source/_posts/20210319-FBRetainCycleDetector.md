@@ -2,7 +2,8 @@
 title: Understand How MLeaksFinder and FBRetainCycleDetector automatically detect memory leaks
 
 date: 2021-03-19 21:37:38
-tags:
+categories:
+  - iOS
 ---
 
 

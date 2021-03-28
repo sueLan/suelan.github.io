@@ -1,35 +1,9 @@
-<div class="post">
-  <h1 class="article-title">
+<div class="posts-collapse" style="margin: 10;">
+  <h1>
     <a href="<%- url_for(psg.path) %>">
       <span>
         <%- psg.title %>
       </span>
     </a>
   </h1>
-  <div class="article-top-meta">
-    <span> post time : <%- psg.date.format("YYYY-MM-DD") %>
-    </span>
-  </div>
-    <div class="article-footer">
-      <div class="article-meta pull-left">
-        <!-- 分类pc端可见 -->
-        <span class="pc-view">
-          <% if(psg.categories && psg.categories.length> 0) { %> <i class="iconfont icon-tag"></i>category: <a
-              href="<%= url_for(psg.categories.data[0].path)%>">
-              <%- psg.categories.data[0].name %>
-            </a>
-        </span>
-        <% } %>
-          <span>
-            <% if(psg.tags && psg.tags.length> 0){ %> <i class="iconfont icon-06tags"></i>tag: <% for(let item of
-                psg.tags.data){ %>
-                <span class="span--tag">
-                  <a href="<%= url_for(item.path)%>"> #<%- item.name %>
-                  </a>
-                </span>
-                <% } %>
-            <% } %>
-          </span>
-      </div>
-    </div>
 </div>
