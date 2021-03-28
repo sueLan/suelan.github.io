@@ -193,13 +193,21 @@ There are other interesting cases in the [FBClassStrongLayoutTests.mm](https://g
 
 ### References to associated objects 
 
-`FBRetainCycleDetector` hooks the calls, `objc_setAssociatedObject` and `objc_removeAssociatedObjects`. Then it store objects and a set of pointers to their associated objects into a global map. 
+`FBRetainCycleDetector` hooks the calls, `objc_setAssociatedObject` and `objc_removeAssociatedObjects`. Then it store objects and a set of pointers to strongly referred associated objects into a global map. 
 
 ```c++
 using ObjectAssociationSet = std::unordered_set<void *>;
 using AssociationMap = std::unordered_map<id, ObjectAssociationSet *>;
 ```
 
+Using  `OBJC_ASSOCIATION_RETAIN` and `OBJC_ASSOCIATION_RETAIN_NONATOMIC` to trace strong references only
+
+```c++
+   if (policy == OBJC_ASSOCIATION_RETAIN ||
+          policy == OBJC_ASSOCIATION_RETAIN_NONATOMIC) {
+        _threadUnsafeSetStrongAssociation(object, key, value);
+   ...
+```
 
 ### Block and captured object 
 
@@ -354,25 +362,28 @@ Create detector for each of the pointer in the faked object.
   void *detectors[elements];
 
   for (size_t i = 0; i < elements; ++i) {
+    // new detectors to detect whether the pointer inside obj is strong or not
     FBBlockStrongRelationDetector *detector = [FBBlockStrongRelationDetector new];
     obj[i] = detectors[i] = detector;
   }
 ```
-Now faked object `obj` contains 5 references to 5 `FBBlockStrongRelationDetector` instances.  
+Now faked object `obj` contains 5 references to 5 `FBBlockStrongRelationDetector` instances. These 5 detectors are newly created to detect whether the pointer inside obj is strong or not. They are not the original block object in your code, but with same memory layout and reference retain policy.  
+
 ```
 (void *[]) obj = ([0] = 0x00007fc07b41c370, [1] = 0x00007fc07b41f4b0, [2] = 0x00007fc07b42c080, [3] = 0x00007fc07b422820, [4] = 0x00007fc07b42e420)
 ```
 
 ![image-20210320170900864](image-20210320170900864.png)
 
-Then, it try to dispose the faked object. 
+Then, try to dispose the faked object. 
 
 ```c++
  @autoreleasepool {
     dispose_helper(obj);
   }
 ```
-The disposing actually trigger sending `release` message to `FBBlockStrongRelationDetector`, in which `release` message has been overridden and set `_strong` ivar to `YES`
+The disposing of the fake object actually triggers `releasing` of those detectors if they are strongly referred by the fake object only. In FBBlockStrongRelationDetector, `release` message has been overridden and set `_strong` ivar to `YES` to mark the related strong reference in the `blockLiteral`
+
 ```
 FBBlockStrongRelationDetector
 // set _strong as YES when received release message
