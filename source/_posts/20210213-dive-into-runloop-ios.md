@@ -70,7 +70,7 @@ Three kinds of inputs can be monitored by a run loop
 - CFRunLoopTimer
 - CFRunLoopObservers
 
-### Source  - CFRunLoopSource
+### Input Source  - CFRunLoopSource
 
 [CFRunLoopSource](https://developer.apple.com/documentation/corefoundation/cfrunloopsource-rhr)
 
@@ -92,16 +92,18 @@ struct __CFRunLoopSource {
 
 `_context` is a `union` type. A union looks like a structure, but  it will use the memory space for just one of the fields in its definition. So the `_context` is either an `CFRunLoopSourceContext`    structure or `CFRunLoopSourceContext1` structure.
 
-#### Two categories
+#### Two categories of Input Source
 
-As it is mentioned in this [doc](https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/Multithreading/RunLoopManagement/RunLoopManagement.html#//apple_ref/doc/uid/10000057i-CH16-SW23), we mainly care about two categories, port-base input sources, source1,  and non-port-based input sources, source0.
+As it is mentioned in this [doc](https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/Multithreading/RunLoopManagement/RunLoopManagement.html#//apple_ref/doc/uid/10000057i-CH16-SW23), we mainly care about two categories, `port-base` input sources, source1,  and `non-port-based` input sources, source0, also called custom sources. 
 
 - Version 0 sources, so named because the `version` field of their context structure is 0, are managed manually by the `application`.
   - When a source is ready to fire, some part of the `application`, perhaps code on a separate` thread` waiting for an event, must call [`CFRunLoopSourceSignal(_:)`](https://developer.apple.com/documentation/corefoundation/1543700-cfrunloopsourcesignal) to tell the run loop that the source is ready to fire. 
+  - custom input source that allows you to perform a selector on any thread. Like `performSelectorOnMainThread:withObject:waitUntilDone:` , `performSelector:withObject:afterDelay:`. see more
+  - [Defining a Custom Input Source](https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/Multithreading/RunLoopManagement/RunLoopManagement.html#//apple_ref/doc/uid/10000057i-CH16-SW3)
 - Version 1 sources are managed by the run loop and kernel. 
   - These sources use `Mach ports` to signal when the sources are ready to fire. 
   - A source is automatically `signaled by the kernel` when a message arrives on the source’s Mach port.
-
+  - see [Configuring a Port-Based Input Source](https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/Multithreading/RunLoopManagement/RunLoopManagement.html#//apple_ref/doc/uid/10000057i-CH16-131281)
 ![image-20210125183432020](image-20210125183432020.png)
 
 
@@ -139,18 +141,29 @@ void CFRunLoopSourceSignal(CFRunLoopSourceRef rls) {
 
 ### CFRunLoopTimer 
 
-#### What is CFRunLoopTimer
+Besides `CFRunLoopSource`, there is another input for runloop. Timer Source, `CFRunLoopTimer`, which represents a specialized run loop source that fires at a preset time in the future.  see [doc for CFRunLoopTimer](https://developer.apple.com/documentation/corefoundation/cfrunlooptimer-rhk)
 
-[Doc for CFRunLoopTimer](https://developer.apple.com/documentation/corefoundation/cfrunlooptimer-rhk)
-
-> A CFRunLoopTimer object represents a specialized run loop source that fires at a preset time in the future. Timers can fire either only once or repeatedly at fixed time intervals.
 
 There are two conditions for a timer to be fired: 
 
 - one of the run loop modes to which the timer has been added is running 
 - the timer's firing time has passed
 
-> If a timer’s firing time occurs while the run loop is in a mode that is not monitoring the timer or during a long callout, the timer does not fire until the next time the run loop checks the timer. Therefore, the actual time at which the timer fires potentially can be a significant period of time after the scheduled firing time.
+#### a timer is not a real-time mechanism
+
+1. Like input sources, timers are associated with specific modes of your run loop. If a timer is not in the mode currently being monitored by the run loop, it does not fire until you run the run loop in one of the timer’s supported modes. 
+2. If a timer fires when the run loop is in the middle of executing a handler routine, the timer waits until the next time through the run loop to invoke its handler routine. 
+3. If the run loop is not running at all, the timer never fires.
+
+
+In Cocoa, you can create and schedule a timer all at once using either of these class methods:
+
+```
+scheduledTimerWithTimeInterval:target:selector:userInfo:repeats:
+scheduledTimerWithTimeInterval:invocation:repeats:
+```
+You can also create your `NSTimer` object and then add it to the run loop using the `addTimer:forMode:` method of `NSRunLoop`. 
+see [how to configure timer source here](https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/Multithreading/RunLoopManagement/RunLoopManagement.html#//apple_ref/doc/uid/10000057i-CH16-SW6)
 
 ### RunLoopObserver
 
