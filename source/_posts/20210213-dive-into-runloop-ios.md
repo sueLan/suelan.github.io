@@ -27,11 +27,11 @@ end function
 
 In Wikipedia, event loop is a programming construct or [design pattern](https://en.wikipedia.org/wiki/Software_design_pattern) that waits for and dispatches [events](https://en.wikipedia.org/wiki/Event-driven_programming) or [messages](https://en.wikipedia.org/wiki/Message_Passing_Interface) in a [program](https://en.wikipedia.org/wiki/Computer_program).  In this event loop, it keeps `waiting events -> receive events -> handle events` until the exit condition is met. 
 
-In Apple's doc,  this kind of event loop is implemented by `CFRunLoop` in low-level. In cocoa, the object is an instance of `NSRunLoop` There is exactly one run loop per thread. 
-
 > Run loops are part of the fundamental infrastructure associated with threads. A *run loop* is an event processing loop that you use to schedule work and coordinate the receipt of incoming events. The purpose of a run loop is to keep your thread busy when there is work to do and put your thread to sleep when there is none.
 
 > A CFRunLoop object monitors sources of input to a task and dispatches control when they become ready for processing.  
+
+A run loop receives events from two different types of sources. `Input sources` deliver asynchronous events, usually messages from another thread or from a different application. `Timer sources` deliver synchronous events, occurring at a scheduled time or repeating interval.  
 
 It can handle 
 
@@ -47,6 +47,8 @@ It can handle
 
   ![image-20210128230441389](image-20210128230441389.png)
 
+In Apple's doc,  this kind of event loop is implemented by `CFRunLoop` in low-level. In cocoa, the object is an instance of `NSRunLoop` There is exactly one run loop per thread. 
+
 Apple provides two APIs to get runloop object 
 
 - `CFRunLoopGetMain()` // the main CFRunLoop object
@@ -60,9 +62,7 @@ A run loop mode contains a set of `CFRunLoopSource`, a list of `CFRunLoopTimer` 
 
 ![image-20210128223829153](image-20210128223829153.png)
 
-
-
-## Inputs 
+## Inputs
 
 Three kinds of inputs can be monitored by a run loop 
 
