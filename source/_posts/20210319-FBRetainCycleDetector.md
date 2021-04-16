@@ -441,7 +441,47 @@ struct __block_literal_5 _block_literal = {
 
 - `copy_helper` and `dispose_helper` helper functions are added
 - a structure `_block_byref_i` is generated to store  `__block` variable; see `captured_i` in `_block_byref_i`
-  
+
+### import `__block` object 
+
+```c++
+void func() {
+    __block NSObject *obj = [[NSObject alloc] init];
+    void (^blk)(void) = ^() {
+        obj = nil;
+    };
+}
+```
+-  structure `__Block_byref_obj_0` holds reference to `NSObject *obj` pointer. 
+-  need copy/dispose helper function
+```c++
+struct __Block_byref_obj_0 {
+  void *__isa;
+  __Block_byref_obj_0 *__forwarding;
+  int __flags;
+  int __size;
+  void (*__Block_byref_id_object_copy)(void*, void*);
+  void (*__Block_byref_id_object_dispose)(void*)
+  NSObject *obj; // capture __block NSObject *obj 
+};
+
+static void __func_block_func_0(struct __func_block_impl_0 *__cself) {
+  __Block_byref_obj_0 *obj = __cself->obj; // bound by ref
+  (obj->__forwarding->obj) = __null;
+}
+
+static void __func_block_copy_0(struct __func_block_impl_0*dst, struct __func_block_impl_0*src) {_Block_object_assign((void*)&dst->obj, (void*)src->obj, 8/*BLOCK_FIELD_IS_BYREF*/);}
+
+static void __func_block_dispose_0(struct __func_block_impl_0*src) {_Block_object_dispose((void*)src->obj, 8/*BLOCK_FIELD_IS_BYREF*/);}
+
+static struct __func_block_desc_0 {
+  size_t reserved;
+  size_t Block_size;
+  void (*copy)(struct __func_block_impl_0*, struct __func_block_impl_0*);
+  void (*dispose)(struct __func_block_impl_0*);
+} 
+
+```
 
 ## Block_size
 
