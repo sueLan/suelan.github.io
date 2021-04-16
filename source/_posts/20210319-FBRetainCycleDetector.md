@@ -7,7 +7,7 @@ categories:
 ---
 
 
-## Background 
+# Background 
 
 Memory is important resource in iOS. If a application uses too much memory, exceeding the limit based on the device, the iOS system will kill our App, by sending `SIGKILL` signal. Besides, minimizing memory usage not only decreases application’s memory footprint, but also reduce the amount of CPU time it consumes. These are mentioned in several WWDC sessions. 
 
@@ -19,11 +19,11 @@ Memory is important resource in iOS. If a application uses too much memory, exce
 
  Obviously, it is important to keep memory under control. In our daily life, we usually use Xcode memory debugger tool and instruments to detect memory leaks. Basically, lots of manual work. A better to integrate memory leak detection into internal test phase or regression phase. The earlier we detect the issue, the more time we got to fix it. The less efforts we put in checking memory leaks, the more likely we keep our app away from memory leaks. Using `MLeaksFinder` and `FBRetainCycleDetector` is a good solution. 
 
-## What is MLeaksFinder for? 
+# What is MLeaksFinder for? 
 
 `MLeaksFinder` is an light-weight tool from `WeChat` team, `Tencent`. It automatically finds leaks in some specific objects. When leaks happening, it will present an alert showing the leaked object and backtrace. 
 
-## What does MLeaksFinder do under the hood? 
+# How does MLeaksFinder work? 
 
 The basic idea is to set a timer when the object is about to be released. When the timer is triggered, checked if the reference to the object is still valid. If it is, it turns out this object is leaked. Then, it uses this leaked object as seed object to `FBRetainCycleDetector` to figure out the retain cycle using. Actually, I found lots of articles introducing `MLeakdsFinder` are Chinese and outdated. While its source code is a bit easy to read.  
 
@@ -78,15 +78,15 @@ We have talked about view controller, how about views?  Well, in `willDealloc` m
 
 If you enable the `FBRetainCycleDetector` through macro, the current leaked object will be the seed object for FBRetainCycleDetector, which will detect the retain cycle. 
 
-## What is FBRetainCycleDetector for? 
+# What is FBRetainCycleDetector for? 
 
 Facebook has a dedicated article about the [FBRetainCycleDetector](https://engineering.fb.com/2016/04/13/ios/automatic-memory-leak-detection-on-ios/)
 > Finding retain cycles in Objective-C is analogous to finding cycles in a directed acyclic graph in which nodes are objects and edges are references between objects (so if object A retains object B, there exists reference from A to B). Our Objective-C objects are already in our graph; all we have to do is traverse it with a depth-first search.
 
 So, in order to traverse the directed graph, how to get neighbors of each node? How to get objects each node references? For each node in the graph, it could be either an object or block.
 
-## References in object
-### strong ivars 
+# References in object
+## strong ivars 
 
 For objects, `FBRetainCycleDetector` get its **ivar list** from the object. 
 
@@ -191,7 +191,7 @@ Parsing ivar layout to filter out the 4th and 6th ivar and get a set of index ra
 
 There are other interesting cases in the [FBClassStrongLayoutTests.mm](https://github.com/facebook/FBRetainCycleDetector/blob/master/FBRetainCycleDetectorTests/FBClassStrongLayoutTests.mm), the ivar type could be structure or block, and it could be weak as well. 
 
-### References to associated objects 
+## References to associated objects 
 
 `FBRetainCycleDetector` hooks the calls, `objc_setAssociatedObject` and `objc_removeAssociatedObjects`. Then it store objects and a set of pointers to strongly referred associated objects into a global map. 
 
@@ -209,7 +209,7 @@ Using  `OBJC_ASSOCIATION_RETAIN` and `OBJC_ASSOCIATION_RETAIN_NONATOMIC` to trac
    ...
 ```
 
-### Block and captured object 
+## Block and captured objects
 
 What attracts me most is the capability in FBRetainCycleDetector to detect leaked blocks and its reference.  [Amazing method to get references from the block](https://github.com/facebook/FBRetainCycleDetector/blob/1ff2adee84a6ee94a1ae82526104a188774eb90a/FBRetainCycleDetector/Layout/Blocks/FBBlockStrongLayout.m#L79) and strong reference layout in block.  
 
@@ -258,9 +258,9 @@ struct __block_literal_1 _block_literal = {
 ```
 This is the initialization of the block literal structure.  
 
-#### What if the block has reference to others?
+## What if the block has reference to others?
 
-1. Case 1: Variables are imported as `const` copies.
+### Imported const copy variables
 
 ```objective-c
 int x = 10;
@@ -278,7 +278,8 @@ struct __block_literal_2 {
     int reserved;
     void (*invoke)(struct __block_literal_2 *);
     struct __block_descriptor_2 *descriptor;
-    const int x; // const copy variable x 
+    // const copy variable x is here 
+    const int x; 
 };
 
 void __block_invoke_2(struct __block_literal_2 *_block) {
@@ -302,7 +303,142 @@ struct __block_literal_2 __block_literal_2 = {
 ```
 We can see the variable `x` is appended at the end of `__block_literal_2` structure.  
 
-2. Case 2: Variables of `__block` storage class are imported as a pointer to an enclosing data structure. see [more here]([Imported  copy of  reference](https://clang.llvm.org/docs/Block-ABI-Apple.html#id5))
+### Imported const copy of Block reference
+
+In the following case, block `existingBlock` is captured by `vv`.  
+
+- a Block requires `copy/dispose` helpers in block descriptor if it imports any block variables
+
+```c++
+void (^existingBlock)(void) = ...;
+void (^vv)(void) = ^{ existingBlock(); }
+vv();
+
+struct __block_literal_3 {
+   ...; // existing block
+};
+
+struct __block_literal_4 {
+    void *isa;
+    int flags;
+    int reserved;
+    void (*invoke)(struct __block_literal_4 *);
+    struct __block_literal_4 *descriptor;
+    struct __block_literal_3 *const existingBlock;
+};
+
+// the invoke function for __block_literal_4
+void __block_invoke_4(struct __block_literal_2 *_block) {
+   __block->existingBlock->invoke(__block->existingBlock);
+}
+
+// copy helper is needed 
+void __block_copy_4(struct __block_literal_4 *dst, struct __block_literal_4 *src) {
+     //_Block_copy_assign(&dst->existingBlock, src->existingBlock, 0);
+     // will increase the reference counting for existingBlock
+     _Block_object_assign(&dst->existingBlock, src->existingBlock, BLOCK_FIELD_IS_BLOCK);
+}
+
+void __block_dispose_4(struct __block_literal_4 *src) {
+     // was _Block_destroy
+     // will decrease the reference counting for existingBlock
+     _Block_object_dispose(src->existingBlock, BLOCK_FIELD_IS_BLOCK);
+}
+
+static struct __block_descriptor_4 {
+    unsigned long int reserved;
+    unsigned long int Block_size;
+    void (*copy_helper)(struct __block_literal_4 *dst, struct __block_literal_4 *src);
+    void (*dispose_helper)(struct __block_literal_4 *);
+} __block_descriptor_4 = {
+    0,
+    sizeof(struct __block_literal_4),
+    __block_copy_4,
+    __block_dispose_4,
+};
+```
+
+```c++
+struct __block_literal_4 _block_literal = {
+      &_NSConcreteStackBlock,
+      (1<<25)|(1<<29), <uninitialized>
+      __block_invoke_4,
+      & __block_descriptor_4
+      existingBlock,
+};
+```
+
+### Importing __block variables into Blocks
+
+- Variables of `__block` storage class are imported as a pointer to an enclosing data structure. see [more here]([Imported  copy of  reference](https://clang.llvm.org/docs/Block-ABI-Apple.html#id5))
+
+```c++
+int __block i = 2;
+functioncall(^{ i = 10; });
+```
+would be compiled into:
+
+```
+struct _block_byref_i {
+    void *isa;  // set to NULL
+    struct _block_byref_voidBlock *forwarding;
+    int flags;   //refcount;
+    int size;
+    void (*byref_keep)(struct _block_byref_i *dst, struct _block_byref_i *src);
+    void (*byref_dispose)(struct _block_byref_i *);
+    int captured_i;  // the capture variable
+};
+
+
+struct __block_literal_5 {
+    void *isa;
+    int flags;
+    int reserved;
+    void (*invoke)(struct __block_literal_5 *);
+    struct __block_descriptor_5 *descriptor;
+    struct _block_byref_i *i_holder;
+};
+ 
+void __block_invoke_5(struct __block_literal_5 *_block) {
+   _block->forwarding->captured_i = 10;
+}
+
+void __block_copy_5(struct __block_literal_5 *dst, struct __block_literal_5 *src) {
+     //_Block_byref_assign_copy(&dst->captured_i, src->captured_i);
+     _Block_object_assign(&dst->captured_i, src->captured_i, BLOCK_FIELD_IS_BYREF | BLOCK_BYREF_CALLER);
+}
+
+void __block_dispose_5(struct __block_literal_5 *src) {
+     //_Block_byref_release(src->captured_i);
+     _Block_object_dispose(src->captured_i, BLOCK_FIELD_IS_BYREF | BLOCK_BYREF_CALLER);
+}
+
+static struct __block_descriptor_5 {
+    unsigned long int reserved
+    unsigned long int Block_size;
+    void (*copy_helper)(struct __block_literal_5 *dst, struct __block_literal_5 *src);
+    void (*dispose_helper)(struct __block_literal_5 *);
+} __block_descriptor_5 = { 0, sizeof(struct __block_literal_5) __block_copy_5, __block_dispose_5 };
+```
+
+and 
+
+```c++
+struct _block_byref_i i = {( .isa=NULL, .forwarding=&i, .flags=0, .size=sizeof(struct _block_byref_i), .captured_i=2 )};
+struct __block_literal_5 _block_literal = {
+      &_NSConcreteStackBlock,
+      (1<<25)|(1<<29), <uninitialized>,
+      __block_invoke_5,
+      &__block_descriptor_5,
+      &i,
+};
+```
+
+- `copy_helper` and `dispose_helper` helper functions are added
+- a structure `_block_byref_i` is generated to store  `__block` variable; see `captured_i` in `_block_byref_i`
+  
+
+## Block_size
 
 From the above cases, we can see in the  descriptor structure `__block_descriptor_2`,  the `Block_size` field is sizeof(struct ` __block_literal_2`) . This is a very import field.  `FBRetainCycleDetector` uses it to get the number of pointers inside
 
@@ -402,19 +538,19 @@ Finally get the index of the strong reference of current block by figuring out i
 ```
 
 
-### Detect cycle
+## Detect cycle
 
 To detect the cycle of objects, it is doing DFS over graph of objects.[ code here](https://github.com/facebook/FBRetainCycleDetector/blob/1ff2adee84a6ee94a1ae82526104a188774eb90a/FBRetainCycleDetector/Detector/FBRetainCycleDetector.mm#L89).  
 
 ![image-20201008115603415](image-20201008115603415.png)
 
-## Impact on memory footprint 
+# Impact on memory footprint 
 
 - **MLeaksFinder** is light-weight. It has **few** impact on memory footprint 
 - **FBRetainCycleDetector has impact** on the memory footprint**.** The upside is that **MLeaksFinder** triggers **DFS in FBRetainCycleDetector** on when the user click `Retain Cycle` button in the alter. After the Alert is dismissed, most of the memory usage will be gone. 
 
 
-## Summary:
+# Summary:
 
 - **FBRetainCycleDetector** is quite powerful. It can even detect leaks related to Blocks. But it is a bit slow since it uses `DFS` algorithm to traverse the object tree. Besides, there is potential risks of data race in [associated manager](https://github.com/facebook/FBRetainCycleDetector/blob/1ff2adee84a6ee94a1ae82526104a188774eb90a/FBRetainCycleDetector/Associations/FBAssociationManager.mm#L136). 
 - **MLeaksFinder** is simple but tricky. So once it detects the leaked object, it use **FBRetainCycleDetector to detect the retain cycle.** Then it shows the **alter.**
