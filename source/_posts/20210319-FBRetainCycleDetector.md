@@ -258,6 +258,11 @@ struct __block_literal_1 _block_literal = {
 ```
 This is the initialization of the block literal structure.  
 
+You can use `clang -rewrite-objc` to convert the Objective-C code into cpp implementation .  
+```
+clang -rewrite-objc xxxxx.m
+```
+
 ## What if the block has reference to others?
 
 ### Imported const copy variables
@@ -368,7 +373,7 @@ struct __block_literal_4 _block_literal = {
 };
 ```
 
-### Importing __block variables into Blocks
+### Importing `__block` variables into Blocks
 
 - Variables of `__block` storage class are imported as a pointer to an enclosing data structure. see [more here]([Imported  copy of  reference](https://clang.llvm.org/docs/Block-ABI-Apple.html#id5))
 
