@@ -40,7 +40,7 @@ When the executable is loaded into memory, the first `4G` memory region for this
 
 I wrote a demo to access  underlying value of an optional  by adding an exclamation point (`!`) to the end of the optional’s name. 
 
-```
+```swift
 class ViewController: UIViewController {
 
     override func viewDidLoad() {
@@ -104,7 +104,7 @@ From Thread State in in the crash report, we got `x19: 0x0000000000000000`. So h
 
 ![image-20210217121128060](./image-20210217121128060.png)
 
-seems, nothing fancy. 
+seems, nothing fancy. To be continue ...
 
 - https://www.mikeash.com/pyblog/friday-qa-2014-08-01-exploring-swift-memory-layout-part-ii.html 
 - https://www.objc.io/issues/6-build-tools/mach-o-executables/#sections
