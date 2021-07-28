@@ -32,15 +32,15 @@ const getRealPath = pathname => {
       </span>
     <% } %>
     <% if(theme.leancloud.timer){ %>
-      <span>
+      <!-- <span>
         read : <span class="article-timer" data-identity="<%- getRealPath(page.path) %>"></span>
-      </span>
+      </span> -->
     <% } %>
   </div>
 
-  <% if(theme.player && page.playlist){ %>
+  <!-- <% if(theme.player && page.playlist){ %>
     <%- partial("_partial/player", {playlist: page.playlist, id: getRealPath(page.path), listFolded: false, style: "margin: 4rem 2px"}) %>
-  <% } %>
+  <% } %> -->
 
   <div class="article-content">
     <div class="markdown-body">

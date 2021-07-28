@@ -9,7 +9,7 @@ categories:
 
 # Background 
 
-Memory is important resource in iOS. If a application uses too much memory, exceeding the limit based on the device, the iOS system will kill our App, by sending `SIGKILL` signal. Besides, minimizing memory usage not only decreases application’s memory footprint, but also reduce the amount of CPU time it consumes. These are mentioned in several WWDC sessions. 
+Memory is important resource in iOS. If a application uses too much memory, exceeding the limit based on the device, the iOS system will kill this App by sending `SIGKILL` signal. Besides, minimizing memory usage not only decreases application’s memory footprint, but also reduces the amount of CPU time it consumes. These are mentioned in several WWDC sessions. 
 
 - [WWDC: performance and power optimization](https://developer.apple.com/videos/play/wwdc2011/312/)
 - [Advanced Memory Management Programming Guide](https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/MemoryMgmt/Articles/MemoryMgmt.html#//apple_ref/doc/uid/10000011-SW1)
@@ -17,17 +17,17 @@ Memory is important resource in iOS. If a application uses too much memory, exce
 - https://developer.apple.com/videos/play/wwdc2018/416/
 - https://developer.apple.com/videos/play/wwdc2020/10078/?time=256
 
- Obviously, it is important to keep memory under control. In our daily life, we usually use Xcode memory debugger tool and instruments to detect memory leaks. Basically, lots of manual work. A better to integrate memory leak detection into internal test phase or regression phase. The earlier we detect the issue, the more time we got to fix it. The less efforts we put in checking memory leaks, the more likely we keep our app away from memory leaks. Using `MLeaksFinder` and `FBRetainCycleDetector` is a good solution. 
+Obviously, it is important to keep memory under control. In our daily life, we usually use Xcode memory debugger tool and instruments to detect memory leaks. Basically, lots of manual works. Maybe, a better way is to integrate memory leak detection into internal test phase or regression phase. The earlier we detect the issue, the more time we got to fix it. The less efforts we put in checking memory leaks manually, the more likely we spend less time to optimal memory issues and keep our app away from memory leaks. So, using `MLeaksFinder` and `FBRetainCycleDetector` in dev or test phase sounds like a good idea. 
 
 # What is MLeaksFinder for? 
 
-`MLeaksFinder` is an light-weight tool from `WeChat` team, `Tencent`. It automatically finds leaks in some specific objects. When leaks happening, it will present an alert showing the leaked object and backtrace. 
+As we know, `MLeaksFinder` is an light-weight tool from `WeChat` team, `Tencent`, which automatically finds leaks in some specific objects. When leaks happening, it will present an alert showing the leaked object and backtrace. 
 
 # How does MLeaksFinder work? 
 
-The basic idea is to set a timer when the object is about to be released. When the timer is triggered, checked if the reference to the object is still valid. If it is, it turns out this object is leaked. Then, it uses this leaked object as seed object to `FBRetainCycleDetector` to figure out the retain cycle using. Actually, I found lots of articles introducing `MLeakdsFinder` are Chinese and outdated. While its source code is a bit easy to read.  
+The basic idea for `MLeaksFinder` is to set a timer when the object is about to be released. When the timer is triggered, checked if the reference to the object is still valid. If it is, this object is leaked. Then, it uses this leaked object as seed object for `FBRetainCycleDetector` to figure out the retain cycle using DFS algorithm to traversal object graph. You may see this brief introduction in some Chinese tech articles. While, I found lots of articles introducing `MLeakdsFinder` are outdated. Since its source code is a bit easy to read, let's just start to explore it. 
 
-Basing on this idea, `MLeaksFinder` has several categories for [these classes](https://github.com/Tencent/MLeaksFinder/tree/master/MLeaksFinder): 
+`MLeaksFinder` has several categories for [these classes](https://github.com/Tencent/MLeaksFinder/tree/master/MLeaksFinder): 
 - NSObject+MemoryLeak
 - UIApplication+MemoryLeak
 - UINavigationController+MemoryLeak
@@ -39,7 +39,7 @@ Basing on this idea, `MLeaksFinder` has several categories for [these classes](h
 - UIViewController+MemoryLeak
 
 
-Take `UIViewController` as an example, it swizzles `viewDidDisappear:` method, then checks if current view controller have been popped by `UINavigationController`. Because the view controller isn't necessarily popped from view controller stack when `viewDidDisappear:` called. Maybe, another view controller just has been pushed into the view controller stack, cover it and showing on the screen.
+Take `UIViewController` as an example, it swizzles `viewDidDisappear:` method, then checks if current view controller has been popped by `UINavigationController`. Why need this check? Because the view controller isn't necessarily popped from view controller stack when `viewDidDisappear:` called. Maybe, another view controller just has been pushed into the view controller stack, cover it and showing on the screen.
 
 ```c++
 - (void)swizzled_viewDidDisappear:(BOOL)animated {
@@ -54,7 +54,7 @@ Take `UIViewController` as an example, it swizzles `viewDidDisappear:` method, t
 `kHasBeenPoppedKey` tag here is set by [UINavigationController, code here](https://github.com/Tencent/MLeaksFinder/blob/master/MLeaksFinder/UINavigationController%2BMemoryLeak.m#L56). 
 
 ![image-20210319225704137](image-20210319225704137.png)
-As this pic demonstrates, if the view controller was released, the reference the block captured 2 seconds ago is `nil`. If this view controller isn't released, `strongSelf` here would be a valid base address to it. Then `MLeakFinder` will show an alter to warning users. 
+As this pic demonstrates, if the view controller was released, the reference the block captured 2 seconds ago is `nil`. If this view controller isn't released, `strongSelf` here would be a valid base address to it. Then `MLeakFinder` will show an alter to warn users. 
 
 We have talked about view controller, how about views?  Well, in `willDealloc` method in `UIViewController`, MLeaksFinder will run self.view's `willDealloc`; then check `subviews` Array. Basically, the view tree in this view controller will be traversed through and checked. 
 
@@ -76,7 +76,7 @@ We have talked about view controller, how about views?  Well, in `willDealloc` m
 
 ![image-20210314194009331](image-20210314194009331.png)
 
-If you enable the `FBRetainCycleDetector` through macro, the current leaked object will be the seed object for FBRetainCycleDetector, which will detect the retain cycle. 
+If you enable the `FBRetainCycleDetector` through macro, the current leaked object will be used as  seed object for FBRetainCycleDetector, which will detect the retain cycle. 
 
 # What is FBRetainCycleDetector for? 
 
@@ -86,13 +86,14 @@ Facebook has a dedicated article about the [FBRetainCycleDetector](https://engin
 So, in order to traverse the directed graph, how to get neighbors of each node? How to get objects each node references? For each node in the graph, it could be either an object or block.
 
 # References in object
+
 ## strong ivars 
 
 For objects, `FBRetainCycleDetector` get its **ivar list** from the object. 
 
 > The first thing we can do is grab the layout of all an object's instance variables (the “ivar layout”). For a given object, an ivar layout describes where we should look for other objects that it references.
 
-```
+```objective-c
 const uint8_t *fullLayout = class_getIvarLayout(aCls);
 
 Ivar *class_copyIvarList(Class cls, unsigned int *outCount)
@@ -103,8 +104,9 @@ Ivar *class_copyIvarList(Class cls, unsigned int *outCount)
 1. Because `class_copyIvarList` won't include instance variables declared by superclasses. This method has to get ivar list for current, its superclass, all the way up to its ancestoiicoder
 2. get strong ivar by analyzing ivar layout
 3. cache ivar list in a map, `<Class, NSArray<FBObjectReference>>`
-   
-Let's understand it deeper by taking an example. For the following class, there are 4 strong references to others, 2 weak reference.   
+
+
+Let's understand it deeper by taking an example. For the following class, there are 4 strong references to others, 2 weak reference.
 
 ```c++
 @interface _RCDTestClassWithMixedWeakAndStrongProperties : NSObject
@@ -123,19 +125,20 @@ using  `class_copyIvarList`, we can see its Ivar list. Each pointer is 8-byte in
 
 Then, use `class_getIvarLayout` to get ivar layout 
 
-```objective-c
+```c++
   const uint8_t *fullLayout = class_getIvarLayout(aCls);
 ```
 
-The full layout is 
+Basically, the value of `fullLayout` is 
 
 ```
 "\x03\x11"
 ```
+
 - In  hexadecimal figure `\x03`, the high bits represents the number of `non-strong` ivar, the lower bits represents the number of `strong ivar`. `\x03` indicates that there are zero non-strong ivar and 3 strong ivar, `_object1`, `_object2`, `_object3` in this case. 
 - `x11` claims that there comes 1 non-strong ivar,  weak `_object4` in above declaration; and then follows 1 strong ivar `object5`
 
-The following method is to parse ivar layout according to this rule and get a set of `NSRange` for index and length for strong ivars in this class. One range is `1 to 3` and the other is `5`. 
+The following method is to parse ivar layout according to the above rule and get a set of `NSRange` for index and length for strong ivars in this class. One range is `1 to 3` and the other is `5`. 
 
 ```c++
 static NSIndexSet *FBGetLayoutAsIndexesForDescription(NSUInteger minimumIndex, const uint8_t *layoutDescription) {
@@ -180,7 +183,7 @@ For the above case, the ivar layout is `"\x03\x11"`
 
 
 
-Parsing ivar layout to filter out the 4th and 6th ivar and get a set of index range for strong ivar. The result is two range, {1, 3} and {5, 1} 
+Parsing ivar layout to filter out the 4th and 6th ivar and get a set of index range for strong ivar. The result are two ranges, {1, 3} and {5, 1} 
 
 ```
 <NSMutableIndexSet: 0x7fb7aea8ef40>[number of indexes: 4 (in 2 ranges), indexes: (1-3 5)]
@@ -189,7 +192,7 @@ Parsing ivar layout to filter out the 4th and 6th ivar and get a set of index ra
 <img src="image-20210320161003483.png" width="375" height="500">
 
 
-There are other interesting cases in the [FBClassStrongLayoutTests.mm](https://github.com/facebook/FBRetainCycleDetector/blob/master/FBRetainCycleDetectorTests/FBClassStrongLayoutTests.mm), the ivar type could be structure or block, and it could be weak as well. 
+There are other interesting cases in the [FBClassStrongLayoutTests.mm](https://github.com/facebook/FBRetainCycleDetector/blob/master/FBRetainCycleDetectorTests/FBClassStrongLayoutTests.mm), the ivar type can be structure or block, and it can be weak as well. 
 
 ## References to associated objects 
 
@@ -211,11 +214,11 @@ Using  `OBJC_ASSOCIATION_RETAIN` and `OBJC_ASSOCIATION_RETAIN_NONATOMIC` to trac
 
 ## Block and captured objects
 
-What attracts me most is the capability in FBRetainCycleDetector to detect leaked blocks and its reference.  [Amazing method to get references from the block](https://github.com/facebook/FBRetainCycleDetector/blob/1ff2adee84a6ee94a1ae82526104a188774eb90a/FBRetainCycleDetector/Layout/Blocks/FBBlockStrongLayout.m#L79) and strong reference layout in block.  
+What attracts me most is the capability in `FBRetainCycleDetector` to detect leaked blocks and its reference.  [Amazing method to get references from the block](https://github.com/facebook/FBRetainCycleDetector/blob/1ff2adee84a6ee94a1ae82526104a188774eb90a/FBRetainCycleDetector/Layout/Blocks/FBBlockStrongLayout.m#L79) and strong reference layout in block.  
 
 >  What we can use is [application binary interface for blocks](http://clang.llvm.org/docs/Block-ABI-Apple.html) (ABI). It describes how the block will look in memory. If we know that the reference we are dealing with is a block, we can cast it on a fake structure that imitates a block. After casting the block to a C-struct we know where objects retained by the block are kept.
 
-**ABI for block**
+** ABI for block**
 
 First of all, let's take a look at the Block Literal. 
 

@@ -102,6 +102,10 @@ nav:
         name: Github
         path: "https://github.com/sueLan"
         blank: true
+      - 
+        name: LinkedIn 
+        path: https://www.linkedin.com/in/rongyanzheng/
+        blank: true 
       -
         name: StackOverflow
         path: "https://stackoverflow.com/users/4026902/ry-zheng"
