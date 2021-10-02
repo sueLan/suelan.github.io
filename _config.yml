@@ -107,11 +107,11 @@ theme: bmw
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
-# deploy:
-#   type: git 
-#   repo: https://github.com/sueLan/sueLan.github.io
-#   email: scutryzheng@gmail.com
-#   branch: master
+deploy:
+  type: git 
+  repo: https://github.com/sueLan/sueLan.github.io
+  email: scutryzheng@gmail.com
+  branch: master
 
 ## indent
 post_style:
