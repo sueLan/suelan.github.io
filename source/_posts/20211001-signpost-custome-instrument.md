@@ -1,5 +1,5 @@
 ---
-title: How to use `SignPost `
+title: How to use SignPost 
 date: 2021-10-02 20:05:59
 categories:
   - iOS
@@ -122,7 +122,7 @@ Well, if you want to use `os_signpost` in C, Apple also provides a series of API
 
 ### Points of Interest 
 
-We may want to focus on timing of some important events. We can promote these events by using `points of interest`  as the category of `OSLog` .  Instrument then will look for this special category and display it in a seperated sections. 
+We may want to focus on timing of some important events. We can promote these events by using `points of interest`  as the category of `OSLog` .  Instrument then will look for this special category and display it in a separated sections. 
 
 ![image-20210117174557365](image-20210117174557365.png)
 
@@ -150,7 +150,7 @@ Or we can add `os_signpost`  here
 
 ![image-20210117170856013](image-20210117170856013.png)
 
-What I like most in Instrument is that we can always zoom in and zoom out to select the region we insterest. 
+What I like most in Instrument is that we can always zoom in and zoom out to select the region we interest. 
 ![](demostration.gif)
 
 ### Analysis time of the intervals 
@@ -165,13 +165,13 @@ Choose `summary:Intervals` . We can see the summary of intervals. The count, dur
 
 #### Analysis Points of Interest 
 
-By chosing the `Points of Interest` section, we can see the points of interest and its meta data. Besides, we can use points of interst together with other section, like Time Profile to check how is the performance like when these importance events happen. 
+By choosing the `Points of Interest` section, we can see the points of interest and its meta data. Besides, we can use points of interst together with other section, like Time Profile to check how is the performance like when these importance events happen. 
 
 ![image-20210117230047705](image-20210117230047705.png)
 
 ## Options 
 
-The default recording mode is `immediate`, which means it records all the signposts immediately. This could bring overhead if your app emits thousands of signposts per second.  However, we can still work around that by changingto window mode and only collecting data for the last 5 seconds.  It is very useful to collect data to analyze stutters. 
+The default recording mode is `immediate`, which means it records all the signposts immediately. This could bring overhead if your app emits thousands of signposts per second.  However, we can still work around that by changing to window mode and only collecting data for the last 5 seconds.  It is very useful to collect data to analyze stutters. 
 
 Steps: 
 
