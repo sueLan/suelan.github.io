@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="RY&#39;s blog">
+  <meta name="keyword" content="hexo-theme, vuejs">
+  
+    <link rel="shortcut icon" type="image/ico" href="[object Object]"/>
+  
+  <title>
+    
+      RY &#39;s Blog
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+    
+<script src="/js/qrious.js"></script>
+
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+  
+    
+<script src="/js/local-search.js"></script>
+
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div>
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>RY 's Blog</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link active">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/series/" class="item-link">Series</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/project/" class="item-link">Projects</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+      
+        <li class="menu-item menu-item-search right-list">
+    <a role="button" class="popup-trigger">
+        <i class="fa fa-search fa-fw"></i>
+    </a>
+</li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link mobile-active">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/series/" class="menu-link">Series</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/project/" class="menu-link">Projects</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+    
+      <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+            <span class="search-icon">
+                <i class="fa fa-search"></i>
+            </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocapitalize="off"
+                    placeholder="Please enter your keyword(s) to search." spellcheck="false"
+                    type="search" class="search-input">
+            </div>
+            <span class="popup-btn-close">
+                <i class="fa fa-times-circle"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+    
+  </div>
+</header>
+
+    <main class="app-body">
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2021/10/02/20211001-signpost-custome-instrument/">How to use SignPost</a>
+      </h2>
+      <p class="article-date">October 2, 2021</p>
+      
+      <div class="article-summary">
+        
+          SignPost is part of the os_log family delivered by Apple for iOS10 and above. It allows developers to place performance-focused time markers which ...
+        
+      </div>
+      <a class="more" href="/2021/10/02/20211001-signpost-custome-instrument/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2021/08/13/20210813-react-native-instrument-profile/">react-native-instrument</a>
+      </h2>
+      <p class="article-date">August 13, 2021</p>
+      
+      <div class="article-summary">
+        
+          
+Sometimes, you may encounter heavy performance issue in RN page, like laggy and unresponsive pages. And you do want to take a deep look at how ma ...
+        
+      </div>
+      <a class="more" href="/2021/08/13/20210813-react-native-instrument-profile/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2021/07/24/20210724-EXC-BREAKPOINT-in-forced-unwrapping-optional/">EXC_BREAKPOINT when forced unwrapping optional in Swift</a>
+      </h2>
+      <p class="article-date">July 24, 2021</p>
+      
+        
+  <a href="/tags#Swift" >
+    <span class="tag-code">Swift</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          When unforced unwrapping optional in Swift, we will see the exception type in crash report is Exception Type:  EXC_BREAKPOINT (SIGTRAP) instead of ...
+        
+      </div>
+      <a class="more" href="/2021/07/24/20210724-EXC-BREAKPOINT-in-forced-unwrapping-optional/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2021/03/19/20210319-FBRetainCycleDetector/">Understand How MLeaksFinder and FBRetainCycleDetector automatically detect memory leaks</a>
+      </h2>
+      <p class="article-date">March 19, 2021</p>
+      
+      <div class="article-summary">
+        
+          BackgroundMemory is important resource in iOS. If a application uses too much memory, exceeding the limit based on the device, the iOS system will ...
+        
+      </div>
+      <a class="more" href="/2021/03/19/20210319-FBRetainCycleDetector/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2021/03/05/20210305-pointer-authentication-failed/">Crash - Pointer Authentication Failures or invalid memory accesses</a>
+      </h2>
+      <p class="article-date">March 5, 2021</p>
+      
+      <div class="article-summary">
+        
+          Recently, a colleague came to me for a crash. It is quite tricky. So i took a note here. The exception section is as follow:
+123456789101112Except ...
+        
+      </div>
+      <a class="more" href="/2021/03/05/20210305-pointer-authentication-failed/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2021/03/05/20210305-crash-ate-bad-food/">Crash - ate bad food (0x8badf00d)</a>
+      </h2>
+      <p class="article-date">March 5, 2021</p>
+      
+      <div class="article-summary">
+        
+          Recently, my colleague came to me for a crash report. It is a case where system watch dog kills our app for blocking main thread for too long time ...
+        
+      </div>
+      <a class="more" href="/2021/03/05/20210305-crash-ate-bad-food/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2021/02/13/20210213-ensure-null-terminated-string/">Ensure Null-Terminated JS Bundle in React Native</a>
+      </h2>
+      <p class="article-date">February 13, 2021</p>
+      
+        
+  <a href="/tags#Dive into React Native" >
+    <span class="tag-code">Dive into React Native</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          DescriptionThere is an expensive copy operation for data buffer when loading and parsing JS Bundle in React Native.  In my case, I have a 4.8 MB J ...
+        
+      </div>
+      <a class="more" href="/2021/02/13/20210213-ensure-null-terminated-string/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2021/02/13/20210213-dive-into-runloop-ios/">Dive into CFRunLoop</a>
+      </h2>
+      <p class="article-date">February 13, 2021</p>
+      
+        
+  <a href="/tags#Popular Article" >
+    <span class="tag-code">Popular Article</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          BackgroundSometimes, you may want to collect on-device performance metrics in main thread to know how our App performs and help you find more clue ...
+        
+      </div>
+      <a class="more" href="/2021/02/13/20210213-dive-into-runloop-ios/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2020/12/24/20201224-How-Image-Loader-and-Cache-work-in-React-Native/">How Image Loader and Cache work in React Native</a>
+      </h2>
+      <p class="article-date">December 24, 2020</p>
+      
+        
+  <a href="/tags#Popular Article" >
+    <span class="tag-code">Popular Article</span>
+  </a>
+
+  <a href="/tags#Dive into React Native" >
+    <span class="tag-code">Dive into React Native</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+           In react native, it is so intuitive to display different types of images. The Image Component can display network images, static resources, tempo ...
+        
+      </div>
+      <a class="more" href="/2020/12/24/20201224-How-Image-Loader-and-Cache-work-in-React-Native/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2020/12/23/20201223-what-is-behind-react-native-module/">Dive into react native module</a>
+      </h2>
+      <p class="article-date">December 23, 2020</p>
+      
+        
+  <a href="/tags#Dive into React Native" >
+    <span class="tag-code">Dive into React Native</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          Native Modules is one of the key part of React Native which enables JavasScript to call methods in iOS or Android native implementation.
+ It is qu ...
+        
+      </div>
+      <a class="more" href="/2020/12/23/20201223-what-is-behind-react-native-module/">Read more</a>
+    </article>
+  
+
+  
+    <div class="guide-pager">
+  
+    <a class="unvisible" href="/"><span class="page-arrow">←</span> Prev</a>
+  
+  
+    <a href="/page/2/">Next<span class="page-arrow"> →</span></a>
+  
+</div>
+  
+</main>
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2021 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a target="_blank" rel="noopener" href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      hljs.configure({useBR: true});
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+
+  </body>
+</html>

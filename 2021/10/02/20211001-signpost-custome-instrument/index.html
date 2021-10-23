@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="RY&#39;s blog">
+  <meta name="keyword" content="hexo-theme, vuejs">
+  
+    <link rel="shortcut icon" type="image/ico" href="[object Object]"/>
+  
+  <title>
+    
+      How to use SignPost | RY &#39;s Blog
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+    
+<script src="/js/qrious.js"></script>
+
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+  
+    
+<script src="/js/local-search.js"></script>
+
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div>
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>RY 's Blog</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/series/" class="item-link">Series</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/project/" class="item-link">Projects</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+      
+        <li class="menu-item menu-item-search right-list">
+    <a role="button" class="popup-trigger">
+        <i class="fa fa-search fa-fw"></i>
+    </a>
+</li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/series/" class="menu-link">Series</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/project/" class="menu-link">Projects</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+    
+      <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+            <span class="search-icon">
+                <i class="fa fa-search"></i>
+            </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocapitalize="off"
+                    placeholder="Please enter your keyword(s) to search." spellcheck="false"
+                    type="search" class="search-input">
+            </div>
+            <span class="popup-btn-close">
+                <i class="fa fa-times-circle"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+    
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>How to use SignPost</h2>
+  <p class="post-date">2021-10-02</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><p><code>SignPost</code> is part of the <code>os_log</code> family delivered by Apple for iOS10 and above. It allows developers to place performance-focused time markers which can be displayed in Instrument for visualization. Or we can say, <code>SignPost</code> APIs enable us add some lightweight instrumentation to code for collection and visualization by performance analysis tooling. Now, here comes two basic concepts in <code>os_signpost</code> APIs. </p>
+<ul>
+<li><code>intervals</code>:  interesting periods of time. <code>os_signpost</code> interval begin and end matching  matching begins and ends is restricted to single threads.</li>
+<li><code>events</code>: single points in time</li>
+</ul>
+<h2 id="Instruments"><a href="#Instruments" class="headerlink" title="Instruments"></a>Instruments</h2><p>As I said, we can use it with signpost logs to  </p>
+<ul>
+<li>Aggregate and analyze signpost data</li>
+<li>Visualize activity over time</li>
+</ul>
+<p>Here comes a piece of code demonstrating how to use <code>OSLog</code>   </p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os.signpost</span><br><span class="line"></span><br><span class="line"><span class="comment">// 1. create a container of related log messages. Each log contains a subsystem and a category, which you define and helpful when sorting and displaying them. Can see category in console.log  </span></span><br><span class="line"><span class="keyword">let</span> refreshLog <span class="operator">=</span> <span class="type">OSLog</span>(subsystem: <span class="string">&quot;com.example.your-app&quot;</span>, category: <span class="string">&quot;RefreshOperations&quot;</span>)</span><br><span class="line"> </span><br><span class="line"><span class="comment">// 2. A different signpost name for this different interval</span></span><br><span class="line">os_signpost(.begin, log: refreshLog, name: <span class="string">&quot;Refresh Panel&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> element <span class="keyword">in</span> panel.elements &#123;</span><br><span class="line">  os_signpost(.begin, log: refreshLog, name: <span class="string">&quot;Fetch Asset&quot;</span>) fetchAsset(for: element)</span><br><span class="line">  os_signpost(.end, log: refreshLog, name: <span class="string">&quot;Fetch Asset&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line">os_signpost(.end, log: refreshLog, name: <span class="string">&quot;Refresh Panel&quot;</span>)</span><br><span class="line"> </span><br></pre></td></tr></table></figure>
+<h3 id="Signpost-Names"><a href="#Signpost-Names" class="headerlink" title="Signpost Names"></a>Signpost Names</h3><ul>
+<li>The string literal identifies signpost intervals</li>
+<li>The name must match at .begin and .end</li>
+</ul>
+<h3 id="Signpost-IDs"><a href="#Signpost-IDs" class="headerlink" title="Signpost IDs"></a>Signpost IDs</h3><p>Intervals with the same log handle and interval name can be in flight simultaneously. Signpost id is needed to correctly match begin signposts with end signposts. So we have to identify each interval with a signpost id. </p>
+<ul>
+<li>Use signpost IDs to tell overlapping operations apart</li>
+<li>While running,use the same IDs for each pair of <code>.begin</code> and <code>.end</code></li>
+</ul>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> spid <span class="operator">=</span> <span class="type">OSSignpostID</span>(log: refreshLog)</span><br><span class="line">os_signpost(.begin, log: refreshLog, name: <span class="string">&quot;Fetch Asset&quot;</span>, signpostID: spid)</span><br><span class="line"></span><br><span class="line">os_signpost(.end, log: refreshLog, name: <span class="string">&quot;Fetch Asset&quot;</span>, signpostID: spid)</span><br></pre></td></tr></table></figure>
+<h3 id="Making-Signpost-IDs"><a href="#Making-Signpost-IDs" class="headerlink" title="Making Signpost IDs"></a>Making Signpost IDs</h3><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> spid <span class="operator">=</span> <span class="type">OSSignpostID</span>(log: refreshLog, object: element)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>Signpost IDs are process-scoped</li>
+<li>Making from object is convenient if you have the same object at .begin and .end</li>
+</ul>
+<h2 id="Organizing-Signposts-A-Hierarchy"><a href="#Organizing-Signposts-A-Hierarchy" class="headerlink" title="Organizing Signposts: A Hierarchy"></a>Organizing Signposts: A Hierarchy</h2><p>You can use <code>subsystem</code>, <code>category</code> and <code>name</code> to organize signposts.<br><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">log <span class="operator">=</span> <span class="type">OSLog</span>(subsystem: <span class="string">&quot;com.example.your-app&quot;</span>, category: <span class="string">&quot;RefreshOperations&quot;</span>)</span><br><span class="line">os_signpost(.begin, log: log, name: <span class="string">&quot;Fetch Asset&quot;</span>, signpostID: spid)</span><br></pre></td></tr></table></figure></p>
+<p><img src="image-20210108175744504.png" alt="image-20210108175744504"></p>
+<h3 id="Custom-Metadata-in-Signpost-Arguments"><a href="#Custom-Metadata-in-Signpost-Arguments" class="headerlink" title="Custom Metadata in Signpost Arguments"></a>Custom Metadata in Signpost Arguments</h3><p>You can add more data when calling <code>os_signpost</code> </p>
+<ul>
+<li>Add context to the .begin and .end</li>
+<li>Pass arguments with os_log format string literal</li>
+<li>Pass many arguments with different types</li>
+<li>Pass dynamic strings</li>
+<li>The format string is a fixed cost, so feel free to be descriptive!</li>
+</ul>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">os_signpost(.begin, log: log, name: <span class="string">&quot;Compute Physics&quot;</span>, <span class="string">&quot;%d %d %d %d&quot;</span>,</span><br><span class="line">x1, y1, x2, y2)</span><br></pre></td></tr></table></figure>
+<h3 id="Signpost-Events"><a href="#Signpost-Events" class="headerlink" title="Signpost Events"></a>Signpost Events</h3><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">os_signpost(.event, log: log, name: <span class="string">&quot;Fetch Asset&quot;</span>,</span><br></pre></td></tr></table></figure>
+<p>To add events between <code>.begin</code> and <code>.end</code>. They will become <code>Points of Interest</code> displayed in instrument later. </p>
+<h2 id="Signposts-Are-Lightweight"><a href="#Signposts-Are-Lightweight" class="headerlink" title="Signposts Are Lightweight"></a>Signposts Are Lightweight</h2><ul>
+<li>Built to minimize observer effect</li>
+<li>Built for fine-grained measurement in a short time span</li>
+</ul>
+<h2 id="Enabling-and-Disabling-Signpost-Categories"><a href="#Enabling-and-Disabling-Signpost-Categories" class="headerlink" title="Enabling and Disabling Signpost Categories"></a>Enabling and Disabling Signpost Categories</h2><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">OSLog</span>.disabled</span><br></pre></td></tr></table></figure>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"> </span><br><span class="line"><span class="keyword">let</span> refreshLog: <span class="type">OSLog</span></span><br><span class="line"><span class="keyword">if</span> <span class="type">ProcessInfo</span>.processInfo.environment.keys.contains(<span class="string">&quot;SIGNPOSTS_FOR_REFRESH&quot;</span>) &#123;</span><br><span class="line">   refreshLog <span class="operator">=</span> <span class="type">OSLog</span>(subsystem: <span class="string">&quot;com.example.your-app&quot;</span>, category: <span class="string">&quot;RefreshOperations&quot;</span>) </span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">   refreshLog <span class="operator">=</span> .disabled</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="Signposts-in-C"><a href="#Signposts-in-C" class="headerlink" title="Signposts in C"></a>Signposts in C</h2><p>Well, if you want to use <code>os_signpost</code> in C, Apple also provides a series of APIs for C. </p>
+<p><img src="image-20210108180102653.png" alt="image-20210108180102653"></p>
+<h3 id="Points-of-Interest"><a href="#Points-of-Interest" class="headerlink" title="Points of Interest"></a>Points of Interest</h3><p>We may want to focus on timing of some important events. We can promote these events by using <code>points of interest</code>  as the category of <code>OSLog</code> .  Instrument then will look for this special category and display it in a separated sections. </p>
+<p><img src="image-20210117174557365.png" alt="image-20210117174557365"></p>
+<p>We later can see these events displayed  and correlate these events with other performance data.  </p>
+<p>In non-swift source code, we can use <code>OS_LOG_CATEGORY_POINTS_OF_INTEREST</code>.  And use <code>os_signpost(.event, ...)</code> to emit import events. </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#ifndef __swift__</span><br><span class="line">#define OS_LOG_CATEGORY_POINTS_OF_INTEREST &quot;PointsOfInterest&quot;</span><br><span class="line">#endif</span><br></pre></td></tr></table></figure>
+<p><img src="image-20210117224415205.png" alt="image-20210117224415205"></p>
+<p>In Instrument, we can use <code>Points of Interest</code> template. </p>
+<h2 id="How-to-use-it-in-Instrument"><a href="#How-to-use-it-in-Instrument" class="headerlink" title="How to use it in Instrument"></a>How to use it in Instrument</h2><p>After opening the instrument, we can chose <code>Logging template</code> </p>
+<p><img src="image-20210117172127316.png" alt="image-20210117172127316"></p>
+<p>Or we can add <code>os_signpost</code>  here</p>
+<p><img src="image-20210117170856013.png" alt="image-20210117170856013"></p>
+<p>What I like most in Instrument is that we can always zoom in and zoom out to select the region we interest.<br><img src="demostration.gif" alt=""></p>
+<h3 id="Analysis-time-of-the-intervals"><a href="#Analysis-time-of-the-intervals" class="headerlink" title="Analysis time of the intervals"></a>Analysis time of the intervals</h3><p>Choose <code>summary:Intervals</code> . We can see the summary of intervals. The count, duration, min duration, average duration, maximum duration of each signpost we collects. </p>
+<p><img src="image-20210117230659066.png" alt="image-20210117230659066"></p>
+<h3 id="Analysis-the-metadata"><a href="#Analysis-the-metadata" class="headerlink" title="Analysis the metadata"></a>Analysis the metadata</h3><p><code>Summary:Metadata Statistics</code> </p>
+<h4 id="Analysis-Points-of-Interest"><a href="#Analysis-Points-of-Interest" class="headerlink" title="Analysis Points of Interest"></a>Analysis Points of Interest</h4><p>By choosing the <code>Points of Interest</code> section, we can see the points of interest and its meta data. Besides, we can use points of interst together with other section, like Time Profile to check how is the performance like when these importance events happen. </p>
+<p><img src="image-20210117230047705.png" alt="image-20210117230047705"></p>
+<h2 id="Options"><a href="#Options" class="headerlink" title="Options"></a>Options</h2><p>The default recording mode is <code>immediate</code>, which means it records all the signposts immediately. This could bring overhead if your app emits thousands of signposts per second.  However, we can still work around that by changing to window mode and only collecting data for the last 5 seconds.  It is very useful to collect data to analyze stutters. </p>
+<p>Steps: </p>
+<ol>
+<li><p>long press the record button and select recording options </p>
+<p><img src="image-20210117182658245.png" alt="image-20210117182658245"></p>
+</li>
+<li><p>Expand <code>Grobal Options</code></p>
+</li>
+</ol>
+<p><img src="image-20210117182537413.png" alt="image-20210117182537413"></p>
+<ol start="3">
+<li>Choose <code>Last</code>, filling 5 seconds.<br><img src="image-20210117172616368.png" alt="image-20210117172616368"></li>
+</ol>
+<p>When recording in <code>Windowed Mode</code> , the Instrument shows a blank white screen with a hint <code>Recording in Windowed Mode</code>.</p>
+<p><img src="image-20210117224703454.png" alt="image-20210117224703454"></p>
+<p>When stoping recording, the Instrument showing a progress view and analyzing the collected data. </p>
+<p><img src="image-20210117224757983.png" alt="image-20210117224757983"></p>
+<h2 id="Ref"><a href="#Ref" class="headerlink" title="Ref"></a>Ref</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://developer.apple.com/documentation/os/logging">Apple doc/logging</a></li>
+<li><a target="_blank" rel="noopener" href="https://developer.apple.com/videos/play/wwdc2018/405/">WWDC/Measuring Performance Using Logging</a></li>
+</ul>
+</section>
+    <!-- Tags START -->
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/2021/08/13/20210813-react-native-instrument-profile/">
+        <span class="nav-arrow">← </span>
+        
+          react-native-instrument
+        
+      </a>
+    
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+  
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">scan qr code and share this article</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Utterances START -->
+      <div id="utterances"></div>
+      <script src="https://utteranc.es/client.js"
+        repo="null"
+        issue-term="pathname"
+        theme="github-light"
+        crossorigin="anonymous"
+        async></script>    
+      <!-- Utterances END -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Instruments"><span class="toc-nav-text">Instruments</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Signpost-Names"><span class="toc-nav-text">Signpost Names</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Signpost-IDs"><span class="toc-nav-text">Signpost IDs</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Making-Signpost-IDs"><span class="toc-nav-text">Making Signpost IDs</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Organizing-Signposts-A-Hierarchy"><span class="toc-nav-text">Organizing Signposts: A Hierarchy</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Custom-Metadata-in-Signpost-Arguments"><span class="toc-nav-text">Custom Metadata in Signpost Arguments</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Signpost-Events"><span class="toc-nav-text">Signpost Events</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Signposts-Are-Lightweight"><span class="toc-nav-text">Signposts Are Lightweight</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Enabling-and-Disabling-Signpost-Categories"><span class="toc-nav-text">Enabling and Disabling Signpost Categories</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Signposts-in-C"><span class="toc-nav-text">Signposts in C</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Points-of-Interest"><span class="toc-nav-text">Points of Interest</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#How-to-use-it-in-Instrument"><span class="toc-nav-text">How to use it in Instrument</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Analysis-time-of-the-intervals"><span class="toc-nav-text">Analysis time of the intervals</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Analysis-the-metadata"><span class="toc-nav-text">Analysis the metadata</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#Analysis-Points-of-Interest"><span class="toc-nav-text">Analysis Points of Interest</span></a></li></ol></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Options"><span class="toc-nav-text">Options</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Ref"><span class="toc-nav-text">Ref</span></a></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://suelan.github.io/2021/10/02/20211001-signpost-custome-instrument/';
+    var banner = 'undefined'
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+    // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', '/css/images/error_icon.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== '/css/images/error_icon.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+  })();
+</script>
+
+
+  <script>
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+  </script>
+
+
+
+
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2021 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a target="_blank" rel="noopener" href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      hljs.configure({useBR: true});
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+
+  </body>
+</html>

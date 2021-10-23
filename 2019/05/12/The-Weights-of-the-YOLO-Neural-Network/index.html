@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="RY&#39;s blog">
+  <meta name="keyword" content="hexo-theme, vuejs">
+  
+    <link rel="shortcut icon" type="image/ico" href="[object Object]"/>
+  
+  <title>
+    
+      The Weights of the YOLO Neural Network | RY &#39;s Blog
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+    
+<script src="/js/qrious.js"></script>
+
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+  
+    
+<script src="/js/local-search.js"></script>
+
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div>
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>RY 's Blog</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/series/" class="item-link">Series</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/project/" class="item-link">Projects</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+      
+        <li class="menu-item menu-item-search right-list">
+    <a role="button" class="popup-trigger">
+        <i class="fa fa-search fa-fw"></i>
+    </a>
+</li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/series/" class="menu-link">Series</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/project/" class="menu-link">Projects</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+    
+      <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+            <span class="search-icon">
+                <i class="fa fa-search"></i>
+            </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocapitalize="off"
+                    placeholder="Please enter your keyword(s) to search." spellcheck="false"
+                    type="search" class="search-input">
+            </div>
+            <span class="popup-btn-close">
+                <i class="fa fa-times-circle"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+    
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>The Weights of the YOLO Neural Network</h2>
+  <p class="post-date">2019-05-12</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><h2 id="Load-Weights"><a href="#Load-Weights" class="headerlink" title="Load Weights"></a>Load Weights</h2><p>First, see this C library function:<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">size_t</span> <span class="title">fread</span> <span class="params">( <span class="keyword">void</span> * ptr, <span class="keyword">size_t</span> size, <span class="keyword">size_t</span> count, FILE * stream )</span></span>;</span><br></pre></td></tr></table></figure><br><strong>Parameters</strong></p>
+<ul>
+<li><p><strong>ptr</strong> − Pointer to a block of memory with a size of at least (size<em>count) bytes, converted to a void</em>.</p>
+</li>
+<li><p><strong>size</strong> − This is the size in bytes of each element to be read.</p>
+</li>
+<li><p><strong>count</strong> − This is the number of elements, each one with a size of size bytes.</p>
+</li>
+<li><p><strong>stream</strong> − This is the pointer to a FILE object that specifies an input stream.</p>
+</li>
+</ul>
+<p>Then, in the <code>load_weights_upto</code> function in <code>parser.c</code>, it begins to load weights for layers from xxx.weights.<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">load_weights_upto</span><span class="params">(network *net, <span class="keyword">char</span> *filename, <span class="keyword">int</span> start, <span class="keyword">int</span> cutoff)</span> </span>&#123;</span><br><span class="line"> ...</span><br><span class="line">     <span class="comment">// Begin to load weights for layers</span></span><br><span class="line">    <span class="keyword">for</span>(i = start; i &lt; net-&gt;n &amp;&amp; i &lt; cutoff; ++i)&#123;</span><br><span class="line">        layer l = net-&gt;layers[i];</span><br><span class="line">        <span class="keyword">if</span> (l.dontload) <span class="keyword">continue</span>;</span><br><span class="line">        <span class="keyword">if</span>(l.type == CONVOLUTIONAL || l.type == DECONVOLUTIONAL)&#123;</span><br><span class="line">            load_convolutional_weights(l, fp);</span><br><span class="line">        &#125;</span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="Convolutional-Layer"><a href="#Convolutional-Layer" class="headerlink" title="Convolutional Layer"></a>Convolutional Layer</h3><p>In <code>load_convolutional_weights</code> function, it loads values of biases for filters. One bias for one filter. </p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fread(l.biases, <span class="keyword">sizeof</span>(<span class="keyword">float</span>), l.n, fp);</span><br></pre></td></tr></table></figure>
+<p><code>l.n</code> is the number of filter in this layer. </p>
+<p>Assign the values to scales, rolling_mean and rooling_variance<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">if (l.batch_normalize &amp;&amp; (!l.dontloadscales))&#123;</span><br><span class="line">       fread(l.scales, sizeof(float), l.n, fp);</span><br><span class="line">       fread(l.rolling_mean, sizeof(float), l.n, fp);</span><br><span class="line">       fread(l.rolling_variance, sizeof(float), l.n, fp);</span><br></pre></td></tr></table></figure></p>
+<p>And load weights for filters in this layer. The default value of <code>l.groups</code> is 1.<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> num = l.c/l.groups*l.n*l.size*l.size;</span><br><span class="line">fread(l.weights, <span class="keyword">sizeof</span>(<span class="keyword">float</span>), num, fp);</span><br></pre></td></tr></table></figure></p>
+<p><code>l.c</code> is input channel. The number of input channel equal to the number of channel of a filter in this layer. Thus, <code>l.size</code> is the size of a filter.</p>
+<p>For a 3x3x3 filter (size=3, channel=3), it has 3x3x3=27 parameters as follow  </p>
+<p><img src="/img/15576478323378/15576531132966.jpg" alt="-w208"></p>
+<p>If a convolutional layer has 3 such filters, it will have 3 values for bias, 3x3x3x3 .Its weight layout in memory is like this: </p>
+<p><img src="/img/15576478323378/15576535368751.jpg" alt="-w746"></p>
+<h2 id="Write-Weights"><a href="#Write-Weights" class="headerlink" title="Write Weights"></a>Write Weights</h2><p><code>save_weights_upto</code> and <code>save_convolutional_weights</code>functions show how to save weights into a xxx.weights file. It’s just a reverse process. </p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">save_convolutional_weights</span><span class="params">(layer l, FILE *fp)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(l.binary)&#123;</span><br><span class="line">        <span class="comment">//save_convolutional_weights_binary(l, fp);</span></span><br><span class="line">        <span class="comment">//return;</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">int</span> num = l.nweights;</span><br><span class="line">    fwrite(l.biases, <span class="keyword">sizeof</span>(<span class="keyword">float</span>), l.n, fp);</span><br><span class="line">    <span class="keyword">if</span> (l.batch_normalize)&#123;</span><br><span class="line">        fwrite(l.scales, <span class="keyword">sizeof</span>(<span class="keyword">float</span>), l.n, fp);</span><br><span class="line">        fwrite(l.rolling_mean, <span class="keyword">sizeof</span>(<span class="keyword">float</span>), l.n, fp);</span><br><span class="line">        fwrite(l.rolling_variance, <span class="keyword">sizeof</span>(<span class="keyword">float</span>), l.n, fp);</span><br><span class="line">    &#125;</span><br><span class="line">    fwrite(l.weights, <span class="keyword">sizeof</span>(<span class="keyword">float</span>), num, fp);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">size_t fwrite ( const void * ptr, size_t size, size_t count, FILE * stream );</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><strong>ptr</strong><br>Pointer to the array of elements to be written, converted to a const void*.</li>
+<li><strong>size</strong><br>Size in bytes of each element to be written.<br>size_t is an unsigned integral type.</li>
+<li><strong>count</strong><br>Number of elements, each one with a size of size bytes.<br>size_t is an unsigned integral type.</li>
+<li><strong>stream</strong><br>Pointer to a FILE object that specifies an output stream.</li>
+</ul>
+</section>
+    <!-- Tags START -->
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <a href="/tags#YOLO" >
+    <span class="tag-code">YOLO</span>
+  </a>
+
+      </div>
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/2019/05/12/LeetCode-237-Delete-Node-in-a-Linked-List/">
+        <span class="nav-arrow">← </span>
+        
+          LeetCode:237. Delete Node in a Linked List
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/2019/05/18/Semantic-Image-Synthesis-with-Spatially-Adaptive-Normalization/">
+        
+          小白读论文:Semantic Image Synthesis with Spatially-Adaptive Normalization
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+  
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">scan qr code and share this article</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Utterances START -->
+      <div id="utterances"></div>
+      <script src="https://utteranc.es/client.js"
+        repo="null"
+        issue-term="pathname"
+        theme="github-light"
+        crossorigin="anonymous"
+        async></script>    
+      <!-- Utterances END -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Load-Weights"><span class="toc-nav-text">Load Weights</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Convolutional-Layer"><span class="toc-nav-text">Convolutional Layer</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Write-Weights"><span class="toc-nav-text">Write Weights</span></a></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://suelan.github.io/2019/05/12/The-Weights-of-the-YOLO-Neural-Network/';
+    var banner = 'undefined'
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+    // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', '/css/images/error_icon.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== '/css/images/error_icon.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+  })();
+</script>
+
+
+  <script>
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+  </script>
+
+
+
+
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2021 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a target="_blank" rel="noopener" href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      hljs.configure({useBR: true});
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+
+  </body>
+</html>

@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="RY&#39;s blog">
+  <meta name="keyword" content="hexo-theme, vuejs">
+  
+    <link rel="shortcut icon" type="image/ico" href="[object Object]"/>
+  
+  <title>
+    
+      RY &#39;s Blog
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+    
+<script src="/js/qrious.js"></script>
+
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+  
+    
+<script src="/js/local-search.js"></script>
+
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div>
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>RY 's Blog</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link active">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/series/" class="item-link">Series</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/project/" class="item-link">Projects</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+      
+        <li class="menu-item menu-item-search right-list">
+    <a role="button" class="popup-trigger">
+        <i class="fa fa-search fa-fw"></i>
+    </a>
+</li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link mobile-active">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/series/" class="menu-link">Series</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/project/" class="menu-link">Projects</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+    
+      <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+            <span class="search-icon">
+                <i class="fa fa-search"></i>
+            </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocapitalize="off"
+                    placeholder="Please enter your keyword(s) to search." spellcheck="false"
+                    type="search" class="search-input">
+            </div>
+            <span class="popup-btn-close">
+                <i class="fa fa-times-circle"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+    
+  </div>
+</header>
+
+    <main class="app-body">
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2020/04/25/How-to-inspect-network-activity-of-your-iOS-applicatoin/">How Flipper network plugin works under the hood</a>
+      </h2>
+      <p class="article-date">April 25, 2020</p>
+      
+        
+  <a href="/tags#Debug" >
+    <span class="tag-code">Debug</span>
+  </a>
+
+  <a href="/tags#Flipper" >
+    <span class="tag-code">Flipper</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          Recently, Facebook launched Flipper, A desktop debugging platform for mobile developers.  And there is an embedded network plugin, FlipperKitNetwo ...
+        
+      </div>
+      <a class="more" href="/2020/04/25/How-to-inspect-network-activity-of-your-iOS-applicatoin/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2020/02/05/iOS-Simulator-from-the-Command-Line/">iOS Simulator from the Command Line</a>
+      </h2>
+      <p class="article-date">February 5, 2020</p>
+      
+        
+  <a href="/tags#WWDC" >
+    <span class="tag-code">WWDC</span>
+  </a>
+
+  <a href="/tags#Popular Article" >
+    <span class="tag-code">Popular Article</span>
+  </a>
+
+  <a href="/tags#Debug" >
+    <span class="tag-code">Debug</span>
+  </a>
+
+  <a href="/tags#Simulator" >
+    <span class="tag-code">Simulator</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          xcrun simctl is command utils to control iOS simulator, just like  adb for Android. Sometimes, in CI server script, We need these simulator-integr ...
+        
+      </div>
+      <a class="more" href="/2020/02/05/iOS-Simulator-from-the-Command-Line/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2020/01/21/onViewableItemsChanged/">Understand onViewableItemsChanged in FlatList</a>
+      </h2>
+      <p class="article-date">January 21, 2020</p>
+      
+        
+  <a href="/tags#Popular Article" >
+    <span class="tag-code">Popular Article</span>
+  </a>
+
+  <a href="/tags#Dive into React Native" >
+    <span class="tag-code">Dive into React Native</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          If you want to get viewable items in the [FlatList], you had better take a look at the onViewableItemsChanged prop. For example, suppose you have  ...
+        
+      </div>
+      <a class="more" href="/2020/01/21/onViewableItemsChanged/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2019/07/12/Gaussian-Filter/">Gaussian Filter</a>
+      </h2>
+      <p class="article-date">July 12, 2019</p>
+      
+        
+  <a href="/tags#CV" >
+    <span class="tag-code">CV</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          高斯函数在学术领域运用的非常广泛。 写工程产品的时候，经常用它来去除图片或者视频的噪音，平滑图片, Blur处理。我们今天来看看高斯滤波, Gaussian Filter。1D的高斯函数一维的高斯函数（或者叫正态分布）方程跟图形如下:$$G(x) = \frac{1}{\sqrt{2\pi\ ...
+        
+      </div>
+      <a class="more" href="/2019/07/12/Gaussian-Filter/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2019/07/06/792-Number-of-Matching-Subsequences/">792. Number of Matching Subsequences</a>
+      </h2>
+      <p class="article-date">July 6, 2019</p>
+      
+      <div class="article-summary">
+        
+          题目Solution 1思路：存储 + 二分查找
+
+首先将字符一集对应的下标存储在26 * n的二维数组中。比如对字符串 ‘abcdea’存储为
+
+
+
+
+Char
+Index
+
+
+
+
+0
+[0, 5]
+
+
+1
+[1]
+
+
+2
+[2]
+
+
+3
+[3]
+
+
+4
+[4]
+
+
+…
+
+
+
+25
+
+
+
+ ...
+        
+      </div>
+      <a class="more" href="/2019/07/06/792-Number-of-Matching-Subsequences/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2019/06/14/1011-Capacity-To-Ship-Packages-Within-D-Days/">1011. Capacity To Ship Packages Within D Days</a>
+      </h2>
+      <p class="article-date">June 14, 2019</p>
+      
+        
+  <a href="/tags#Algorithm" >
+    <span class="tag-code">Algorithm</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          题目分析来自Vlad神的解答https://leetcode.com/problems/capacity-to-ship-packages-within-d-days/discuss/256737/C%2B%2B-Binary-Search 
+先定下可能的承重范围: 
+
+最大 maxCap  ...
+        
+      </div>
+      <a class="more" href="/2019/06/14/1011-Capacity-To-Ship-Packages-Within-D-Days/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2019/06/11/LeetCode-1014-Best-Sightseeing-Pair/">LeetCode:1014. Best Sightseeing Pair</a>
+      </h2>
+      <p class="article-date">June 11, 2019</p>
+      
+        
+  <a href="/tags#Algorithm" >
+    <span class="tag-code">Algorithm</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          题目： 1014. Best Sightseeing Pair分析这道题求 the maximum score of a pair of sightseeing spots; score = A[i] + A[j] + i - j)。 是个最优解问题。迭代中，当前idx为i; 要考虑 (0, ...
+        
+      </div>
+      <a class="more" href="/2019/06/11/LeetCode-1014-Best-Sightseeing-Pair/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2019/06/08/%E7%90%86%E8%A7%A3GPS%E5%AE%9A%E4%BD%8D%E5%8E%9F%E7%90%86/">理解手机GPS定位原理</a>
+      </h2>
+      <p class="article-date">June 8, 2019</p>
+      
+      <div class="article-summary">
+        
+          本文取材自 TED教学视频How does your smartphone know your location? - Wilton L. Virgo我们的手机是如何准确定位的呢？ 答案在离我们2000多英里的卫星上。
+第一个问题： 为啥卫星上的时间对GPS定位如此重要？ 因为我们要知道手机 ...
+        
+      </div>
+      <a class="more" href="/2019/06/08/%E7%90%86%E8%A7%A3GPS%E5%AE%9A%E4%BD%8D%E5%8E%9F%E7%90%86/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2019/06/06/714-Best-Time-to-Buy-and-Sell-Stock-with-Transaction-Fee/">714. Best Time to Buy and Sell Stock with Transaction Fee</a>
+      </h2>
+      <p class="article-date">June 6, 2019</p>
+      
+        
+  <a href="/tags#Algorithm" >
+    <span class="tag-code">Algorithm</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          题目分析定义两个状态变量:
+buy_profit: 若i-1天，持有股票，最大利润是 $(buy_profit)
+sell_profit: 若i-1天，卖出股票, 最大利润是 $(sell_profit)
+
+买卖利润情况：最开始: i == 0;  int buy_profit = -pri ...
+        
+      </div>
+      <a class="more" href="/2019/06/06/714-Best-Time-to-Buy-and-Sell-Stock-with-Transaction-Fee/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2019/06/04/LeetCode-413-Arithmetic-Slices/">LeetCode:413. Arithmetic Slices</a>
+      </h2>
+      <p class="article-date">June 4, 2019</p>
+      
+        
+  <a href="/tags#Algorithm" >
+    <span class="tag-code">Algorithm</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          413. Arithmetic Slices这道题，简而言之，求数组里，等差序列的个数。 
+比如123A = [1, 2, 3, 4]有3个等差数列[1, 2, 3], [2, 3, 4], [1, 2, 3, 4]
+题目没有说明A是等差数列，所以也要考虑A不是等差数列，但是其子数组是等差数 ...
+        
+      </div>
+      <a class="more" href="/2019/06/04/LeetCode-413-Arithmetic-Slices/">Read more</a>
+    </article>
+  
+
+  
+    <div class="guide-pager">
+  
+    <a href="/page/2/"><span class="page-arrow">← </span>Prev</a>
+  
+  
+    <a href="/page/4/">Next<span class="page-arrow"> →</span></a>
+  
+</div>
+  
+</main>
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2021 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a target="_blank" rel="noopener" href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      hljs.configure({useBR: true});
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+
+  </body>
+</html>

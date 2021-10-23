@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="RY&#39;s blog">
+  <meta name="keyword" content="hexo-theme, vuejs">
+  
+    <link rel="shortcut icon" type="image/ico" href="[object Object]"/>
+  
+  <title>
+    
+      XMPP(5): 消息 | RY &#39;s Blog
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+    
+<script src="/js/qrious.js"></script>
+
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+  
+    
+<script src="/js/local-search.js"></script>
+
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div>
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>RY 's Blog</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/series/" class="item-link">Series</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/project/" class="item-link">Projects</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+      
+        <li class="menu-item menu-item-search right-list">
+    <a role="button" class="popup-trigger">
+        <i class="fa fa-search fa-fw"></i>
+    </a>
+</li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/series/" class="menu-link">Series</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/project/" class="menu-link">Projects</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+    
+      <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+            <span class="search-icon">
+                <i class="fa fa-search"></i>
+            </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocapitalize="off"
+                    placeholder="Please enter your keyword(s) to search." spellcheck="false"
+                    type="search" class="search-input">
+            </div>
+            <span class="popup-btn-close">
+                <i class="fa fa-times-circle"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+    
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>XMPP(5): 消息</h2>
+  <p class="post-date">2019-04-09</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><h2 id="Message消息体构造"><a href="#Message消息体构造" class="headerlink" title="Message消息体构造"></a>Message消息体构造</h2><p>属性： </p>
+<ol>
+<li>to ：接收方地址， JID </li>
+<li>from ： 发送方， JID</li>
+<li>type <ul>
+<li>chat: 一对一聊天</li>
+<li>error: 出错</li>
+<li>groupchat: 群聊</li>
+<li>headline: 通知、临时消息这种不需要回复的系统消息</li>
+<li>normal: 之前没有聊天的记录， 客户端可以回复的消息</li>
+</ul>
+</li>
+</ol>
+<p>子元素</p>
+<ol>
+<li>body: 消息内容</li>
+</ol>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">message</span></span></span><br><span class="line"><span class="tag">    <span class="attr">from</span>=<span class="string">&#x27;juliet@example.com/balcony&#x27;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">id</span>=<span class="string">&#x27;b4vs9km4&#x27;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">to</span>=<span class="string">&#x27;romeo@example.net&#x27;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">type</span>=<span class="string">&#x27;chat&#x27;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">xml:lang</span>=<span class="string">&#x27;en&#x27;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">body</span>&gt;</span>Wherefore art thou, Romeo?<span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">message</span>&gt;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>Subject: 聊天的话题</li>
+</ol>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">message</span></span></span><br><span class="line"><span class="tag">    <span class="attr">from</span>=<span class="string">&#x27;juliet@example.com/balcony&#x27;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">id</span>=<span class="string">&#x27;c8xg3nf8&#x27;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">to</span>=<span class="string">&#x27;romeo@example.net&#x27;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">type</span>=<span class="string">&#x27;chat&#x27;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">xml:lang</span>=<span class="string">&#x27;en&#x27;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">subject</span>&gt;</span>I implore you!<span class="tag">&lt;/<span class="name">subject</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">body</span>&gt;</span>Wherefore art thou, Romeo?<span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">message</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>Thread: 聊天会话的唯一标识</li>
+</ol>
+<h2 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h2><p>对话： </p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">CC: <span class="tag">&lt;<span class="name">message</span></span></span><br><span class="line"><span class="tag">        <span class="attr">from</span>=<span class="string">&#x27;juliet@example.com/balcony&#x27;</span></span></span><br><span class="line"><span class="tag">        <span class="attr">to</span>=<span class="string">&#x27;romeo@example.net&#x27;</span></span></span><br><span class="line"><span class="tag">        <span class="attr">type</span>=<span class="string">&#x27;chat&#x27;</span></span></span><br><span class="line"><span class="tag">        <span class="attr">xml:lang</span>=<span class="string">&#x27;en&#x27;</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">body</span>&gt;</span>My ears have not yet drunk a hundred words<span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">thread</span>&gt;</span>e0ffe42b28561960c6b12b944a092794b9683a38<span class="tag">&lt;/<span class="name">thread</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">message</span>&gt;</span></span><br><span class="line"></span><br><span class="line">CC: <span class="tag">&lt;<span class="name">message</span></span></span><br><span class="line"><span class="tag">        <span class="attr">from</span>=<span class="string">&#x27;juliet@example.com/balcony&#x27;</span></span></span><br><span class="line"><span class="tag">        <span class="attr">to</span>=<span class="string">&#x27;romeo@example.net&#x27;</span></span></span><br><span class="line"><span class="tag">        <span class="attr">type</span>=<span class="string">&#x27;chat&#x27;</span></span></span><br><span class="line"><span class="tag">        <span class="attr">xml:lang</span>=<span class="string">&#x27;en&#x27;</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">body</span>&gt;</span>Of that tongue&#x27;s utterance, yet I know the sound:<span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">thread</span>&gt;</span>e0ffe42b28561960c6b12b944a092794b9683a38<span class="tag">&lt;/<span class="name">thread</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">message</span>&gt;</span></span><br><span class="line"></span><br><span class="line">CC: <span class="tag">&lt;<span class="name">message</span></span></span><br><span class="line"><span class="tag">        <span class="attr">from</span>=<span class="string">&#x27;juliet@example.com/balcony&#x27;</span></span></span><br><span class="line"><span class="tag">        <span class="attr">to</span>=<span class="string">&#x27;romeo@example.net&#x27;</span></span></span><br><span class="line"><span class="tag">        <span class="attr">type</span>=<span class="string">&#x27;chat&#x27;</span></span></span><br><span class="line"><span class="tag">        <span class="attr">xml:lang</span>=<span class="string">&#x27;en&#x27;</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">body</span>&gt;</span>Art thou not Romeo, and a Montague?<span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">thread</span>&gt;</span>e0ffe42b28561960c6b12b944a092794b9683a38<span class="tag">&lt;/<span class="name">thread</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">message</span>&gt;</span></span><br><span class="line"></span><br><span class="line">UC: <span class="tag">&lt;<span class="name">message</span></span></span><br><span class="line"><span class="tag">        <span class="attr">from</span>=<span class="string">&#x27;romeo@example.net/orchard&#x27;</span></span></span><br><span class="line"><span class="tag">        <span class="attr">to</span>=<span class="string">&#x27;juliet@example.com/balcony&#x27;</span></span></span><br><span class="line"><span class="tag">        <span class="attr">type</span>=<span class="string">&#x27;chat&#x27;</span></span></span><br><span class="line"><span class="tag">        <span class="attr">xml:lang</span>=<span class="string">&#x27;en&#x27;</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">body</span>&gt;</span>Neither, fair saint, if either thee dislike.<span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">thread</span>&gt;</span>e0ffe42b28561960c6b12b944a092794b9683a38<span class="tag">&lt;/<span class="name">thread</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">message</span>&gt;</span></span><br><span class="line"></span><br><span class="line">CC: <span class="tag">&lt;<span class="name">message</span></span></span><br><span class="line"><span class="tag">        <span class="attr">from</span>=<span class="string">&#x27;juliet@example.com/balcony&#x27;</span></span></span><br><span class="line"><span class="tag">        <span class="attr">to</span>=<span class="string">&#x27;romeo@example.net/orchard&#x27;</span></span></span><br><span class="line"><span class="tag">        <span class="attr">type</span>=<span class="string">&#x27;chat&#x27;</span></span></span><br><span class="line"><span class="tag">        <span class="attr">xml:lang</span>=<span class="string">&#x27;en&#x27;</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">body</span>&gt;</span>How cam&#x27;st thou hither, tell me, and wherefore?<span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">thread</span>&gt;</span>e0ffe42b28561960c6b12b944a092794b9683a38<span class="tag">&lt;/<span class="name">thread</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">message</span>&gt;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>在<a target="_blank" rel="noopener" href="https://github.com/xmppjs/xmpp.js/">xmpp.js</a>中，客户端与服务端建立了WebSocket长链接后，发消息，需要自己构造消息体</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> &#123;client, xml&#125; = <span class="built_in">require</span>(<span class="string">&#x27;@xmpp/client&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> xmpp = client(&#123;</span><br><span class="line">  <span class="attr">service</span>: <span class="string">&#x27;ws://localhost:5280/xmpp-websocket&#x27;</span>,</span><br><span class="line">  <span class="attr">domain</span>: <span class="string">&#x27;localhost&#x27;</span>,</span><br><span class="line">  <span class="attr">resource</span>: <span class="string">&#x27;example&#x27;</span>,</span><br><span class="line">  <span class="attr">username</span>: <span class="string">&#x27;username&#x27;</span>,</span><br><span class="line">  <span class="attr">password</span>: <span class="string">&#x27;password&#x27;</span>,</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"> <span class="keyword">const</span> message = xml(</span><br><span class="line">    <span class="string">&#x27;message&#x27;</span>,</span><br><span class="line">    &#123;<span class="attr">type</span>: <span class="string">&#x27;chat&#x27;</span>, <span class="attr">to</span>: address&#125;,</span><br><span class="line">    xml(<span class="string">&#x27;body&#x27;</span>, <span class="string">&#x27;hello world&#x27;</span>)</span><br><span class="line">  )</span><br><span class="line">  <span class="keyword">await</span> xmpp.send(message)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>如果收到消息会走到一个回调里, chat-sdk就可以根据type字段来分发。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">self.xmppClient.on(<span class="string">&#x27;stanza&#x27;</span>, <span class="function"><span class="keyword">function</span> (<span class="params">stanza: any</span>) </span>&#123;</span><br><span class="line">    Utils.DLog(<span class="string">&#x27;[Chat] RECV:&#x27;</span>, stanza.toString());</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Detect typeof incoming stanza</span></span><br><span class="line"><span class="comment">     * and fire the Listener</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">if</span> (stanza.is(<span class="string">&#x27;presence&#x27;</span>)) &#123;</span><br><span class="line">        self._onPresence(stanza);</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (stanza.is(<span class="string">&#x27;iq&#x27;</span>)) &#123;</span><br><span class="line">        self._onIQ(stanza);</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (stanza.is(<span class="string">&#x27;message&#x27;</span>)) &#123;</span><br><span class="line">        <span class="keyword">if</span> (stanza.attrs.type === <span class="string">&#x27;headline&#x27;</span>) &#123;</span><br><span class="line">            self._onSystemMessageListener(stanza);</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (stanza.attrs.type === <span class="string">&#x27;error&#x27;</span>) &#123;</span><br><span class="line">            self._onMessageErrorListener(stanza);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            self._onMessage(stanza);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<ul>
+<li>ref: <a target="_blank" rel="noopener" href="https://xmpp.org/rfcs/rfc6121.html#message">https://xmpp.org/rfcs/rfc6121.html#message</a></li>
+</ul>
+</section>
+    <!-- Tags START -->
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/2019/04/03/JWT-%E5%85%A5%E9%97%A8/">
+        <span class="nav-arrow">← </span>
+        
+          JWT 入门
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/2019/04/10/XMPP-6-XMPP-%E6%B6%88%E6%81%AF%E5%AD%98%E5%82%A8%E4%B8%8E%E6%8B%89%E5%8F%96%E5%8E%86%E5%8F%B2%E6%B6%88%E6%81%AF/">
+        
+          XMPP(6):XMPP-消息存储与拉取历史消息
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+  
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">scan qr code and share this article</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Utterances START -->
+      <div id="utterances"></div>
+      <script src="https://utteranc.es/client.js"
+        repo="null"
+        issue-term="pathname"
+        theme="github-light"
+        crossorigin="anonymous"
+        async></script>    
+      <!-- Utterances END -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Message%E6%B6%88%E6%81%AF%E4%BD%93%E6%9E%84%E9%80%A0"><span class="toc-nav-text">Message消息体构造</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Example"><span class="toc-nav-text">Example</span></a></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://suelan.github.io/2019/04/09/XMPP-5-消息/';
+    var banner = 'undefined'
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+    // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', '/css/images/error_icon.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== '/css/images/error_icon.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+  })();
+</script>
+
+
+  <script>
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+  </script>
+
+
+
+
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2021 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a target="_blank" rel="noopener" href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      hljs.configure({useBR: true});
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+
+  </body>
+</html>

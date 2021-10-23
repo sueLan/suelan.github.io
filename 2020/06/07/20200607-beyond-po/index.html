@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="RY&#39;s blog">
+  <meta name="keyword" content="hexo-theme, vuejs">
+  
+    <link rel="shortcut icon" type="image/ico" href="[object Object]"/>
+  
+  <title>
+    
+      Beyond &quot;po&quot; | RY &#39;s Blog
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+    
+<script src="/js/qrious.js"></script>
+
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+  
+    
+<script src="/js/local-search.js"></script>
+
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div>
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>RY 's Blog</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/series/" class="item-link">Series</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/project/" class="item-link">Projects</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+      
+        <li class="menu-item menu-item-search right-list">
+    <a role="button" class="popup-trigger">
+        <i class="fa fa-search fa-fw"></i>
+    </a>
+</li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/series/" class="menu-link">Series</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/project/" class="menu-link">Projects</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+    
+      <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+            <span class="search-icon">
+                <i class="fa fa-search"></i>
+            </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocapitalize="off"
+                    placeholder="Please enter your keyword(s) to search." spellcheck="false"
+                    type="search" class="search-input">
+            </div>
+            <span class="popup-btn-close">
+                <i class="fa fa-times-circle"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+    
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>Beyond "po"</h2>
+  <p class="post-date">2020-06-07</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><blockquote>
+<p><a target="_blank" rel="noopener" href="https://developer.apple.com/videos/play/wwdc2019/429">https://developer.apple.com/videos/play/wwdc2019/429</a> </p>
+</blockquote>
+<h2 id="po-command"><a href="#po-command" class="headerlink" title="po command"></a>po command</h2><p>We usually use <code>po</code> to print object description, which does the same job as <code>expression --object-description</code>. </p>
+<h3 id="Alias-the-command"><a href="#Alias-the-command" class="headerlink" title="Alias the command"></a>Alias the command</h3><p>We can also use <code>command alias</code> to custom it. like </p>
+<p><code>command alias my_po expression --object-description</code> <img src="15902187135968.jpg" alt="img"></p>
+<h3 id="Custom-the-output"><a href="#Custom-the-output" class="headerlink" title="Custom the output"></a>Custom the output</h3><p>We can add <code>debugDescription</code> to custom the output when using <code>po</code></p>
+<p><img src="image-20200607171902758.png" alt="image-20200607171902758"></p>
+<h3 id="Others-jobs-po-can-do"><a href="#Others-jobs-po-can-do" class="headerlink" title="Others jobs po can do"></a>Others jobs po can do</h3><p><img src="image-20200607172607792.png" alt="image-20200607172607792"></p>
+<h3 id="What-LLDB-does-behind-the-Po-command"><a href="#What-LLDB-does-behind-the-Po-command" class="headerlink" title="What LLDB does behind the Po command"></a>What LLDB does behind the <code>Po</code> command</h3><p><img src="15902307367967.jpg?lastModify=1591521218" alt="img"></p>
+<h2 id="p-command"><a href="#p-command" class="headerlink" title="p command"></a>p command</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">p is a alias of `expression</span><br></pre></td></tr></table></figure>
+<p><img src="15902310620901.jpg?lastModify=1591521218" alt="-w398"></p>
+<p>The result of LLDB is given a increasing name, such as <code>$R1</code> and <code>$R2</code> </p>
+<p><img src="15902311269458.jpg?lastModify=1591521218" alt="-w509"></p>
+<h2 id="Dynamic-type-resolution"><a href="#Dynamic-type-resolution" class="headerlink" title="Dynamic type resolution"></a>Dynamic type resolution</h2><p><img src="15902347284185.jpg?lastModify=1591521218" alt="img"></p>
+<blockquote>
+<p>In Swift, the static representation of a type in the source code and the dynamic type at the runtime, aren’t necessarily the same. For example, a variable might be declared using a protocol of this type. In this example, the static type of <code>cruise</code> is <code>Activity</code>. But at runtime, the variable will have an instance of type <code>Trip</code> which is the dynamic time. If we print the value of <code>cruise</code>, we get back an object of type <code>Trip</code> because LLDB retell results metadata to display the most accurate type for a given variable at a given program point. This is what we call <code>dynamic type resolution</code>.</p>
+</blockquote>
+<p>With the p-command, dynamic type resolution is <code>only</code> performed on the result of the <code>expression</code>.</p>
+<p>This happens because if you remember, LLDB compiles code where running p and the only type it sees is the one in your source code, the static one. It’s the same thing as typing the expression <code>cruise.name</code> in your source code. The static compiler will reject it with an error.  <img src="15902348043124.jpg?lastModify=1591521218" alt="-w1104"></p>
+<p>If you want to evaluate the expression without errors, you need to first cast the object explicitly to its dynamic type and then access the field on the result. This is true both for the debugger and your source code.</p>
+<p><img src="15902348340793.jpg?lastModify=1591521218" alt="img"></p>
+<h3 id="“p”-Under-the-Hood"><a href="#“p”-Under-the-Hood" class="headerlink" title="“p” Under the Hood"></a>“p” Under the Hood</h3><p><img src="15902348740856.jpg?lastModify=1591521218" alt="img"></p>
+<h3 id="Formatter"><a href="#Formatter" class="headerlink" title="Formatter"></a>Formatter</h3><p>After it performed <code>dynamic type resolution</code> on the result, LLDB passes the resulting object to the <code>formatter subsystem</code> which is the part of LLDB responsible for printing a human readable description of objects.</p>
+<p><img src="15902349355474.jpg?lastModify=1591521218" alt="-w850"></p>
+<h2 id="v-Command"><a href="#v-Command" class="headerlink" title="v Command"></a>v Command</h2><ul>
+<li>The output of <code>v</code> is exactly the same as <code>p</code> as it also relies on the formatter we just described.</li>
+<li><code>v</code> is just an alias we introduced in Xcode 10.2 for the <code>frame</code> variable command</li>
+<li>The v-command doesn’t compile and execute code at all which makes it very fast.</li>
+</ul>
+<p><img src="15902351819724.jpg?lastModify=1591521218" alt="img"></p>
+<h3 id="v-under-the-hood"><a href="#v-under-the-hood" class="headerlink" title="v under the hood"></a>v under the hood</h3><p><img src="15902354049114.jpg?lastModify=1591521218" alt="img"></p>
+<h3 id="frame-command"><a href="#frame-command" class="headerlink" title="frame command"></a>frame command</h3><p><img src="15902352051371.jpg?lastModify=1591521218" alt="-w799"></p>
+<h2 id="po-vs-p-vs-v"><a href="#po-vs-p-vs-v" class="headerlink" title="po vs p vs v"></a>po vs p vs v</h2><p><img src="15902354519154.jpg?lastModify=1591521218" alt="-w1306"></p>
+</section>
+    <!-- Tags START -->
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <a href="/tags#Debug" >
+    <span class="tag-code">Debug</span>
+  </a>
+
+  <a href="/tags#LLDB" >
+    <span class="tag-code">LLDB</span>
+  </a>
+
+      </div>
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/2020/05/15/20200515-react-native-anchor-point/">
+        <span class="nav-arrow">← </span>
+        
+          Anchor point for 3D Transform in React Native
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/2020/06/07/20200607-Advanced-debug-in-Xcode-and-LLDB/">
+        
+          Advanced debug in Xcode and LLDB
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+  
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">scan qr code and share this article</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Utterances START -->
+      <div id="utterances"></div>
+      <script src="https://utteranc.es/client.js"
+        repo="null"
+        issue-term="pathname"
+        theme="github-light"
+        crossorigin="anonymous"
+        async></script>    
+      <!-- Utterances END -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#po-command"><span class="toc-nav-text">po command</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Alias-the-command"><span class="toc-nav-text">Alias the command</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Custom-the-output"><span class="toc-nav-text">Custom the output</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Others-jobs-po-can-do"><span class="toc-nav-text">Others jobs po can do</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#What-LLDB-does-behind-the-Po-command"><span class="toc-nav-text">What LLDB does behind the Po command</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#p-command"><span class="toc-nav-text">p command</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Dynamic-type-resolution"><span class="toc-nav-text">Dynamic type resolution</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E2%80%9Cp%E2%80%9D-Under-the-Hood"><span class="toc-nav-text">“p” Under the Hood</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Formatter"><span class="toc-nav-text">Formatter</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#v-Command"><span class="toc-nav-text">v Command</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#v-under-the-hood"><span class="toc-nav-text">v under the hood</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#frame-command"><span class="toc-nav-text">frame command</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#po-vs-p-vs-v"><span class="toc-nav-text">po vs p vs v</span></a></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://suelan.github.io/2020/06/07/20200607-beyond-po/';
+    var banner = 'undefined'
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+    // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', '/css/images/error_icon.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== '/css/images/error_icon.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+  })();
+</script>
+
+
+  <script>
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+  </script>
+
+
+
+
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2021 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a target="_blank" rel="noopener" href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      hljs.configure({useBR: true});
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+
+  </body>
+</html>

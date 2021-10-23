@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="RY&#39;s blog">
+  <meta name="keyword" content="hexo-theme, vuejs">
+  
+    <link rel="shortcut icon" type="image/ico" href="[object Object]"/>
+  
+  <title>
+    
+      How Image Loader and Cache work in React Native | RY &#39;s Blog
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+    
+<script src="/js/qrious.js"></script>
+
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+  
+    
+<script src="/js/local-search.js"></script>
+
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div>
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>RY 's Blog</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/series/" class="item-link">Series</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/project/" class="item-link">Projects</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+      
+        <li class="menu-item menu-item-search right-list">
+    <a role="button" class="popup-trigger">
+        <i class="fa fa-search fa-fw"></i>
+    </a>
+</li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/series/" class="menu-link">Series</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/project/" class="menu-link">Projects</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+    
+      <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+            <span class="search-icon">
+                <i class="fa fa-search"></i>
+            </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocapitalize="off"
+                    placeholder="Please enter your keyword(s) to search." spellcheck="false"
+                    type="search" class="search-input">
+            </div>
+            <span class="popup-btn-close">
+                <i class="fa fa-times-circle"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+    
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>How Image Loader and Cache work in React Native</h2>
+  <p class="post-date">2020-12-24</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><p> In react native, it is so intuitive to display different types of images. The <a target="_blank" rel="noopener" href="https://reactnative.dev/docs/image">Image Component</a> can display network images, static resources, temporary local images, and images from local disk. </p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;Image style=&#123;styles.footerLastestImage&#125; source=&#123;&#123; <span class="attr">uri</span>: latestImage &#125;&#125; /&gt;</span><br></pre></td></tr></table></figure>
+<p>However, there are actually lots of stories behind this simple line of code.<br>Today, I would like to explore image loader and image cache in react native, and talk something about how they work under the hood. After reading this, you will find some limits in the image component shipped from react-native and may want to use other tech solutions for better image display. </p>
+<h2 id="Overview-of-React-Image-module"><a href="#Overview-of-React-Image-module" class="headerlink" title="Overview of React/Image module"></a>Overview of React/Image module</h2><p>Let me begin with an activity diagram about <strong>React/Image</strong> module.</p>
+<p><img src="ActivityReactNative.jpg" alt=""></p>
+<p>There are several classes playing important roles in image render and cache in react native. <strong>RCTImageView</strong> is the iOS native implementation for <strong>Image component</strong>. It inherits <code>RCTView</code> and hold a <code>UIImageView</code> to render the image. <code>RCTImageView</code> is created by <code>RCTUIManager</code>. The <code>UIImageView</code> size comes from the style prop in <code>Image</code> component in JavaScript side or calculated by <code>Yoga</code>. When setting property for Image component in RN or other events triggering the image loading, <code>RCTImageView</code> calls <code>RCTImageLoader</code> to get the cached image or download image. <code>RCTImageLoader</code> is the controller for the workflow of image downloading, decoding. It depends on <code>RCTNetwork</code> to fetch the image remotely.  Before trying to download an image, <code>RCTImageLoader</code> will try to check <a target="_blank" rel="noopener" href="https://github.com/facebook/react-native/blob/1ee406b9ccbecc52dff3e77d65c6d9b4837e6dab/Libraries/Image/RCTImageLoader.mm#L606">if there is cached image</a> and to reuse the cached image. So here comes <code>RCTImageCache</code>, which is for Image Cache in react native iOS. </p>
+<h2 id="RCTImageCache"><a href="#RCTImageCache" class="headerlink" title="RCTImageCache"></a><strong>RCTImageCache</strong></h2><p>First of all, keep in mind that <strong>RCTImageCache</strong> uses <a target="_blank" rel="noopener" href="https://developer.apple.com/documentation/foundation/nscache">NSCache</a> to cache images. <code>NSCache</code> object used <code>RCTImageCache</code> has only <a target="_blank" rel="noopener" href="https://github.com/facebook/react-native/blob/00456211e591930f28a08356141fc8bec52fe3e5/Libraries/Image/RCTImageCache.m#L41">20MB</a> cache capacity in React Native iOS.</p>
+<h3 id="How-images-added-into-NSCache"><a href="#How-images-added-into-NSCache" class="headerlink" title="How images added into NSCache?"></a>How images added into NSCache?</h3><h4 id="1-expiration-time"><a href="#1-expiration-time" class="headerlink" title="1. expiration time"></a>1. expiration time</h4><p>After successfully downloading the images, <strong>RCTImageLoader</strong> decodes the image using <a target="_blank" rel="noopener" href="https://github.com/facebook/react-native/blob/9500eb8867d25896b1611903a64fac8d81984bf6/Libraries/Image/RCTImageLoader.mm#L935">decodeImageData:size:scale:clipped:resizeMode:completionBlock</a>, then it <a target="_blank" rel="noopener" href="https://github.com/facebook/react-native/blob/00456211e591930f28a08356141fc8bec52fe3e5/Libraries/Image/RCTImageLoader.mm#L806">adds the decoded image to cache</a>. In this step, it extracts the <strong>expiration time</strong> from the Http Response header. See more in the diagram to see how it get the expire time. The <strong>max-age</strong> is the top priority to decide expiration time for an image here. </p>
+<p><img src="stale_time.png" style="zoom:50%;" /></p>
+<h4 id="2-The-cost-of-image-in-NSCache"><a href="#2-The-cost-of-image-in-NSCache" class="headerlink" title="2. The cost of image in NSCache"></a>2. The cost of image in NSCache</h4><p>Another key point is that <strong>RCTImageCache</strong> uses <a target="_blank" rel="noopener" href="https://developer.apple.com/documentation/foundation/nscache/1416399-setobject?language=objc"><code>setObject:forKey:cost:</code> API</a>. </p>
+<blockquote>
+<p>The <code>cost</code> value is used to compute a sum encompassing the costs of all the objects in the cache. When memory is limited or when the total cost of the cache eclipses the maximum allowed total cost, the cache could begin an eviction process to remove some of its elements.</p>
+</blockquote>
+<h4 id="3-using-Bitmap-size-as-cost"><a href="#3-using-Bitmap-size-as-cost" class="headerlink" title="3. using Bitmap size as cost"></a>3. using Bitmap size as cost</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">const</span> NSUInteger RCTMaxCachableDecodedImageSizeInBytes = <span class="number">2097152</span>; <span class="comment">// 2 MB</span></span><br><span class="line"></span><br><span class="line">- (<span class="keyword">void</span>)addImageToCache:(UIImage *)image</span><br><span class="line">                 forKey:(NSString *)cacheKey</span><br><span class="line">&#123;</span><br><span class="line">  <span class="keyword">if</span> (!image) &#123;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// calculate the bitmap size </span></span><br><span class="line">  NSInteger bytes = image.reactDecodedImageBytes;</span><br><span class="line">  <span class="comment">// checks if the size of the decoded image bigger than 2MB. Any decoded image occupying more than 2MB memory won&#x27;t be added into **NSCache**.  </span></span><br><span class="line">  <span class="keyword">if</span> (bytes &lt;= RCTMaxCachableDecodedImageSizeInBytes) &#123;</span><br><span class="line">    [self-&gt;_decodedImageCache setObject:image</span><br><span class="line">                                 forKey:cacheKey</span><br><span class="line">                                   cost:bytes];</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Before adding an image into the <strong>NSCache</strong>. <strong>RCTImageCache</strong> firstly calculate the bitmap size using the following formula</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> NSInteger <span class="title">RCTImageBytesForImage</span><span class="params">(UIImage *image)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  NSInteger singleImageBytes = image.size.width * image.size.height * image.scale * image.scale * <span class="number">4</span>;</span><br><span class="line">  <span class="keyword">return</span> image.images ? image.images.count * singleImageBytes : singleImageBytes;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>For a <code>RGBA</code> format image, each pixel needs 4 bytes to represent the RGBA value, which contains 4 channels. We know that the value for each channel varies from 0 to 255.  So we need 8 bits, or 1 bytes to store it.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">A   R   G   B   A   R   G   B   A   R   G   B  </span><br><span class="line">| pixel 0       | pixel 1       | pixel 2  </span><br><span class="line">0  233  2  100  4  155 255  7   8   9   10  11</span><br></pre></td></tr></table></figure>
+<p>Beside, Image.scale is the scale factor. Multiplying the logical size of the image (stored in the size property) by value, you get the dimensions of the image in pixels. So for the <code>310*165</code> <code>UIImage</code> object, it totally uses <code>310*scale*165*scale*4</code> pixels. </p>
+<p>An important point here is that the <strong>reactDecodedImageBytes</strong> isn’t always equal to the true bitmap size in memory after decoding images. Because <strong>RCTImageLoader</strong> will take the size and the resize mode of the <strong>UIImageView</strong> into consideration. <a target="_blank" rel="noopener" href="https://github.com/facebook/react-native/blob/00456211e591930f28a08356141fc8bec52fe3e5/Libraries/Image/RCTImageUtils.m#L256">Source code here.</a>. When decoding, it downscale the downloaded image and display the downsized image to fit the image view size. This means <code>reactDecodedImageBytes</code> used as image cost in NSCache could be bigger than the actual size of finally displaying image. </p>
+<p>So briefly speaking, for each image added into the <code>NSCache</code>, its cost is the bitmap size instead of the file size. <code>JPG</code> or <code>PNG</code> is kind of compressed format, which has much smaller size. Remember <code>NSCache</code> has <code>20MB</code> <strong>totalCostLimit</strong> in react native. In addition, bitmap size is much bigger than file size. It is so easy to exceed the totalCostLimit for <code>NSCache</code>, and then to trigger the eviction process to remove some of the images. </p>
+<h4 id="4-The-unknown-storage-and-eviction-policy-in-NSCache"><a href="#4-The-unknown-storage-and-eviction-policy-in-NSCache" class="headerlink" title="4. The unknown storage and eviction policy in NSCache"></a>4. The unknown storage and eviction policy in NSCache</h4><p>In the official doc  <a target="_blank" rel="noopener" href="https://developer.apple.com/documentation/foundation/nscache">NSCache</a> , it says <code>NSCache</code> is to temporarily store transient key-value pairs, and doesn’t mention whether it uses <code>disk cache</code> or not. I added a log to see if it get <code>image</code> from the <code>NSCache</code> when launching my App without <code>network</code>. It does get a few cached images. So far, I think we can say that <code>NSCache</code> does have <code>disk cache</code> , but the proportion of disk cache is so small that we got a few cached images and the hit rate doesn’t improve a lot even when I improve the <code>totalCostLimit</code> of NSCache. </p>
+<p>So if your react native app is kind of image-heavy app. Sometimes, when you are in the scroll view full of displaying images. When you scroll down, then scroll back, you can see it fetching and decoding images, even if some of them were rendered just now but moved out of the screen later. Because in this case, the <code>NSCache</code> uses up its cache capacity and keep evicting images. Moreover, this eviction process isn’t in a guaranteed order. Seems it doesn’t simply apply <code>LRU</code> policy here. </p>
+<h3 id="How-to-get-images-from-cache"><a href="#How-to-get-images-from-cache" class="headerlink" title="How to get images from cache"></a>How to get images from cache</h3><p>The method to get images from <code>NSCache</code> looks relatively simple. <a target="_blank" rel="noopener" href="https://github.com/facebook/react-native/blob/00456211e591930f28a08356141fc8bec52fe3e5/Libraries/Image/RCTImageCache.m#L79"> imageForUrl:size:scale:resizeMode</a>. </p>
+<ol>
+<li>get the key for cached image by using <strong>url, size, scale, resizeMode.</strong> As long as these 4 factors not changed next time, the key for the cached image won’t be changed, and you can reuse this image</li>
+<li>check if the cached image is expired. If it is, remove the image from the cache. </li>
+</ol>
+<h3 id="How-to-replace-RCTImageCache-with-your-own-cache-implementation"><a href="#How-to-replace-RCTImageCache-with-your-own-cache-implementation" class="headerlink" title="How to replace RCTImageCache with your own cache implementation"></a>How to replace RCTImageCache with your own cache implementation</h3><p>Let your own cache implementation conform <code>RCTImageCache</code> protocol. And then <code>setImageCache</code> in <code>RCTImageLoader</code>.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Allows developers to set their own caching implementation for</span></span><br><span class="line"><span class="comment"> * decoded images as long as it conforms to the RCTImageCache</span></span><br><span class="line"><span class="comment"> * protocol. This method should be called in bridgeDidInitializeModule.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">- (<span class="keyword">void</span>)setImageCache:(id&lt;RCTImageCache&gt;)cache;</span><br></pre></td></tr></table></figure>
+<h2 id="Concurrent-Loading-and-Decoding-Tasks"><a href="#Concurrent-Loading-and-Decoding-Tasks" class="headerlink" title="Concurrent Loading and Decoding Tasks"></a>Concurrent Loading and Decoding Tasks</h2><p><code>RCTImageLoader</code> maintains queues to schedule image loading and decoding tasks.  The following property controls the number of concurrent tasks for image loading and decoding. </p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * The maximum number of concurrent image loading tasks. Loading and decoding</span></span><br><span class="line"><span class="comment"> * images can consume a lot of memory, so setting this to a higher value may</span></span><br><span class="line"><span class="comment"> * cause memory to spike. If you are seeing out-of-memory crashes, try reducing</span></span><br><span class="line"><span class="comment"> * this value.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">@<span class="built_in">property</span> (nonatomic, assign) NSUInteger maxConcurrentLoadingTasks;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * The maximum number of concurrent image decoding tasks. Decoding large</span></span><br><span class="line"><span class="comment"> * images can be especially CPU and memory intensive, so if your are decoding a</span></span><br><span class="line"><span class="comment"> * lot of large images in your app, you may wish to adjust this value.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">@<span class="built_in">property</span> (nonatomic, assign) NSUInteger maxConcurrentDecodingTasks;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Decoding large images can use a lot of memory, and potentially cause the app</span></span><br><span class="line"><span class="comment"> * to crash. This value allows you to throttle the amount of memory used by the</span></span><br><span class="line"><span class="comment"> * decoder independently of the number of concurrent threads. This means you can</span></span><br><span class="line"><span class="comment"> * still decode a lot of small images in parallel, without allowing the decoder</span></span><br><span class="line"><span class="comment"> * to try to decompress multiple huge images at once. Note that this value is</span></span><br><span class="line"><span class="comment"> * only a hint, and not an indicator of the total memory used by the app.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">@<span class="built_in">property</span> (nonatomic, assign) NSUInteger maxConcurrentDecodingBytes;</span><br></pre></td></tr></table></figure>
+</section>
+    <!-- Tags START -->
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <a href="/tags#Popular Article" >
+    <span class="tag-code">Popular Article</span>
+  </a>
+
+  <a href="/tags#Dive into React Native" >
+    <span class="tag-code">Dive into React Native</span>
+  </a>
+
+      </div>
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/2020/12/23/20201223-what-is-behind-react-native-module/">
+        <span class="nav-arrow">← </span>
+        
+          Dive into react native module
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/2021/02/13/20210213-dive-into-runloop-ios/">
+        
+          Dive into CFRunLoop
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+  
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">scan qr code and share this article</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Utterances START -->
+      <div id="utterances"></div>
+      <script src="https://utteranc.es/client.js"
+        repo="null"
+        issue-term="pathname"
+        theme="github-light"
+        crossorigin="anonymous"
+        async></script>    
+      <!-- Utterances END -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Overview-of-React-Image-module"><span class="toc-nav-text">Overview of React&#x2F;Image module</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#RCTImageCache"><span class="toc-nav-text">RCTImageCache</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#How-images-added-into-NSCache"><span class="toc-nav-text">How images added into NSCache?</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#1-expiration-time"><span class="toc-nav-text">1. expiration time</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#2-The-cost-of-image-in-NSCache"><span class="toc-nav-text">2. The cost of image in NSCache</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#3-using-Bitmap-size-as-cost"><span class="toc-nav-text">3. using Bitmap size as cost</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#4-The-unknown-storage-and-eviction-policy-in-NSCache"><span class="toc-nav-text">4. The unknown storage and eviction policy in NSCache</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#How-to-get-images-from-cache"><span class="toc-nav-text">How to get images from cache</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#How-to-replace-RCTImageCache-with-your-own-cache-implementation"><span class="toc-nav-text">How to replace RCTImageCache with your own cache implementation</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Concurrent-Loading-and-Decoding-Tasks"><span class="toc-nav-text">Concurrent Loading and Decoding Tasks</span></a></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://suelan.github.io/2020/12/24/20201224-How-Image-Loader-and-Cache-work-in-React-Native/';
+    var banner = 'undefined'
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+    // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', '/css/images/error_icon.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== '/css/images/error_icon.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+  })();
+</script>
+
+
+  <script>
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+  </script>
+
+
+
+
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2021 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a target="_blank" rel="noopener" href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      hljs.configure({useBR: true});
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+
+  </body>
+</html>
