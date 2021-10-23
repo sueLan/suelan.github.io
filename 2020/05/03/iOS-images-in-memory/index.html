@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="RY&#39;s blog">
+  <meta name="keyword" content="hexo-theme, vuejs">
+  
+    <link rel="shortcut icon" type="image/ico" href="[object Object]"/>
+  
+  <title>
+    
+      iOS images in memory | RY &#39;s Blog
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+    
+<script src="/js/qrious.js"></script>
+
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+  
+    
+<script src="/js/local-search.js"></script>
+
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div>
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>RY 's Blog</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/series/" class="item-link">Series</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/project/" class="item-link">Projects</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+      
+        <li class="menu-item menu-item-search right-list">
+    <a role="button" class="popup-trigger">
+        <i class="fa fa-search fa-fw"></i>
+    </a>
+</li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/series/" class="menu-link">Series</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/project/" class="menu-link">Projects</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+    
+      <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+            <span class="search-icon">
+                <i class="fa fa-search"></i>
+            </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocapitalize="off"
+                    placeholder="Please enter your keyword(s) to search." spellcheck="false"
+                    type="search" class="search-input">
+            </div>
+            <span class="popup-btn-close">
+                <i class="fa fa-times-circle"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+    
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>iOS images in memory</h2>
+  <p class="post-date">2020-05-03</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><blockquote>
+<p>Notes for <a target="_blank" rel="noopener" href="https://developer.apple.com/videos/play/wwdc2018/219">wwdc2018/219</a> and <a target="_blank" rel="noopener" href="https://developer.apple.com/videos/play/wwdc2018/416/">wwdc2018/416</a></p>
+</blockquote>
+<h2 id="Why-memory-and-CPU-matter"><a href="#Why-memory-and-CPU-matter" class="headerlink" title="Why memory and CPU matter?"></a>Why memory and CPU matter?</h2><p><img src="media/15884695669510/15888626848016.jpg" alt=""></p>
+<ul>
+<li>It is obvious that too much usage of <code>CPU</code> has negative impact on <code>battery life</code> and <code>responsiveness</code>.  </li>
+<li>But, if you application consumes too much memory, that causes more <code>CPU utilization</code>, which have negative effects on <code>battery life</code> and <code>performance</code>.</li>
+</ul>
+<h2 id="Basic-Concepts"><a href="#Basic-Concepts" class="headerlink" title="Basic Concepts"></a>Basic Concepts</h2><h3 id="Buffers"><a href="#Buffers" class="headerlink" title="Buffers"></a>Buffers</h3><blockquote>
+<p>Buffer is contiguous region of memory.<br>It is often viewed as sequence of elements of the same sizes, usually of the same internal construction. </p>
+</blockquote>
+<p><img src="media/15884695669510/15888596565806.jpg" alt="-w354"></p>
+<h4 id="Image-Buffers"><a href="#Image-Buffers" class="headerlink" title="Image Buffers"></a>Image Buffers</h4><blockquote>
+<p>One kind of the important buffers is the <code>Image Buffer</code>, which holds the <code>in-memory representation of some image</code>. </p>
+</blockquote>
+<p>Each element in image buffers describes the color and the transparency of single pixel in our image. Constantly, the buffer size is proportional to image size. For example, in the image with sRBG format, each 32 bits describes the color and transparency of a single pixel. <code>The buffer size =  4 byte  x image_width x image_height</code></p>
+<p><img src="media/15884695669510/15888600604360.jpg" alt="-w452"></p>
+<h4 id="Frame-buffer"><a href="#Frame-buffer" class="headerlink" title="Frame buffer"></a>Frame buffer</h4><blockquote>
+<p>The frame buffer is what holds the actual rendered output of your application.  </p>
+</blockquote>
+<p>As your application updates its view hierarchy UIKit will render the application’s <code>window</code> and all of its <code>subviews</code> into the <code>frame buffer</code>. And that frame buffer provides per pixel color information that the <code>display hardware</code> will read in order to illuminate the pixels on the display.</p>
+<p><a target="_blank" rel="noopener" href="https://developer.apple.com/library/archive/documentation/WindowsViews/Conceptual/ViewPG_iPhoneOS/WindowsandViews/WindowsandViews.html#//apple_ref/doc/uid/TP40009503-CH2-SW10">Related resource: The View Drawing Cycle</a></p>
+<p>The pipeline is like this: </p>
+<p><img src="image_graphic.gif" alt=""></p>
+<h4 id="Data-Buffer"><a href="#Data-Buffer" class="headerlink" title="Data Buffer"></a>Data Buffer</h4><blockquote>
+<p>a data buffer is just a buffer that contains a sequence of bytes. </p>
+</blockquote>
+<p>If we’ve downloaded images from the network or we’ve <code>loaded</code> them from disk. A data buffer that contains an image file, typically, begins with some metadata describing the size of the image that’s stored in that data buffer.</p>
+<p><img src="media/15884695669510/15888655020412.jpg" alt="-w397"></p>
+<ul>
+<li>Store contents of an <code>image file</code> in memory. The <code>size</code> is the same as that in the image file in the disk. </li>
+<li>Metadata describing dimensions of image</li>
+<li>Image itself <code>encoded</code> as JPEG, PNG, or other (usually compressed) form</li>
+<li>Bytes <code>do not</code>directly describe pixels</li>
+</ul>
+<h3 id="The-Pipeline-in-Action"><a href="#The-Pipeline-in-Action" class="headerlink" title="The Pipeline in Action"></a>The Pipeline in Action</h3><p><img src="media/15884695669510/15890026431784.jpg" alt="-w834"></p>
+<h2 id="Consequences-of-Excessive-Memory-Usage"><a href="#Consequences-of-Excessive-Memory-Usage" class="headerlink" title="Consequences of Excessive Memory Usage"></a>Consequences of Excessive Memory Usage</h2><ul>
+<li>Increased fragmentation. <ul>
+<li><code>fragment</code> : The large allocation that is in your application’s address space could force other related content apart from content that it wants to reference.</li>
+</ul>
+</li>
+<li>Poor locality of reference</li>
+<li><p>System starts <code>compressing</code> memory Process termination</p>
+<ul>
+<li>Eventually, if your application starts accumulating a lot of memory usage the operating system will step in and start transparently <code>compressing</code> the content of physical memory. Now, the CPU needs to be involved in this operation so in addition to any CPU usage in your own application. You could be <code>increasing global CPU usage</code> that you have no control over. Eventually, your application could start consuming so much physical memory that the OS needs to start <code>terminating processes</code>. And it’ll start with background processes of low priority.</li>
+</ul>
+</li>
+<li><p>You app may be terminated by the system</p>
+</li>
+<li>Cause <code>CPU peak</code>, and then has negative impact on battery life and responsiveness.</li>
+</ul>
+<h2 id="Decoding"><a href="#Decoding" class="headerlink" title="Decoding"></a>Decoding</h2><blockquote>
+<p>Decoding is an operation that will convert the JPEG or PNG or other encoded image data into per pixel image information. </p>
+</blockquote>
+<ul>
+<li><p>CPU-intensive process</p>
+</li>
+<li><p>The memory used for the image buffer is proportional to original image size, not view size. </p>
+</li>
+<li>There are persistent large memory allocation in decoding.</li>
+<li>The image buffer is retained for repeat rendering by UIImage. </li>
+</ul>
+<p>After decoding, UIImage will hang onto that image buffer, so that it only does that work once. Consequently, your application, for every image that gets decoded, could have a persistent and large memory allocation hanging out.</p>
+<h2 id="The-memory-use-of-an-image-using-sRGB-space"><a href="#The-memory-use-of-an-image-using-sRGB-space" class="headerlink" title="The memory use of an image using sRGB space"></a>The memory use of an image using sRGB space</h2><blockquote>
+<p>Memory use is related to the dimensions of the images, not the file size.</p>
+</blockquote>
+<p>Take the following image as an instance, its file size is 590KB, with dimension 2048 x 1536 pixel.<br><img src="28bfb5ac-c3fa-4575-a1b1-72fcbacc9069/83dca9cf.png" alt="83dca9cf.png"></p>
+<h3 id="4-byetes-for-each-pixel-in-RGBA"><a href="#4-byetes-for-each-pixel-in-RGBA" class="headerlink" title="4 byetes for each pixel in RGBA"></a>4 byetes for each pixel in RGBA</h3><p>By this <a target="_blank" rel="noopener" href="https://www.objc.io/issues/3-views/moving-pixels-onto-the-screen/">article</a>, each pixel in sRGB image needs 32bit, 4 bytes, in memory when it’s decoded. Because in sRGB, there are Red, Green, Blue 3 channels and Alpha. The range of each channel value is from 0 to 255, which needs 8 bits to represent the value. </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"> A   R   G   B   A   R   G   B   A   R   G   B  </span><br><span class="line">| pixel 0       | pixel 1       | pixel 2   </span><br><span class="line"> 0  233  2  100  4  155 255  7   8   9   10  11 </span><br></pre></td></tr></table></figure>
+<h3 id="More-memory-usage-when-decoding-a-image"><a href="#More-memory-usage-when-decoding-a-image" class="headerlink" title="More memory usage when decoding a image"></a>More memory usage when decoding a image</h3><p>A image have load -&gt; decode -&gt; render these 3 phases.  </p>
+<p><img src="28bfb5ac-c3fa-4575-a1b1-72fcbacc9069/ed4e1c96.png" alt="64aaa3cd.png"></p>
+<p>We only need 590KB to load a image, while we need<br><code>2048 pixels x 1536 pixels x 4 bytes per pixel</code> = 10MB when decoding </p>
+<h2 id="Image-Rendering-Pipeline"><a href="#Image-Rendering-Pipeline" class="headerlink" title="Image Rendering Pipeline"></a>Image Rendering Pipeline</h2><ul>
+<li><code>UIImage</code> is responsible for loading image content. Usually, it is bigger than the ImageView that is going to display it. </li>
+<li><code>UIImageView</code> is responsible for displaying the image. The image which it is going to display will be shrink down to fit its size.<br><img src="media/15884695669510/15889026761062.jpg" alt=""></li>
+</ul>
+<h2 id="Downsampling"><a href="#Downsampling" class="headerlink" title="Downsampling"></a>Downsampling</h2><p>So, we can use technique, called Downsampling, to <code>downsample</code> the images to <code>the size that they&#39;re going to be displayed</code>. Rather than having these large allocations hanging around, we’re reducing our memory usage.</p>
+<p><img src="media/15884695669510/15889088392417.jpg" alt="-w1333"></p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Downsampling large images for display at smaller size</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">downsample</span>(<span class="params">imageAt</span> <span class="params">imageURL</span>: <span class="type">URL</span>, <span class="params">to</span> <span class="params">pointSize</span>: <span class="type">CGSize</span>, <span class="params">scale</span>: <span class="type">CGFloat</span>)</span> -&gt; <span class="type">UIImage</span> &#123;</span><br><span class="line">    <span class="comment">// ShouldCache flag tells Core Graphics framework that we&#x27;re just creating an object to</span></span><br><span class="line">    <span class="comment">// represent the infomation stored in the file at this URL</span></span><br><span class="line">    <span class="keyword">let</span> imageSourceOptions <span class="operator">=</span> [kCGImageSourceShouldCache: <span class="literal">false</span>] <span class="keyword">as</span> <span class="type">CFDictionary</span></span><br><span class="line">    <span class="keyword">let</span> imageSource <span class="operator">=</span> <span class="type">CGImageSourceCreateWithURL</span>(imageURL <span class="keyword">as</span> <span class="type">CFURL</span>, imageSourceOptions)<span class="operator">!</span></span><br><span class="line">    <span class="keyword">let</span> maxDimensionInPixels <span class="operator">=</span> <span class="built_in">max</span>(pointSize.width, pointSize.height) <span class="operator">*</span> scale</span><br><span class="line">    <span class="keyword">let</span> downsampleOptions <span class="operator">=</span></span><br><span class="line">        <span class="comment">// Ask the Core Graphics to create the decoded image buffer for me when calling it to create the thumbnail</span></span><br><span class="line">        [kCGImageSourceCreateThumbnailFromImageAlways: <span class="literal">true</span>,</span><br><span class="line">        kCGImageSourceShouldCacheImmediately: <span class="literal">true</span>,</span><br><span class="line">        <span class="comment">// Should include kCGImageSourceCreateThumbnailWithTransform: true in the options dictionary. Otherwise, the image result will appear rotated when an image is taken from camera in the portrait orientation.</span></span><br><span class="line">        kCGImageSourceCreateThumbnailWithTransform: <span class="literal">true</span>,</span><br><span class="line">        kCGImageSourceThumbnailMaxPixelSize: maxDimensionInPixels] <span class="keyword">as</span> <span class="type">CFDictionary</span></span><br><span class="line">    <span class="keyword">let</span> downsampledImage <span class="operator">=</span></span><br><span class="line">        <span class="type">CGImageSourceCreateThumbnailAtIndex</span>(imageSource, <span class="number">0</span>, downsampleOptions)<span class="operator">!</span></span><br><span class="line">    <span class="keyword">return</span> <span class="type">UIImage</span>(cgImage: downsampledImage)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="Decoding-in-ScrollViews"><a href="#Decoding-in-ScrollViews" class="headerlink" title="Decoding in ScrollViews"></a>Decoding in ScrollViews</h2><h3 id="The-cause-of-the-ScrollView-hitch"><a href="#The-cause-of-the-ScrollView-hitch" class="headerlink" title="The cause of the ScrollView hitch"></a>The cause of the ScrollView hitch</h3><p><img src="media/15884695669510/15889147842616.jpg" alt="-w1178"></p>
+<blockquote>
+<p>When beginning scrolling, we’re about to display another row of images. And we’re about to ask Core Graphics to <code>decode</code> those images before we hand the cells back to UICollectionView.<br>And that could take <code>a lot of CPU time</code>. So much so, that we <code>don&#39;t</code> get around to <code>re-rendering the frame buffer</code>. But the <code>display hardware</code> is operating on a <code>fixed interval</code>. So, from the user’s perspective the application has just <code>stuttered</code>. Now, we’re done decoding these images, we’re able to provide those cells back to UICollectionView. And animation continues on, as before. Just saw a <code>visual hitch</code>, </p>
+</blockquote>
+<h2 id="Two-techniques-to-smooth-out-CPU-usage"><a href="#Two-techniques-to-smooth-out-CPU-usage" class="headerlink" title="Two techniques to smooth out CPU usage"></a>Two techniques to smooth out CPU usage</h2><ol>
+<li>prefetching </li>
+<li>performing work in the background</li>
+</ol>
+<h3 id="Thread-Explosion"><a href="#Thread-Explosion" class="headerlink" title="Thread Explosion"></a>Thread Explosion</h3><p>It is caused by </p>
+<ul>
+<li>More images to decode than available CPUs </li>
+<li>GCD continues creating threads as new work is enqueued</li>
+<li>Each thread gets less time to actually decode images</li>
+</ul>
+<blockquote>
+<p>Now, to avoid deadlock when we dispatch asynchronously to a global queue, GCD is going to create new threads to capture the work we’re asking it to do. And then, the CPUs are going to spend a lot of time moving between those threads to try and make incremental progress on all of the work we asked the operating system to do for us. And switching between those threads, actually, has a pretty significant overhead.</p>
+</blockquote>
+<p>we’re going to serialize some work.</p>
+<p>So, rather than simply dispatching work to one of the global asynchronous queues, we’re going to create a serial queue. And inside of our implementation of the prefetch method we’re going to asynchronously dispatch to that queue.</p>
+<p><img src="media/15884695669510/15889150745604.jpg" alt="-w1516"></p>
+<h2 id="Image-Sources"><a href="#Image-Sources" class="headerlink" title="Image Sources"></a>Image Sources</h2><p>Images may come from </p>
+<ul>
+<li>Image assets in asset catalog</li>
+<li>Files in application/framework bundle</li>
+<li>Files in Documents and Caches directories </li>
+<li>Data downloaded from network</li>
+</ul>
+<p>This session suggests us to use image assets for the following reasons: </p>
+<ul>
+<li><p>Optimized name- and trait-based lookup</p>
+<ul>
+<li>It’s <code>faster</code> to <code>look up</code> an image asset in the asset catalog, than it is to search for files on disk that have a certain naming scheme. </li>
+</ul>
+</li>
+<li><p>Smarter buffer caching</p>
+<ul>
+<li>The asset catalog runtime has, also, got some really good smarts in it for managing <code>buffer sizes</code>.</li>
+</ul>
+</li>
+<li><p>Per-device thinning</p>
+<ul>
+<li>your application only downloads image resources that are relevant to the device that it’s going to run on and vector artwork. The </li>
+</ul>
+</li>
+<li><p>Vector artwork</p>
+</li>
+</ul>
+<h2 id="Vector-artwork"><a href="#Vector-artwork" class="headerlink" title="Vector artwork"></a>Vector artwork</h2><ul>
+<li>Since iOS 11, image assets support  “Preserve Vector Data”</li>
+<li>Avoids blurriness and aliasing when drawn larger or smaller than natural size</li>
+</ul>
+<h2 id="Image-Rendering-Format"><a href="#Image-Rendering-Format" class="headerlink" title="Image Rendering Format"></a>Image Rendering Format</h2><h3 id="SRGB"><a href="#SRGB" class="headerlink" title="SRGB"></a>SRGB</h3><ul>
+<li>4 bytes per pixel </li>
+<li>full color images </li>
+<li>most common used<br><img src="28bfb5ac-c3fa-4575-a1b1-72fcbacc9069/a1bf604b.png" alt="a1bf604b.png"></li>
+</ul>
+<h3 id="Wide-format"><a href="#Wide-format" class="headerlink" title="Wide format"></a>Wide format</h3><ul>
+<li>8 bytes per pixel </li>
+<li>super accurate colors. Because they use 8bytes, 16 bits, for each channel. In the meantime, double the image size.  </li>
+<li>Only useful with wide color display. We don’t want to use it when we don’t need to. </li>
+<li>Wide color capture cameras since iPhone 7</li>
+</ul>
+<p><img src="28bfb5ac-c3fa-4575-a1b1-72fcbacc9069/75a1a01e.png" alt="75a1a01e.png"></p>
+<h3 id="Luminance-and-alpha-8-format"><a href="#Luminance-and-alpha-8-format" class="headerlink" title="Luminance and alpha 8 format"></a>Luminance and alpha 8 format</h3><p>This image only holds grayscale value. And the image size is smaller. </p>
+<ul>
+<li>2 bytes per pixel </li>
+<li>Single-color iamges and alpha</li>
+<li><p>Most used in Metal shaders, not very common.<br><img src="28bfb5ac-c3fa-4575-a1b1-72fcbacc9069/6383b177.png" alt="6383b177.png"></p>
+<h3 id="Alpha-8-Format"><a href="#Alpha-8-Format" class="headerlink" title="Alpha 8 Format"></a>Alpha 8 Format</h3></li>
+<li><p>1 byte per pixel </p>
+</li>
+<li>Userful for monochrome images because it uses less memory. <ul>
+<li>masks </li>
+<li>Emoji-free text </li>
+</ul>
+</li>
+<li>75% smaller than SRGB</li>
+</ul>
+<p><img src="28bfb5ac-c3fa-4575-a1b1-72fcbacc9069/753920b5.png" alt="753920b5.png"><br>We can also change <code>image.tintColor</code> in this image without changing its format.  </p>
+<h2 id="How-do-I-pick-the-right-format"><a href="#How-do-I-pick-the-right-format" class="headerlink" title="How do I pick the right format?"></a>How do I pick the right format?</h2><p><code>UIGraphicsBeginImageContextWithOptions</code> always uses SRGB rendering-format, which use 4 bytes per pixel. </p>
+<p>while <code>UIGraphicsImageRenderer</code>, which introduced in iOS 10 will automatically pick the best graphic format in iOS12. It means, you will save 75% of memory by replacing <code>UIGraphicsBeginImageContextWithOptions</code> with  <code>UIGraphicsImageRenderer</code></p>
+<p><strong>Do</strong> ✅</p>
+<p><img src="28bfb5ac-c3fa-4575-a1b1-72fcbacc9069/2f0229d3.png" alt="2f0229d3.png"></p>
+<h2 id="Use-ImageIO-to-downsample-images"><a href="#Use-ImageIO-to-downsample-images" class="headerlink" title="Use ImageIO to downsample images"></a>Use ImageIO to downsample images</h2><p><code>UIImage</code> is expensive for sizing and to resizing</p>
+<ul>
+<li>Will decompress original image into memory </li>
+<li>Internal coordinate space transforms are expensive</li>
+</ul>
+<p><strong>Don’t</strong> ❌</p>
+<p><img src="28bfb5ac-c3fa-4575-a1b1-72fcbacc9069/c25d45de.png" alt="c25d45de.png"></p>
+<p>Use ImageIO</p>
+<ul>
+<li><p>ImageIO can read image sizes and metadata information without dirtying memory.</p>
+</li>
+<li><p>ImageIO can resize images at cost of resized image only.</p>
+</li>
+</ul>
+<p><strong>Do</strong> ✅<br><img src="28bfb5ac-c3fa-4575-a1b1-72fcbacc9069/922ac245.png" alt="922ac245.png"></p>
+<p>The bad is that you have to specify some options. </p>
+<h2 id="Resize-image-effectively"><a href="#Resize-image-effectively" class="headerlink" title="Resize image effectively"></a>Resize image effectively</h2><p>This is a function of resizing image without reading it into the memory, using ImageIO.  </p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">resize</span>(<span class="params">url</span>: <span class="type">NSURL</span>, <span class="params">maxPixelSize</span>: <span class="type">Int</span>)</span> -&gt; <span class="type">CGImage</span>? &#123;</span><br><span class="line">    <span class="keyword">let</span> imgSource <span class="operator">=</span> <span class="type">CGImageSourceCreateWithURL</span>(url, <span class="literal">nil</span>)</span><br><span class="line">    <span class="keyword">guard</span> <span class="keyword">let</span> imageSource <span class="operator">=</span> imgSource <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> scaledImage: <span class="type">CGImage</span>?</span><br><span class="line">    <span class="keyword">let</span> options: [<span class="type">NSString</span>: <span class="keyword">Any</span>] <span class="operator">=</span> [</span><br><span class="line">            <span class="comment">// The maximum width and height in pixels of a thumbnail.</span></span><br><span class="line">            kCGImageSourceThumbnailMaxPixelSize: maxPixelSize,</span><br><span class="line">            kCGImageSourceCreateThumbnailFromImageAlways: <span class="literal">true</span>,</span><br><span class="line">            <span class="comment">// Should include kCGImageSourceCreateThumbnailWithTransform: true in the options dictionary. Otherwise, the image result will appear rotated when an image is taken from camera in the portrait orientation.</span></span><br><span class="line">            kCGImageSourceCreateThumbnailWithTransform: <span class="literal">true</span></span><br><span class="line">    ]</span><br><span class="line">    scaledImage <span class="operator">=</span> <span class="type">CGImageSourceCreateThumbnailAtIndex</span>(imageSource, <span class="number">0</span>, options <span class="keyword">as</span> <span class="type">CFDictionary</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> scaledImage</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> filePath <span class="operator">=</span> <span class="type">Bundle</span>.main.path(forResource:<span class="string">&quot;large_leaves_70mp&quot;</span>, ofType: <span class="string">&quot;jpg&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> url <span class="operator">=</span> <span class="type">NSURL</span>(fileURLWithPath: filePath <span class="operator">??</span> <span class="string">&quot;&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> image <span class="operator">=</span> resize(url: url, maxPixelSize: <span class="number">600</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="Optimizing-when-in-the-background"><a href="#Optimizing-when-in-the-background" class="headerlink" title="Optimizing when in the background"></a>Optimizing when in the background</h2><h3 id="foreground-background"><a href="#foreground-background" class="headerlink" title="foreground/background"></a>foreground/background</h3><p>The strategy is simple, when <code>UIApplicationDidEnterBackground</code>, we unload images; and when <code>UIApplicationWillEnterForeground</code>, load images. </p>
+<h3 id="on-screen-off-screen"><a href="#on-screen-off-screen" class="headerlink" title="on-screen/off-screen"></a>on-screen/off-screen</h3><p>unload large resource when off-screen, <code>viewDidDisappear</code>; and load large resource when on-screen, <code>viewWillAppear</code>. </p>
+<h2 id="Debug"><a href="#Debug" class="headerlink" title="Debug"></a>Debug</h2><p>Use memory graphs to further understand and reduce memory footprint</p>
+<h2 id="Ref"><a href="#Ref" class="headerlink" title="Ref"></a>Ref</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://developer.apple.com/videos/play/wwdc2018/416/">An great example of how to use command line tools to find root cause of an image memory issue.</a>  </li>
+</ul>
+<h2 id="Related"><a href="#Related" class="headerlink" title="Related"></a>Related</h2><ul>
+<li><a href="https://suelan.github.io/2020/05/03/An-glimpse-of-iOS-Memory-Deep-Dive/">An-glimpse-of-iOS-Memory-Deep-Dive</a></li>
+<li><a href="https://suelan.github.io/2020/05/09/20190509-Work-with-Wider-Color">Work with Wider Color </a></li>
+</ul>
+</section>
+    <!-- Tags START -->
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <a href="/tags#Image" >
+    <span class="tag-code">Image</span>
+  </a>
+
+  <a href="/tags#Debug" >
+    <span class="tag-code">Debug</span>
+  </a>
+
+  <a href="/tags#Memory" >
+    <span class="tag-code">Memory</span>
+  </a>
+
+      </div>
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/2020/05/03/An-glimpse-of-iOS-Memory-Deep-Dive/">
+        <span class="nav-arrow">← </span>
+        
+          A glimpse of iOS Memory Deep Dive
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/2020/05/09/20190509-Work-with-Wider-Color/">
+        
+          Work with Wider Color
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+    
+      <div class="money-like">
+        <div class="reward-btn">
+          赏
+          <span class="money-code">
+            <span class="alipay-code">
+              <div class="code-image"></div>
+              <b>使用支付宝打赏</b>
+            </span>
+            <span class="wechat-code">
+              <div class="code-image"></div>
+              <b>使用微信打赏</b>
+            </span>
+          </span>
+        </div>
+        <p class="notice">若你觉得我的文章对你有帮助，欢迎点击上方按钮对我打赏</p>
+      </div>
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">扫描二维码，分享此文章</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Utterances START -->
+      <div id="utterances"></div>
+      <script src="https://utteranc.es/client.js"
+        repo="null"
+        issue-term="pathname"
+        theme="github-light"
+        crossorigin="anonymous"
+        async></script>    
+      <!-- Utterances END -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Why-memory-and-CPU-matter"><span class="toc-nav-text">Why memory and CPU matter?</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Basic-Concepts"><span class="toc-nav-text">Basic Concepts</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Buffers"><span class="toc-nav-text">Buffers</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#Image-Buffers"><span class="toc-nav-text">Image Buffers</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#Frame-buffer"><span class="toc-nav-text">Frame buffer</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#Data-Buffer"><span class="toc-nav-text">Data Buffer</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#The-Pipeline-in-Action"><span class="toc-nav-text">The Pipeline in Action</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Consequences-of-Excessive-Memory-Usage"><span class="toc-nav-text">Consequences of Excessive Memory Usage</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Decoding"><span class="toc-nav-text">Decoding</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#The-memory-use-of-an-image-using-sRGB-space"><span class="toc-nav-text">The memory use of an image using sRGB space</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#4-byetes-for-each-pixel-in-RGBA"><span class="toc-nav-text">4 byetes for each pixel in RGBA</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#More-memory-usage-when-decoding-a-image"><span class="toc-nav-text">More memory usage when decoding a image</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Image-Rendering-Pipeline"><span class="toc-nav-text">Image Rendering Pipeline</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Downsampling"><span class="toc-nav-text">Downsampling</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Decoding-in-ScrollViews"><span class="toc-nav-text">Decoding in ScrollViews</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#The-cause-of-the-ScrollView-hitch"><span class="toc-nav-text">The cause of the ScrollView hitch</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Two-techniques-to-smooth-out-CPU-usage"><span class="toc-nav-text">Two techniques to smooth out CPU usage</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Thread-Explosion"><span class="toc-nav-text">Thread Explosion</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Image-Sources"><span class="toc-nav-text">Image Sources</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Vector-artwork"><span class="toc-nav-text">Vector artwork</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Image-Rendering-Format"><span class="toc-nav-text">Image Rendering Format</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#SRGB"><span class="toc-nav-text">SRGB</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Wide-format"><span class="toc-nav-text">Wide format</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Luminance-and-alpha-8-format"><span class="toc-nav-text">Luminance and alpha 8 format</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Alpha-8-Format"><span class="toc-nav-text">Alpha 8 Format</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#How-do-I-pick-the-right-format"><span class="toc-nav-text">How do I pick the right format?</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Use-ImageIO-to-downsample-images"><span class="toc-nav-text">Use ImageIO to downsample images</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Resize-image-effectively"><span class="toc-nav-text">Resize image effectively</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Optimizing-when-in-the-background"><span class="toc-nav-text">Optimizing when in the background</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#foreground-background"><span class="toc-nav-text">foreground&#x2F;background</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#on-screen-off-screen"><span class="toc-nav-text">on-screen&#x2F;off-screen</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Debug"><span class="toc-nav-text">Debug</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Ref"><span class="toc-nav-text">Ref</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Related"><span class="toc-nav-text">Related</span></a></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://suelan.github.io/2020/05/03/iOS-images-in-memory/';
+    var banner = 'undefined'
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+    // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', '/css/images/error_icon.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== '/css/images/error_icon.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+  })();
+</script>
+
+
+  <script>
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+  </script>
+
+
+
+
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2021 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a target="_blank" rel="noopener" href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      hljs.configure({useBR: true});
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+
+  </body>
+</html>

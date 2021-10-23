@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="RY&#39;s blog">
+  <meta name="keyword" content="hexo-theme, vuejs">
+  
+    <link rel="shortcut icon" type="image/ico" href="[object Object]"/>
+  
+  <title>
+    
+      iOS main in Assembly | RY &#39;s Blog
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+    
+<script src="/js/qrious.js"></script>
+
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+  
+    
+<script src="/js/local-search.js"></script>
+
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div>
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>RY 's Blog</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/series/" class="item-link">Series</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/project/" class="item-link">Projects</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+      
+        <li class="menu-item menu-item-search right-list">
+    <a role="button" class="popup-trigger">
+        <i class="fa fa-search fa-fw"></i>
+    </a>
+</li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/series/" class="menu-link">Series</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/project/" class="menu-link">Projects</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+    
+      <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+            <span class="search-icon">
+                <i class="fa fa-search"></i>
+            </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocapitalize="off"
+                    placeholder="Please enter your keyword(s) to search." spellcheck="false"
+                    type="search" class="search-input">
+            </div>
+            <span class="popup-btn-close">
+                <i class="fa fa-times-circle"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+    
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>iOS main in Assembly</h2>
+  <p class="post-date">2020-08-18</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><h3 id="How-to-see-Assemble-code-in-Xcode"><a href="#How-to-see-Assemble-code-in-Xcode" class="headerlink" title="How to see Assemble code in Xcode"></a>How to see Assemble code in Xcode</h3><p><code>debug</code> -&gt; <code>Product -&gt; Action</code>-&gt;  <code>Assemble</code>  “main.m”</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">12 int main(int argc, char * argv[]) &#123;</span><br><span class="line">13    NSString * appDelegateClassName;</span><br><span class="line">14    @autoreleasepool &#123;</span><br><span class="line">15        // Setup code that might create autoreleased objects goes here.</span><br><span class="line">16        appDelegateClassName = NSStringFromClass([AppDelegate class]);</span><br><span class="line">17    &#125;</span><br><span class="line">18    return UIApplicationMain(argc, argv, nil, appDelegateClassName);</span><br><span class="line">19 &#125;</span><br></pre></td></tr></table></figure>
+<p>It produces a file with 541 lines of code with lots of assembler directives for debugger.  </p>
+<h3 id="Assembler-directives"><a href="#Assembler-directives" class="headerlink" title="Assembler directives"></a>Assembler directives</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">.section	__TEXT,__text,regular,pure_instructions</span><br><span class="line">.ios_version_min 11, 0	sdk_version 13, 6</span><br><span class="line">.file	1 &quot;/Users/rongyan.zheng/Downloads/AssemblyMain&quot; &quot;AssemblyMain/main.m&quot;</span><br><span class="line">.globl	_main                   ; -- Begin function main</span><br><span class="line">.p2align	2</span><br></pre></td></tr></table></figure>
+<p>These are assembler directives, not assembly code. The <code>.section</code> directive specifies into which section the following will go.  </p>
+<p>Next, the <code>.globl</code> directive specifies that <code>_main</code> is an external symbol.<code>.p2align    2</code> aligns  the current location in the file to a specified boundary, here it is 2^2, 4 bytes.  </p>
+<p>Then, here comes our <code>main</code>  assemble label. </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">_main:                                  ; @main</span><br><span class="line">Lfunc_begin0:</span><br><span class="line">4.loc	1 12 0                  ; AssemblyMain/main.m:12:0</span><br><span class="line">4.cfi_startproc</span><br><span class="line">; %bb.0:</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>The <code>.cfi_startproc</code> directive is used at the beginning of most functions. CFI is short for Call Frame Information. A <em>frame</em> corresponds loosely to a function. When you use the debugger and <em>step in</em> or <em>step out</em>, you’re actually stepping in/out of call frames. In C code, functions have their own call frames, but other things can too. The <code>.cfi_startproc</code> directive gives the function an entry into <code>.eh_frame</code>, which contains unwind information – this is how exception can unwind the call frame stack. The directive will also emit architecture-dependent instructions for CFI. It’s matched by a corresponding <code>.cfi_endproc</code> further down in the output to mark the end of our <code>main()</code> function.  – <a target="_blank" rel="noopener" href="https://www.objc.io/issues/6-build-tools/mach-o-executables/">https://www.objc.io/issues/6-build-tools/mach-o-executables/</a> </p>
+</blockquote>
+<h3 id="SP-and-stack"><a href="#SP-and-stack" class="headerlink" title="SP and stack"></a>SP and stack</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sub	sp, sp, #48             ; =48</span><br></pre></td></tr></table></figure>
+<p>It sets up a call frame on the stack. Here <code>sp</code> refers to the register for stack-pointer. In AArch64 the stack-pointer must be 128-bit aligned; here is 48*8-bit.</p>
+<p><img src="image-20200807093341883.png" alt="image-20200807093341883"></p>
+<h4 id="Registers"><a href="#Registers" class="headerlink" title="Registers"></a>Registers</h4><blockquote>
+<p>Processor operations mostly involve processing data. This data can be stored in memory and accessed from thereon. However, reading data from and storing data into memory slows down the processor, as it involves complicated processes of sending the data request across the control bus and into <code>the memory storage unit</code> and getting the data through the same channel. To speed up the processor operations, the processor includes some <code>internal memory storage locations</code>, called <strong>registers</strong>.</p>
+<p>The registers store data elements for processing without having to access the memory. A limited number of registers are built into the processor chip. – <a target="_blank" rel="noopener" href="https://www.tutorialspoint.com/assembly_programming/assembly_registers.htm">https://www.tutorialspoint.com/assembly_programming/assembly_registers.htm</a> </p>
+</blockquote>
+<p>In ARM 64, the following graph shows the registers’ roles.</p>
+<p><img src="image-20200805000244292.png" alt="image-20200805000244292"></p>
+<ul>
+<li>The first eight registers, r0-r7, are used to pass argument values into a subroutine and to return result values from a function. </li>
+<li>The frame record for the innermost frame (belonging to the most recent routine invocation) shall be pointed to by the <code>Frame Pointer register</code> (FP). The lowest addressed double-word shall point to the <code>previous frame record</code> and the highest addressed double-word shall contain the value passed in LR on entry to the current function. </li>
+</ul>
+<h4 id="Stack-Structure"><a href="#Stack-Structure" class="headerlink" title="Stack Structure"></a>Stack Structure</h4><blockquote>
+<p>The stack is a <code>contiguous area of memory</code> that may be used for storage of local variables and for passing additional arguments to subroutines when there are insufficient argument registers available.The stack implementation is <em>full-descending</em>, with <code>the current extent of the stack</code> held in the special-purpose register <code>SP</code>.   –<a target="_blank" rel="noopener" href="https://developer.arm.com/documentation/ihi0055/b/">Procedure Call Standard for the ARM 64-bit Architecture (AArch64)- AArch64 ABI release 1.0</a></p>
+</blockquote>
+<p>The ARM environment uses a stack that—at the point of function calls—is grows downward, and contains local variables and a function’s parameters. The stack is  aligned at the point of function calls.  Figure 1 shows the stack before and during a subroutine call. </p>
+<p><img src="https://developer.apple.com/library/archive/documentation/Xcode/Conceptual/iPhoneOSABIReference/art/arm_stack.jpg" alt="img"></p>
+<p> Stack frames contain the following areas:</p>
+<ul>
+<li><em>The parameter area</em> stores the arguments the caller passes to the called function or stores space for them, depending on the type of each argument and the availability of registers. This area resides in the caller’s stack frame.</li>
+<li><em>The linkage area</em> contains the address of the caller’s next instruction.</li>
+<li><em>The saved frame pointer</em> (optional) contains the base address of the caller’s stack frame.</li>
+<li>The <em>local storage area</em> contains the subroutine’s local variables and the values of the registers that must be restored before the called function returns. See <a target="_blank" rel="noopener" href="https://developer.apple.com/library/archive/documentation/Xcode/Conceptual/iPhoneOSABIReference/Articles/ARMv6FunctionCallingConventions.html#//apple_ref/doc/uid/TP40009021-SW4">Register Preservation</a> for details.</li>
+<li>The <em>saved registers area</em> contains the values of the registers that must be restored before the called function returns. See <a target="_blank" rel="noopener" href="https://developer.apple.com/library/archive/documentation/Xcode/Conceptual/iPhoneOSABIReference/Articles/ARMv6FunctionCallingConventions.html#//apple_ref/doc/uid/TP40009021-SW4">Register Preservation</a> for details.</li>
+</ul>
+<p>In this environment, the stack frame size is not fixed.</p>
+<p>Another stack frame layout graph comes from <a target="_blank" rel="noopener" href="https://developer.arm.com/documentation/ihi0055/b/">Procedure Call Standard for the ARM 64-bit Architecture (AArch64)- AArch64 ABI release 1.0</a></p>
+<p><img src="image-20200805222941420.png" alt="image-20200805222941420"></p>
+<p>About stack and stack pointer, see more in. </p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://community.arm.com/developer/ip-products/processors/b/processors-ip-blog/posts/using-the-stack-in-aarch32-and-aarch64">Using the Stack in AArch32 and AArch64</a></li>
+<li><a target="_blank" rel="noopener" href="https://community.arm.com/developer/ip-products/processors/b/processors-ip-blog/posts/using-the-stack-in-aarch64-implementing-push-and-pop">Using the Stack in AArch64: Implementing Push and Pop</a></li>
+</ul>
+<h3 id="Addressing-Mode"><a href="#Addressing-Mode" class="headerlink" title="Addressing Mode"></a>Addressing Mode</h3><p>As a beginner, I want to know how the addresses are calculated from the figures within the square brackets</p>
+<p>Here, we have to know something about  <code>addressing modes</code>. There are several addressing modes that define how the address is formed according to <a target="_blank" rel="noopener" href="https://developer.arm.com/architectures/learn-the-architecture/armv8-a-instruction-set-architecture/loads-and-stores-addressing">document s about ARMv8 instructions set</a>  </p>
+<ul>
+<li><p><strong>Base register</strong> - The simplest form of addressing is a single register. Base register is an X register that contains the full, or absolute, virtual address of the data being accessed, as you can see in this figure:</p>
+<p><img src="image-20200807150953454.png" alt="image-20200807150953454"  /></p>
+</li>
+<li><p><strong>Offset addressing modes</strong> - An offset can be applied optionally to the base address, as you can see in this figure:</p>
+<p><img src="image-20200807151043180.png" alt="image-20200807151043180"/></p>
+<p>In the preceding figure, X1 contains the base address and <code>#12</code> is a byte offset from that address. This means that the accessed address is<code>X1+12</code>. The offset can be either a constant or another register. This type of addressing might be used for structs, for example. The compiler maintains a pointer to the base of struct using the offset to select different members.</p>
+</li>
+<li><p><strong>Pre-index addressing modes</strong> - In the instruction syntax, pre-index is shown by adding an exclamation mark <code>!</code> After the square brackets, as this figure shows: </p>
+<p><img src="image-20200807151621841.png" alt="image-20200807151621841"></p>
+<p>Pre-indexed addressing is like offset addressing,<code>except that the base pointer is updated as a result of the instruction</code>. In the preceding figure, <code>X1</code> would have the value X1+12 after the instruction has completed.</p>
+</li>
+<li><p><strong>Post-index addressing modes</strong> - With post-index addressing, the value is loaded from the address in the base pointer, and then the pointer is updated, as this figure shows: </p>
+<p><img src="image-20200807151851210.png" alt="image-20200807151851210"></p>
+<p>Post-index addressing is useful for popping off the stack. The instruction loads the value from the location pointed at by the stack pointer, and then moves the stack pointer on to the next full location in the stack.</p>
+</li>
+</ul>
+<p>So, here comes the next instruction in our <code>main</code> function: </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">stp	x29, x30, [sp, #32] </span><br></pre></td></tr></table></figure>
+<p><code>stp</code> pushes X29 and X30 onto the stack, which means this instruction will store values from <code>x29</code> and <code>x30</code> to memory where the address is <code>sp+32</code>. And in ARMv8, <code>X29</code> is for frame pointer, <code>X30</code> is used as the Link Register and can be referred to as LR.</p>
+<p><img src="image-20200807103821841.png" alt="image-20200807103821841"></p>
+<h3 id="Store-parameters-on-the-Stack"><a href="#Store-parameters-on-the-Stack" class="headerlink" title="Store parameters on the Stack"></a>Store parameters on the Stack</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">add	x29, sp, #32            ; =32</span><br></pre></td></tr></table></figure>
+<p>set the value of <code>x29</code> as <code>sp</code> + <code>#32</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">stur	wzr, [x29, #-4]</span><br><span class="line">stur	w0, [x29, #-8]</span><br><span class="line">str	x1, [sp, #16]</span><br></pre></td></tr></table></figure>
+<p>store value from <code>wzr</code> to <code>x29 + #-4</code>, which means write <code>x29 + #-4</code> using 0; </p>
+<blockquote>
+<p> The zero registers, ZXR and WZR, always read as 0 and ignore writes.</p>
+</blockquote>
+<p>store value  from <code>w0</code> to <code>x29 + #-8;</code></p>
+<p>store value from <code>x1</code> to <code>sp + #16</code>.</p>
+<p><img src="image-20200807103920889.png" alt="image-20200807103920889"></p>
+<p>Most A64 instructions operate on registers. The architecture provides 31 general purpose registers. Each register can be used as a 64-bit X register (X0..X30), or as a 32-bit W register (W0..W30).   W0 is the bottom 32 bits of X0.</p>
+<p><img src="image-20200807155505092.png" alt="image-20200807155505092" style="zoom:50%;" /></p>
+<p>The choice of X or W determines the size of the operation. Using X registers will result in 64-bit calculations, and using W registers will result in 32-bit calculations. </p>
+<h4 id="Registers-for-parameters"><a href="#Registers-for-parameters" class="headerlink" title="Registers for parameters"></a>Registers for parameters</h4><p>The Arm architecture has some restrictions on how general purpose registers are used.  </p>
+<p><code>X0-X7</code> is the parameter/result registers.  x0-x7, are used to pass argument values into a subroutine and to return result values from a function.  The first argument is passed into <code>X0</code>, the second argument is in <code>X1</code>.  </p>
+<p>In our case, <code>main</code> function takes two arguments, so <code>w0</code> and <code>X</code> are used. </p>
+<h4 id="Registers-for-return"><a href="#Registers-for-return" class="headerlink" title="Registers for return"></a>Registers for return</h4><p>Which register is used for return result is determined by the type of that result:</p>
+<ul>
+<li><p>If the type, T, of the result of a function is such that</p>
+<p><code>void func(T arg)</code>,  the result is returned in the same registers used as passing arguments. For exmaple</p>
+</li>
+</ul>
+<p><img src="image-20200807175855759.png" alt="image-20200807175855759"></p>
+<ul>
+<li>Otherwise,  the caller shall reserve a block of memory of sufficient size and alignment to hold the result. The address of the memory block shall be passed as an additional argument to the function in X8.<code>XR</code> |<code>X8</code>.</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Ltmp0:</span><br><span class="line">4.loc	1 13 16 prologue_end    ; AssemblyMain/main.m:13:16</span><br><span class="line">4mov	x8, #0                    ; copy #0 to x8</span><br><span class="line">4str	x8, [sp, #8]              ; </span><br><span class="line">4.loc	1 14 22                 ; AssemblyMain/main.m:14:22</span><br></pre></td></tr></table></figure>
+<p>Then,  store value from <code>x8</code> to <code>sp + #8</code>.  </p>
+<p><img src="image-20200807154518025.png" alt="image-20200807154518025"></p>
+<h3 id="Branch-instructions-and-Function-calls"><a href="#Branch-instructions-and-Function-calls" class="headerlink" title="Branch instructions and Function calls"></a>Branch instructions and Function calls</h3><p>So let’s see the next instruction. </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bl	_objc_autoreleasePoolPush</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Ordinarily, a processor executes instructions in program order. This means that a processor executes instructions in the same order that they are set in memory. One way to change this order is to use branch instructions. Branch instructions change the program flow and are used for loops, decisions and function calls.</p>
+<p>The A64 instruction set also has some conditional branch instructions. These are instructions that change the way they execute, based on the results of previous instructions.       –  <a target="_blank" rel="noopener" href="https://developer.arm.com/architectures/learn-the-architecture/armv8-a-instruction-set-architecture/program-flow">https://developer.arm.com/architectures/learn-the-architecture/armv8-a-instruction-set-architecture/program-flow</a></p>
+</blockquote>
+<h4 id="Unconditional-branch-instructions"><a href="#Unconditional-branch-instructions" class="headerlink" title="Unconditional branch instructions"></a>Unconditional branch instructions</h4><blockquote>
+<p>There are two types of unconditional branch instructions; <code>B</code> which means Branch and <code>BR</code> which means Branch with Register. </p>
+</blockquote>
+<p>The unconditional branch instruction <code>B &lt;label</code>&gt; performs a direct, PC-relative, branch to <label>.</p>
+<p>In our case, the <code>labe</code> is  <code>_objc_autoreleasePoolPush</code>; <code>bl    _objc_autoreleasePoolPush</code> means we will jump to <code>_objc_autoreleasePoolPush</code> routine. </p>
+<h4 id="Conditional-branch-instructions"><a href="#Conditional-branch-instructions" class="headerlink" title="Conditional branch instructions"></a>Conditional branch instructions</h4><p>The conditional branch instruction B.<cond> <label> is the conditional version of the B instruction. The branch is only taken if the condition <cond> is true. The range is limited to +/- 1MB.</p>
+<h4 id="Labels-for-PC-relative-addresses"><a href="#Labels-for-PC-relative-addresses" class="headerlink" title="Labels for PC-relative addresses"></a><a target="_blank" rel="noopener" href="https://www.keil.com/support/man/docs/armasm/armasm_dom1359731174549.htm">Labels for PC-relative addresses</a></h4><blockquote>
+<p>A label can represent the PC value plus or minus the offset from the PC to the label. Use these labels as targets for branch instructions, or to access small items of data embedded in code sections.</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">adrp	x8, _OBJC_SELECTOR_REFERENCES_@PAGE</span><br><span class="line">add	x8, x8, _OBJC_SELECTOR_REFERENCES_@PAGEOFF        ;@selector(class)</span><br><span class="line">adrp	x9, _OBJC_CLASSLIST_REFERENCES_$_@PAGE </span><br><span class="line">add	x9, x9, _OBJC_CLASSLIST_REFERENCES_$_@PAGEOFF     ; objc_cls_ref_AppDelegate</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p><code>adrp</code> is to Address of 4KB page at a PC-relative offset</p>
+<p>I drag the final executable into <code>hopper</code>,   the address for <code>_OBJC_SELECTOR_REFERENCES_@PAGE</code> is <code>#0x100009000</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">000000010000621c         adrp       x8, #0x100009000                            ; 0x1000093e0@PAGE</span><br><span class="line">0000000100006220         add        x8, x8, #0x3e0                              ; 0x1000093e0@PAGEOFF, &amp;@selector(class)</span><br><span class="line">0000000100006224         adrp       x9, #0x100009000                            ; 0x1000093f0@PAGE</span><br><span class="line">0000000100006228         add        x9, x9, #0x3f0                              ; 0x1000093f0@PAGEOFF, objc_cls_ref_AppDelegate</span><br><span class="line">000000010000622c         ldr        x9, [x9]                                    ; objc_cls_ref_AppDelegate,_OBJC_CLASS_$_AppDelegate</span><br><span class="line">0000000100006230         ldr        x1, [x8]                                    ; &quot;class&quot;,@selector(class)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ldr	x9, [x9]                ; load data into x9 from the value in x9.</span><br><span class="line">ldr	x1, [x8]                ; load data into x1 from the value in x8, which is the address of @selector(class)</span><br><span class="line">str	x0, [sp]                ; 8-byte Folded Spill</span><br><span class="line">mov	x0, x9                  ; move the addreess in x9 into x0, which is the address of objc_cls_ref_AppDelegate</span><br><span class="line">bl	_objc_msgSend           ; call msgSend, [AppDelegate class]</span><br><span class="line">bl	_NSStringFromClass      ; call NSStringFromClass </span><br></pre></td></tr></table></figure>
+<h4 id="The-return-value-and-auto-release"><a href="#The-return-value-and-auto-release" class="headerlink" title="The return value and auto release"></a>The return value and auto release</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"> mov	x29, x29	; marker for objc_retainAutoreleaseReturnValue</span><br><span class="line">bl	_objc_retainAutoreleasedReturnValue</span><br><span class="line"> ldr	x8, [sp, #8]            ; load data into x8 from memory [sp, #8] </span><br><span class="line">str	x0, [sp, #8]            ; store data from x0 into [sp, #8], which is the result of _NSStringFromClass</span><br><span class="line">mov	x0, x8                  ; move data from x8 to x0</span><br><span class="line">bl	_objc_release</span><br><span class="line">ldr	x0, [sp]                ; 8-byte Folded Reload</span><br><span class="line">bl	_objc_autoreleasePoolPop</span><br></pre></td></tr></table></figure>
+<p><code>str    x0, [sp, #8]</code> means store data from x0 into [sp, #8]. As we mentioned before, for functions with this type <code>NSString *NSStringFromClass(Class aClass)</code>, the <code>x0</code> is used to store the return result. </p>
+<h3 id="Pass-parameters"><a href="#Pass-parameters" class="headerlink" title="Pass parameters"></a>Pass parameters</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ldur	w0, [x29, #-8]      ; load data into w0 from [x29, #-8]; which is int argc</span><br><span class="line">ldr	x1, [sp, #16]         ; load data into x1 from [sp, #16], where argv is stroed</span><br><span class="line">ldr	x3, [sp, #8]          ; laod data into x3 from [sp, #8], which is the result of  the result of _NSStringFromClass</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mov	x8, #0</span><br><span class="line">mov	x2, x8                ; nil</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">bl	_UIApplicationMain    ; call _UIApplicationMain</span><br><span class="line">stur	w0, [x29, #-4]      </span><br><span class="line">add	x8, sp, #8              ; =8</span><br><span class="line">mov	x0, x8</span><br><span class="line">mov	x8, #0</span><br><span class="line">mov	x1, x8</span><br><span class="line">bl	_objc_storeStrong</span><br><span class="line">ldur	w0, [x29, #-4]</span><br><span class="line">ldp	x29, x30, [sp, #32]     ; 16-byte Folded Reload, reset </span><br><span class="line">add	sp, sp, #48             ; =48, reset </span><br><span class="line">ret</span><br></pre></td></tr></table></figure>
+<p><code>ldp    x29, x30, [sp, #32]</code>  this is for reset the <code>fp</code> and linker regiseter </p>
+<p><code>add    sp, sp, #48</code> means, the call frame for this function is gone. </p>
+<p><img src="image-20200810095955537.png" alt="image-20200810095955537"></p>
+</section>
+    <!-- Tags START -->
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <a href="/tags#Debug" >
+    <span class="tag-code">Debug</span>
+  </a>
+
+  <a href="/tags#Popular Article" >
+    <span class="tag-code">Popular Article</span>
+  </a>
+
+      </div>
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/2020/08/18/20200817-address-sanitizer/">
+        <span class="nav-arrow">← </span>
+        
+          Address Sanitizer
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/2020/12/23/20201223-what-is-behind-react-native-module/">
+        
+          Dive into react native module
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+    
+      <div class="money-like">
+        <div class="reward-btn">
+          赏
+          <span class="money-code">
+            <span class="alipay-code">
+              <div class="code-image"></div>
+              <b>使用支付宝打赏</b>
+            </span>
+            <span class="wechat-code">
+              <div class="code-image"></div>
+              <b>使用微信打赏</b>
+            </span>
+          </span>
+        </div>
+        <p class="notice">若你觉得我的文章对你有帮助，欢迎点击上方按钮对我打赏</p>
+      </div>
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">扫描二维码，分享此文章</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Utterances START -->
+      <div id="utterances"></div>
+      <script src="https://utteranc.es/client.js"
+        repo="null"
+        issue-term="pathname"
+        theme="github-light"
+        crossorigin="anonymous"
+        async></script>    
+      <!-- Utterances END -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#How-to-see-Assemble-code-in-Xcode"><span class="toc-nav-text">How to see Assemble code in Xcode</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Assembler-directives"><span class="toc-nav-text">Assembler directives</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#SP-and-stack"><span class="toc-nav-text">SP and stack</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#Registers"><span class="toc-nav-text">Registers</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#Stack-Structure"><span class="toc-nav-text">Stack Structure</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Addressing-Mode"><span class="toc-nav-text">Addressing Mode</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Store-parameters-on-the-Stack"><span class="toc-nav-text">Store parameters on the Stack</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#Registers-for-parameters"><span class="toc-nav-text">Registers for parameters</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#Registers-for-return"><span class="toc-nav-text">Registers for return</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Branch-instructions-and-Function-calls"><span class="toc-nav-text">Branch instructions and Function calls</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#Unconditional-branch-instructions"><span class="toc-nav-text">Unconditional branch instructions</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#Conditional-branch-instructions"><span class="toc-nav-text">Conditional branch instructions</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#Labels-for-PC-relative-addresses"><span class="toc-nav-text">Labels for PC-relative addresses</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#The-return-value-and-auto-release"><span class="toc-nav-text">The return value and auto release</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Pass-parameters"><span class="toc-nav-text">Pass parameters</span></a></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://suelan.github.io/2020/08/18/20200817-ios-main-in-assembly/';
+    var banner = 'undefined'
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+    // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', '/css/images/error_icon.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== '/css/images/error_icon.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+  })();
+</script>
+
+
+  <script>
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+  </script>
+
+
+
+
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2021 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a target="_blank" rel="noopener" href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      hljs.configure({useBR: true});
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+
+  </body>
+</html>

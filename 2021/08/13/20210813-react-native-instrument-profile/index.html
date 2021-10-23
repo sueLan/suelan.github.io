@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="RY&#39;s blog">
+  <meta name="keyword" content="hexo-theme, vuejs">
+  
+    <link rel="shortcut icon" type="image/ico" href="[object Object]"/>
+  
+  <title>
+    
+      react-native-instrument | RY &#39;s Blog
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+    
+<script src="/js/qrious.js"></script>
+
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+  
+    
+<script src="/js/local-search.js"></script>
+
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div>
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>RY 's Blog</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/series/" class="item-link">Series</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/project/" class="item-link">Projects</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+      
+        <li class="menu-item menu-item-search right-list">
+    <a role="button" class="popup-trigger">
+        <i class="fa fa-search fa-fw"></i>
+    </a>
+</li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/series/" class="menu-link">Series</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/project/" class="menu-link">Projects</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+    
+      <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+            <span class="search-icon">
+                <i class="fa fa-search"></i>
+            </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocapitalize="off"
+                    placeholder="Please enter your keyword(s) to search." spellcheck="false"
+                    type="search" class="search-input">
+            </div>
+            <span class="popup-btn-close">
+                <i class="fa fa-times-circle"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+    
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>react-native-instrument</h2>
+  <p class="post-date">2021-08-13</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><a id="more"></a>
+<p>Sometimes, you may encounter heavy performance issue in RN page, like laggy and unresponsive pages. And you do want to take a deep look at how many data are passed through JSBridge and what’s going on there. You may found some people leverage <code>spy</code> function in <code>MessageQueue.js</code> to check the traffic volume through JSBridge. <a target="_blank" rel="noopener" href="https://callstack.com/blog/react-native-how-to-check-what-passes-through-your-bridge/">Blog here</a>. It looks cool and helpful. However, in real life, you could see the your app performance is dragged down dramatically, even totally unresponsive when using this debug tool. So I was trying to find out a more efficient way to monitor traffic volume in JS bridge. Luckily, I saw a native performance monitoring logger inside react native framework, which appears in almost every crucial points in the workflow of JS-Native method calling. Then, I realized, maybe, I can use it to achieve the goal to spy bridge messages efficiently since it is in C++ realm and I can store all the data I collect in memory or use <code>SignPost</code>  to make data visualized in Instrument.</p>
+<h2 id="NativeModulePerfLogger-in-React-Native"><a href="#NativeModulePerfLogger-in-React-Native" class="headerlink" title="NativeModulePerfLogger in React Native"></a>NativeModulePerfLogger in React Native</h2><p>In some crucial classes in react-native,  you can see <code>NativeModulePerfLogger</code> is used to collect execution data. For example, in <code>RCTNativeModule:invokeInner</code> function, which is to dispatch function calling from JS to native, there are stubs using  <code>NativeModulePerfLogger</code>  in namespace <code>BridgeNativeModulePerfLogger</code>.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (context == Async) &#123;</span><br><span class="line">   BridgeNativeModulePerfLogger::<span class="built_in">asyncMethodCallExecutionStart</span>(moduleName, methodName, (<span class="keyword">int32_t</span>)callId);</span><br><span class="line">   BridgeNativeModulePerfLogger::<span class="built_in">asyncMethodCallExecutionArgConversionStart</span>(moduleName, methodName, (<span class="keyword">int32_t</span>)callId);</span><br><span class="line"> &#125;</span><br><span class="line"> </span><br><span class="line"> <span class="keyword">if</span> (context == Sync) &#123;</span><br><span class="line">     BridgeNativeModulePerfLogger::<span class="built_in">syncMethodCallExecutionStart</span>(moduleName, methodName);</span><br><span class="line">   &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">     BridgeNativeModulePerfLogger::<span class="built_in">asyncMethodCallExecutionArgConversionEnd</span>(moduleName, methodName, (<span class="keyword">int32_t</span>)callId);</span><br><span class="line">   &#125;</span><br><span class="line">   </span><br><span class="line"> <span class="keyword">if</span> (context == Sync) &#123;</span><br><span class="line">     BridgeNativeModulePerfLogger::<span class="built_in">syncMethodCallExecutionEnd</span>(moduleName, methodName);</span><br><span class="line">     BridgeNativeModulePerfLogger::<span class="built_in">syncMethodCallReturnConversionStart</span>(moduleName, methodName);</span><br><span class="line">   &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">     BridgeNativeModulePerfLogger::<span class="built_in">asyncMethodCallExecutionEnd</span>(moduleName, methodName, (<span class="keyword">int32_t</span>)callId);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<p>If you look into <code>BridgeNativeModulePerfLogger</code>, it basically calls functions in  <code>NativeModulePerfLogger</code>  to collect data. Basically,  <code>NativeModulePerfLogger</code> is a virtual class, a platform-agnostic interface to do performance logging for native modules and tubomodules.  We can inherit  <code>NativeModulePerfLogger</code> and implement all its pure virtual functions. These functions are for initializing Native Module object, JS require , sync method calls, async method calls,pre-processing async method call batch, async method call execution etc.<br>You may want to check out more details about these functions in the source file in <a target="_blank" rel="noopener" href="https://github.com/facebook/react-native/blob/57aa70c06cba3597725f7447943613e8905ae11d/ReactCommon/reactperflogger/reactperflogger/NativeModulePerfLogger.h#L18">Github</a>. With the help of <code>NativeModulePerfLogger</code>, we can inject our own logger implementation, collecting performance data without modifying react-native SDK heavily.  </p>
+<h2 id="SignPost"><a href="#SignPost" class="headerlink" title="SignPost"></a>SignPost</h2><p><code>os_signpost</code> is delivered by Apple for developers to collect performance data for visualization on iOS 10 and above. It allows you to place markers which can be displayed in instrument so that it is easier for developers to discern where the bottleneck is. The good is that Apple also provides C based APIs so I can basically use them in my c++ class which implements  <code>NativeModulePerfLogger</code>. </p>
+<p><img src="image-20210108180102653.png" alt="image-2021010`8180102653"></p>
+<p>I finally wrote <a target="_blank" rel="noopener" href="https://github.com/sueLan/react-native-bridge-instrument">react-native-bridge-instrument</a> to combine the power of  <code>NativeModulePerfLogger</code> and <code>SignPost</code> and help your monitor function callings happening in JS bridge much more efficiently.</p>
+<p>For example, I place a markers when an async method calling starts; then place another related marker at the moment when this method calling ends. Instrument will help us wrap up all these data and visualize them for us well. </p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> Cxx ::<span class="built_in">asyncMethodCallArgConversionStart</span>(</span><br><span class="line">                                                    <span class="keyword">const</span> <span class="keyword">char</span> *moduleName,</span><br><span class="line">                                                    <span class="keyword">const</span> <span class="keyword">char</span> *methodName) &#123;</span><br><span class="line">  <span class="built_in">os_signpost_interval_begin</span>(async_method_call_logger, OS_SIGNPOST_ID_EXCLUSIVE, <span class="built_in">function_name</span>(__func__), <span class="string">&quot;%s %s&quot;</span>, moduleName, methodName);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">CxxNativeModulePerfLogger::asyncMethodCallArgConversionEnd</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">                                                    <span class="keyword">const</span> <span class="keyword">char</span> *moduleName,</span></span></span><br><span class="line"><span class="params"><span class="function">                                                    <span class="keyword">const</span> <span class="keyword">char</span> *methodName)</span> </span>&#123;</span><br><span class="line">  <span class="built_in">os_signpost_interval_end</span>(async_method_call_logger, OS_SIGNPOST_ID_EXCLUSIVE, <span class="built_in">function_name</span>(__func__), <span class="string">&quot;%s %s&quot;</span>, moduleName, methodName);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h2 id="How-to-use-it"><a href="#How-to-use-it" class="headerlink" title="How to use it"></a>How to use it</h2><p>Because I implemented <code>CxxNativeModulePerfLogger</code> in C. Basically, you have to write a method in <code>mm</code> file to use these C++ functions.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;ReactNativeBridgeInstrument/CxxNativeModulePerfLogger.h&gt;</span><br><span class="line">// make sure `CXXFLAGS += -std=c++14` or 14 above in your Xcode building settings</span><br><span class="line">#include &lt;memory&gt;</span><br><span class="line"></span><br><span class="line">- (void)initializeInstrument</span><br><span class="line">&#123;</span><br><span class="line">  facebook::react::CxxNativeModulePerfLogger logger = facebook::react::CxxNativeModulePerfLogger();</span><br><span class="line">  facebook::react::BridgeNativeModulePerfLogger::enableLogging(std::make_unique&lt;facebook::react::CxxNativeModulePerfLogger&gt;(logger));</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>To test it, I integrate these <code>CxxNativeModulePerfLogger</code> to <a target="_blank" rel="noopener" href="https://github.com/facebook/react-native/tree/main/packages/rn-tester"><code>RNTester</code></a> and run <code>RNTester</code> locally, then use Instrument to collect performance data. </p>
+<ol>
+<li><p>Open the instrument,  choose <code>Blank</code> template in Instrument <img src="https://tva1.sinaimg.cn/large/008i3skNgy1guu5vkkpu7j61880aemyj02.jpg" alt="image-20210926173249306"></p>
+</li>
+<li><p>Then , add <code>os_signpost</code>  to current template,  and start recording. </p>
+</li>
+</ol>
+<p><img src="https://tva1.sinaimg.cn/large/008i3skNgy1gv18fu3r64j628009c40202.jpg" alt="image-20210926173031427"></p>
+<ol start="3">
+<li>pay attention to our customed logger Volume. There are 4 parts, </li>
+</ol>
+<ul>
+<li><code>async_method_call</code>:  collect data for asynchronous methods running through JSBridge</li>
+<li><code>js_require</code>  : used to calculate time interval to initialize modules </li>
+<li><code>module</code> : used to calculate time interval to create <code>RCTModuleData</code> </li>
+<li><code>sync_method_call</code> :  collect data for synchronous methods running through JSBridge</li>
+</ul>
+<p><img src="https://tva1.sinaimg.cn/large/008i3skNgy1gv18fv7bi9j61ht0u0wjn02.jpg" alt="image-20210926174136104"></p>
+<p>For example, after scrolling a FlatList, I checked <code>async_method_call</code> volume. I saw <code>createView</code> , <code>setChildren</code> and <code>managedChildren</code> mthods  in <code>UIManager</code>  are called frequently. In <code>1.91</code> second, <code>createView</code> called for 2886 times, costing <code>1.16</code> seconds. Although the average duration is about <code>402.27us</code>  , which may looks like it is not a big deal; considering its frequency, this method finally tops first in our analysis panel. In this <code>summary</code> panel,  you can see <code>total</code>, <code>min</code>, and <code>avg</code>  time intervals for a specific method. </p>
+<p><img src="https://tva1.sinaimg.cn/large/008i3skNgy1gv18hjuyerj61jk0u0ti402.jpg" alt="image-20210926175209847"></p>
+<p>Also, you may would like to check the time interval to load module data. </p>
+<p><img src="https://tva1.sinaimg.cn/large/008i3skNgy1gv18hn21d0j61g70u0agn02.jpg" alt="image-20210926180112597"></p>
+</section>
+    <!-- Tags START -->
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/2021/07/24/20210724-EXC-BREAKPOINT-in-forced-unwrapping-optional/">
+        <span class="nav-arrow">← </span>
+        
+          EXC_BREAKPOINT when forced unwrapping optional in Swift
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/2021/10/02/20211001-signpost-custome-instrument/">
+        
+          How to use SignPost
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+    
+      <div class="money-like">
+        <div class="reward-btn">
+          赏
+          <span class="money-code">
+            <span class="alipay-code">
+              <div class="code-image"></div>
+              <b>使用支付宝打赏</b>
+            </span>
+            <span class="wechat-code">
+              <div class="code-image"></div>
+              <b>使用微信打赏</b>
+            </span>
+          </span>
+        </div>
+        <p class="notice">若你觉得我的文章对你有帮助，欢迎点击上方按钮对我打赏</p>
+      </div>
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">扫描二维码，分享此文章</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Utterances START -->
+      <div id="utterances"></div>
+      <script src="https://utteranc.es/client.js"
+        repo="null"
+        issue-term="pathname"
+        theme="github-light"
+        crossorigin="anonymous"
+        async></script>    
+      <!-- Utterances END -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#NativeModulePerfLogger-in-React-Native"><span class="toc-nav-text">NativeModulePerfLogger in React Native</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#SignPost"><span class="toc-nav-text">SignPost</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#How-to-use-it"><span class="toc-nav-text">How to use it</span></a></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://suelan.github.io/2021/08/13/20210813-react-native-instrument-profile/';
+    var banner = 'undefined'
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+    // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', '/css/images/error_icon.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== '/css/images/error_icon.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+  })();
+</script>
+
+
+  <script>
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+  </script>
+
+
+
+
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2021 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a target="_blank" rel="noopener" href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      hljs.configure({useBR: true});
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+
+  </body>
+</html>

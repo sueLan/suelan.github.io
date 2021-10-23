@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="RY&#39;s blog">
+  <meta name="keyword" content="hexo-theme, vuejs">
+  
+    <link rel="shortcut icon" type="image/ico" href="[object Object]"/>
+  
+  <title>
+    
+      Anchor point for 3D Transform in React Native | RY &#39;s Blog
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+    
+<script src="/js/qrious.js"></script>
+
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+  
+    
+<script src="/js/local-search.js"></script>
+
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div>
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>RY 's Blog</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/series/" class="item-link">Series</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/project/" class="item-link">Projects</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+      
+        <li class="menu-item menu-item-search right-list">
+    <a role="button" class="popup-trigger">
+        <i class="fa fa-search fa-fw"></i>
+    </a>
+</li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/series/" class="menu-link">Series</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/project/" class="menu-link">Projects</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+    
+      <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+            <span class="search-icon">
+                <i class="fa fa-search"></i>
+            </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocapitalize="off"
+                    placeholder="Please enter your keyword(s) to search." spellcheck="false"
+                    type="search" class="search-input">
+            </div>
+            <span class="popup-btn-close">
+                <i class="fa fa-times-circle"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+    
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>Anchor point for 3D Transform in React Native</h2>
+  <p class="post-date">2020-05-15</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><p>In react-native, sometimes, you may want to rotate a view basing one a specific point instead of the center of the view. Like the cube animation in the instagram stories. Some people think you need a extra <code>transformZ</code> property to achieve that. But, actually, you don’t need that. What you need is <code>Anchor Point</code>. </p>
+<h2 id="What-is-Anchor-Point"><a href="#What-is-Anchor-Point" class="headerlink" title="What is Anchor Point"></a>What is Anchor Point</h2><p>Web developers may be familiar with <code>transform-origin</code> in css. While in iOS, there is something similar called <code>anchor point</code>. </p>
+<p><code>Anchor point</code> in a view is a point in the unit coordinate space, about which all geometric manipulations to the view occur. </p>
+<blockquote>
+<p>Defines the anchor point of the layer’s bounds rectangle. Animatable.<br>You specify the value for this property using the unit coordinate space. The default value of this property is (0.5, 0.5), which represents the center of the layer’s bounds rectangle. <code>All geometric manipulations to the view occur about the specified point</code>. For example, applying a rotation transform to a layer with the default anchor point causes the layer to rotate around its center. Changing the anchor point to a different location would cause the layer to rotate around that new point.                – <a target="_blank" rel="noopener" href="https://developer.apple.com/documentation/quartzcore/calayer/1410817-anchorpoint">Apple dev</a></p>
+</blockquote>
+<p>By default, the anchor point for the rotation is the center of the view. That means the rotation of a view is based on its center. Inspired by this <a target="_blank" rel="noopener" href="https://commitocracy.com/implementing-foldview-in-react-native-e970011f98b8#.k95f793qe">article</a>, which teaches us how to rotate a view based from the origin point, I got an important clue to implement the anchor point.  </p>
+<h3 id="Why-do-we-need-anchor-point-in-react-native"><a href="#Why-do-we-need-anchor-point-in-react-native" class="headerlink" title="Why do we need anchor point in react-native"></a>Why do we need anchor point in react-native</h3><ol>
+<li>Currently, there is no public API in react-native providing the ability to set <code>transform-origin</code> or <code>anchor-point</code>. So you will find it is difficult to do some fancy 3D transform animations. For example, <a target="_blank" rel="noopener" href="https://www.npmjs.com/package/react-native-cube-transition">cube animation</a> has some flaws: <ul>
+<li>There is a gap between the views when translating views in Android </li>
+<li>The angle is not correct, less than 90 degrees, make the animation wired. It is not a cube, if you try to adjust the angle, you will break all the things. </li>
+<li>part of the view is clipped, not rendering on the screen.<br><img src="https://user-images.githubusercontent.com/7471672/84166299-4c06dd00-aaa7-11ea-8c48-4e401c756767.png" alt="image2020-5-27_17-17-21"></li>
+</ul>
+</li>
+</ol>
+<p>Actually, I use this function to solve all these issues. But it is code for company, I can’t make it public. The key thing is to set anchor point as (1, 0.5) for the left view and (0, 0.5) for the right view.<br><img src="https://user-images.githubusercontent.com/7471672/84166384-63de6100-aaa7-11ea-8102-9de5bee4cf18.png" alt="image"></p>
+<ol start="2">
+<li>Beside, for this foldview animation <a target="_blank" rel="noopener" href="https://commitocracy.com/implementing-foldview-in-react-native-e970011f98b8">foldview-in-react-native</a>, one of the most import things is to use <a target="_blank" rel="noopener" href="https://github.com/jmurzy/react-native-foldview/blob/892f89569cd851867602ce7412852515dccc7e5f/src/transformUtil.js#L3"><code>transformOrigin</code></a>. But, this function works with <code>transform matrix</code>, and isn’t easy to use. So, I made <code>react-native-anchor-point</code>. It looks simple and tricky, but actually very powerful. With it, you can use the transform API in react-native to achieve many fancy animations.</li>
+</ol>
+<h3 id="transformOrigin-in-react-native-foldview"><a href="#transformOrigin-in-react-native-foldview" class="headerlink" title="transformOrigin in react-native-foldview"></a>transformOrigin in react-native-foldview</h3><blockquote>
+<p>“Since the transform origin of a view is at its horizontal and vertical center by default, to rotate it in x-space along the bottom, we need to first shift our view’s origin on the y-axis by 50% of the view’s height, then apply rotation, then shift it back to the original center.” — <a target="_blank" rel="noopener" href="https://commitocracy.com/implementing-foldview-in-react-native-e970011f98b8">@jmurzy</a></p>
+</blockquote>
+<p>So @jmurze implemented a [function]<br>(<a target="_blank" rel="noopener" href="https://gist.github.com/jmurzy/0d62c0b5ea88ca806c16b5e8a16deb6a#file-foldview-transformutil-transformorigin-js">https://gist.github.com/jmurzy/0d62c0b5ea88ca806c16b5e8a16deb6a#file-foldview-transformutil-transformorigin-js</a>)</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">transformOrigin</span>(<span class="params">matrix, origin</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> &#123; x, y, z &#125; = origin;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> translate = MatrixMath.createIdentityMatrix();</span><br><span class="line">  MatrixMath.reuseTranslate3dCommand(translate, x, y, z);</span><br><span class="line">  MatrixMath.multiplyInto(matrix, translate, matrix);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> untranslate = MatrixMath.createIdentityMatrix();</span><br><span class="line">  MatrixMath.reuseTranslate3dCommand(untranslate, -x, -y, -z);</span><br><span class="line">  MatrixMath.multiplyInto(matrix, matrix, untranslate);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Here</p>
+<ul>
+<li><code>reuseTranslate3dCommand</code> in the <a target="_blank" rel="noopener" href="https://github.com/facebook/react-native/blob/a1ac2518a364ebcd3cc024a22229cadc1791e1c4/Libraries/Utilities/MatrixMath.js#L95">react-native source code</a>, is to replace the 12th, 13th, 14th element in the matrix by parameters, z, y, z to achieve <code>translation</code> effect. </li>
+<li><code>reuseTranslate3dCommand</code> is called in <a target="_blank" rel="noopener" href="https://github.com/facebook/react-native/blob/a1ac2518a364ebcd3cc024a22229cadc1791e1c4/Libraries/StyleSheet/processTransform.js#L79">processTransform.js#L79</a>, in which, RN generates a transform matrix based on <code>transform object</code> we provide.<br>[<a target="_blank" rel="noopener" href="https://github.com/facebook/react-native/blob/a1ac2518a364ebcd3cc024a22229cadc1791e1c4/Libraries/StyleSheet/processTransform.js#L43]">https://github.com/facebook/react-native/blob/a1ac2518a364ebcd3cc024a22229cadc1791e1c4/Libraries/StyleSheet/processTransform.js#L43]</a></li>
+</ul>
+<h3 id="What-transformOrigin-does-is-to"><a href="#What-transformOrigin-does-is-to" class="headerlink" title="What transformOrigin does is to"></a>What <code>transformOrigin</code> does is to</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1. translate the view by x, y, z on the x-axis, y-axis, z-axis </span><br><span class="line">2. apply rotation</span><br><span class="line">3. translate the view back by -x, -y, -z on the x-axis, y-axis, z-axis </span><br></pre></td></tr></table></figure>
+<h3 id="Plain-Code"><a href="#Plain-Code" class="headerlink" title="Plain Code"></a>Plain Code</h3><p>After understanding the above things, we know we can can use <code>transform</code> style to set the anchor point. For example, the following code sets the anchor point of the view as (0, 0.5). This will make the rotate base on the left side of the view. </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"> <span class="keyword">const</span> transform = &#123;</span><br><span class="line">    <span class="attr">transform</span>: [</span><br><span class="line">        &#123;<span class="attr">translateX</span>: -w / <span class="number">2</span>&#125;, </span><br><span class="line">        rotateY, </span><br><span class="line">        &#123;<span class="attr">translateX</span>: w / <span class="number">2</span>&#125;</span><br><span class="line">    ]</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> (   </span><br><span class="line">      <span class="xml"><span class="tag">&lt;<span class="name">Animated.View</span> <span class="attr">style</span>=<span class="string">&#123;transform&#125;</span>&gt;</span><span class="tag">&lt;/<span class="name">Animated.View</span>&gt;</span></span></span><br><span class="line">  )</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><img src="./d32bef61.png" alt=""></p>
+<p>Remember that RN generates only one single transform matrix, based on <code>transform object</code> we provide, <a target="_blank" rel="noopener" href="https://github.com/facebook/react-native/blob/a1ac2518a364ebcd3cc024a22229cadc1791e1c4/Libraries/StyleSheet/processTransform.js#L43">here</a>. So, finally, the above code will be converted into a transform matrix, with which the rendering system can render a view with a given layout and shape.  There are some transform matrix knowledge involved. <a target="_blank" rel="noopener" href="http://www.opengl-tutorial.org/beginners-tutorials/tutorial-3-matrices/">ref: tutorial-3-matrices</a></p>
+<h2 id="react-native-anchor-point"><a href="#react-native-anchor-point" class="headerlink" title="react-native-anchor-point"></a>react-native-anchor-point</h2><p>In this <a target="_blank" rel="noopener" href="https://github.com/sueLan/react-native-anchor-point">package</a>, I provides a function <code>withAnchorPoint</code>, to inject the above code into your <code>transform</code> object. It works well with the original way you use transform and. So, you don’t have to use <code>ref</code> to set the <code>transformOrigin</code> any more. This would make the <code>3d transform</code> in React Native easier to implement. </p>
+<p><img src="./rotateZ.gif" alt=""><br><img src="./rotateXY.gif" alt=""><br><img src="./rotate.gif" alt=""></p>
+<p>And it works well with the react-native <code>transform</code> API </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">import &#123; withAnchorPoint &#125; from &#x27;react-native-anchor-point&#x27;;</span><br><span class="line"></span><br><span class="line">getTransform = () =&gt; &#123;</span><br><span class="line">    let transform = &#123;</span><br><span class="line">        transform: [&#123; perspective: 400 &#125;, &#123; rotateX: rotateValue &#125;],</span><br><span class="line">    &#125;;</span><br><span class="line">    // inject the anchor point here</span><br><span class="line">    return withAnchorPoint(transform, &#123; x: 0.5, y: 0 &#125;, &#123; width: CARD_WIDTH, height: CARD_HEIGHT &#125;);</span><br><span class="line">&#125;;</span><br><span class="line">    </span><br><span class="line">&lt;Animated.View style=&#123;[styles.blockBlue, this.getTransform()]&#125; /&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="Ref"><a href="#Ref" class="headerlink" title="Ref"></a>Ref</h2><ul>
+<li><a target="_blank" rel="noopener" href="http://www.opengl-tutorial.org/beginners-tutorials/tutorial-3-matrices/">Matrices</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/jmurzy/react-native-foldview">react-native-foldview</a></li>
+<li><a target="_blank" rel="noopener" href="https://stackoverflow.com/a/60632809/4026902">RN How to set the anchor point of a view.</a></li>
+<li><a target="_blank" rel="noopener" href="https://pages.mtu.edu/~shene/COURSES/cs3621/NOTES/geometry/geo-tran.html">https://pages.mtu.edu/~shene/COURSES/cs3621/NOTES/geometry/geo-tran.html</a></li>
+</ul>
+</section>
+    <!-- Tags START -->
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <a href="/tags#Popular Article" >
+    <span class="tag-code">Popular Article</span>
+  </a>
+
+  <a href="/tags#Animation" >
+    <span class="tag-code">Animation</span>
+  </a>
+
+      </div>
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/2020/05/09/20190509-Work-with-Wider-Color/">
+        <span class="nav-arrow">← </span>
+        
+          Work with Wider Color
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/2020/06/07/20200607-beyond-po/">
+        
+          Beyond &quot;po&quot;
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+    
+      <div class="money-like">
+        <div class="reward-btn">
+          赏
+          <span class="money-code">
+            <span class="alipay-code">
+              <div class="code-image"></div>
+              <b>使用支付宝打赏</b>
+            </span>
+            <span class="wechat-code">
+              <div class="code-image"></div>
+              <b>使用微信打赏</b>
+            </span>
+          </span>
+        </div>
+        <p class="notice">若你觉得我的文章对你有帮助，欢迎点击上方按钮对我打赏</p>
+      </div>
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">扫描二维码，分享此文章</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Utterances START -->
+      <div id="utterances"></div>
+      <script src="https://utteranc.es/client.js"
+        repo="null"
+        issue-term="pathname"
+        theme="github-light"
+        crossorigin="anonymous"
+        async></script>    
+      <!-- Utterances END -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#What-is-Anchor-Point"><span class="toc-nav-text">What is Anchor Point</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Why-do-we-need-anchor-point-in-react-native"><span class="toc-nav-text">Why do we need anchor point in react-native</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#transformOrigin-in-react-native-foldview"><span class="toc-nav-text">transformOrigin in react-native-foldview</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#What-transformOrigin-does-is-to"><span class="toc-nav-text">What transformOrigin does is to</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Plain-Code"><span class="toc-nav-text">Plain Code</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#react-native-anchor-point"><span class="toc-nav-text">react-native-anchor-point</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Ref"><span class="toc-nav-text">Ref</span></a></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://suelan.github.io/2020/05/15/20200515-react-native-anchor-point/';
+    var banner = 'undefined'
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+    // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', '/css/images/error_icon.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== '/css/images/error_icon.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+  })();
+</script>
+
+
+  <script>
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+  </script>
+
+
+
+
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2021 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a target="_blank" rel="noopener" href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      hljs.configure({useBR: true});
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+
+  </body>
+</html>

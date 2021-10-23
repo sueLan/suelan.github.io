@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="RY&#39;s blog">
+  <meta name="keyword" content="hexo-theme, vuejs">
+  
+    <link rel="shortcut icon" type="image/ico" href="[object Object]"/>
+  
+  <title>
+    
+      Advanced debug in Xcode and LLDB | RY &#39;s Blog
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+    
+<script src="/js/qrious.js"></script>
+
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+  
+    
+<script src="/js/local-search.js"></script>
+
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div>
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>RY 's Blog</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/series/" class="item-link">Series</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/project/" class="item-link">Projects</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+      
+        <li class="menu-item menu-item-search right-list">
+    <a role="button" class="popup-trigger">
+        <i class="fa fa-search fa-fw"></i>
+    </a>
+</li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/series/" class="menu-link">Series</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/project/" class="menu-link">Projects</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+    
+      <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+            <span class="search-icon">
+                <i class="fa fa-search"></i>
+            </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocapitalize="off"
+                    placeholder="Please enter your keyword(s) to search." spellcheck="false"
+                    type="search" class="search-input">
+            </div>
+            <span class="popup-btn-close">
+                <i class="fa fa-times-circle"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+    
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>Advanced debug in Xcode and LLDB</h2>
+  <p class="post-date">2020-06-07</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><h1 id="Advanced-debug-in-Xcode-and-LLDB"><a href="#Advanced-debug-in-Xcode-and-LLDB" class="headerlink" title="Advanced debug in Xcode and LLDB"></a>Advanced debug in Xcode and LLDB</h1><p><a target="_blank" rel="noopener" href="https://developer.apple.com/videos/play/wwdc2018/412">https://developer.apple.com/videos/play/wwdc2018/412</a> </p>
+<p>This session is awesome! </p>
+<h2 id="Configure-behaviors-to-dedicate-a-tab-for-debugging"><a href="#Configure-behaviors-to-dedicate-a-tab-for-debugging" class="headerlink" title="Configure behaviors to dedicate a tab for debugging"></a>Configure behaviors to dedicate a tab for debugging</h2><p>In <code>Prefernece</code> -&gt; <code>Behaviors</code> ,  we can custom the debugging tab for ourselves. For example, choose <code>Show tab named</code> , fill in the name and choose <code>active window</code> . We will have a independent debug tab. </p>
+<p><img src="412/image-20200601222857985.png" alt="image-20200601222857985"></p>
+<p><img src="media/15902152252875/image-20200607112605302.png" alt="image-20200607112605302" style="zoom:50%;" /></p>
+<h2 id="LLDB-expressions-can-modify-program-state"><a href="#LLDB-expressions-can-modify-program-state" class="headerlink" title="LLDB expressions can modify program state"></a>LLDB expressions can modify program state</h2><p>By using  auto-continuing breakpoints with debugger commands to inject code live, you can inject expression, change state or logic without compiling the project.  </p>
+<p><strong>How to do it? </strong></p>
+<ul>
+<li><p>Click <code>Edit BreakPoint...</code></p>
+</li>
+<li><p>Click <code>add action</code> ; the default option is <code>Debugger Command</code>  we can write some <code>LLDB</code> command here</p>
+</li>
+<li><p>Choose the <code>Automatically continue</code>, it will not pause when trigger this breakpoint. </p>
+</li>
+</ul>
+<p>  <img src="media/15902152252875/image-20200607111532596.png" alt="image-20200607111532596" style="zoom:50%;" /></p>
+<p><img src="media/15902152252875/image-20200601224246210.png" alt="image-20200601224246210" style="zoom:50%;" /></p>
+<h2 id="Symbolic-Breakpoint"><a href="#Symbolic-Breakpoint" class="headerlink" title="Symbolic Breakpoint"></a>Symbolic Breakpoint</h2><p><code>Symbolic Breakpoint</code> is one of my favorite tools to debug issues caused by others’ framework.</p>
+<p>In the  <code>Breakpoint navigator</code> , choose <code>Symbolic Breakpoint</code> .  </p>
+<p><img src="412/image-20200607113135963.png" style="zoom:50%;" /></p>
+<p>Fill in any signature of the <code>Objective-c</code> method you want. </p>
+<p><img src="412/image-20200607113105829.png" style="zoom:50%;" /></p>
+<h2 id="“po-arg1”-arg2-etc-in-assembly-frames-to-print-function-arguments"><a href="#“po-arg1”-arg2-etc-in-assembly-frames-to-print-function-arguments" class="headerlink" title="“po $arg1” ($arg2, etc) in assembly frames to print function arguments"></a>“po $arg1” ($arg2, etc) in assembly frames to print function arguments</h2><p><img src="412/image-20200601224622911.png" style="zoom:50%;" /></p>
+<p>In this case,  we use <code>Symbolic Breakpoint</code> to hit the <code>setText:</code> in <code>UILabe</code>, but we don’t have the source code of <code>UIKit</code>. When the method is hit, we are in an assembly frame, we can use <code>$arg</code> to inspect the parameters.  <code>$arg1</code> is <code>self</code> pointer. <code>$arg2</code> is the  <code>selector</code> of the method. Others are  arguements to the method. <a target="_blank" rel="noopener" href="https://developer.apple.com/documentation/objectivec/1456712-objc_msgsend#parameters">doc for objc_msgSend</a></p>
+<p><img src="media/15902152252875/image-20200601224723843.png" style="zoom: 50%;" /></p>
+<p><strong>Noted</strong>:  we have to do typecast for the <code>$arg2</code> , which is a <code>Slector</code> . </p>
+<p><img src="media/15902152252875/image-20200601224918951.png" alt="image-20200601224918951" style="zoom:50%;" /></p>
+<h2 id="Create-dependent-breakpoints-using-“breakpoint-set-–one-shot-true”"><a href="#Create-dependent-breakpoints-using-“breakpoint-set-–one-shot-true”" class="headerlink" title="Create dependent breakpoints using “breakpoint set –one-shot true”"></a>Create dependent breakpoints using “breakpoint set –one-shot true”</h2><p>If a Breakpoint is frequently hit, Like the above breakpoint <code>[UILabel setText:]</code>,  usually we will edit <code>conditions</code> for this breakpoint. And then, this <code>Breakppint</code> will be hit only when the expression for the condition is true.  However, when we don’t a property to make the <code>condition expression</code>.   There is another way.  We can add action <code>one-shot symbolic breakpoint</code> in <code>a specific breakpoint</code>, where it will be hit only once in the proper time. </p>
+<blockquote>
+<p> The one shot breakpoint is a temporary breakpoint that only exists until it’s triggered and then it’s automatically deleted.</p>
+</blockquote>
+<p><img src="media/15902152252875/image-20200607115734569.png" alt="image-20200607115734569" style="zoom:67%;" /></p>
+<ul>
+<li>Set  a break point in line 96, where we might don’t want a break, but we can <code>configure this breakpoint</code> to actually set the <code>symbolic breakpoint</code> in UI label set text . </li>
+<li><p>choose <code>automatically continue</code> </p>
+</li>
+<li><p>Then add action , <code>breakpoint set --one-shot true --name &quot;[UILabel setText:]&quot;</code>.  This <code>one-shot symbolic breakpoint</code> is activated only after this breakpoint in line 96 is hit.  </p>
+</li>
+</ul>
+<p>How magical the dependent breakpoints are!</p>
+<h2 id="Skip-lines-of-code"><a href="#Skip-lines-of-code" class="headerlink" title="Skip lines of code"></a>Skip lines of code</h2><p>By <code>dragging</code> Instruction Pointer, the green handler in the following picture,  we can skip lines of code. It means, these lines of  code will not be executed. </p>
+<p><img src="media/15902152252875/image-20200607123358909.png" alt="image-20200607123358909"></p>
+<p>Or we can use <code>action</code> int the breakpoint to skip this line of code for us. </p>
+<p><img src="media/15902152252875/image-20200607123639829.png" alt="image-20200607123639829" style="zoom:50%;" /></p>
+<p>After doing that, we can add <code>expression</code> to add new expressions, like calling other functions. </p>
+<p><img src="media/15902152252875/image-20200607123845152.png" alt="image-20200607123845152" style="zoom:50%;" /></p>
+<h2 id="Pause-when-variables-are-modified-by-using-watchpoints"><a href="#Pause-when-variables-are-modified-by-using-watchpoints" class="headerlink" title="Pause when variables are modified by using watchpoints"></a>Pause when variables are modified by using watchpoints</h2><ul>
+<li>filter the variable we want using <code>fitler</code> </li>
+<li>click <code>Watch attempts</code> </li>
+</ul>
+<p><img src="412/image-20200607124534515.png" style="zoom:50%;" /></p>
+<p>Then, we create a <code>Watchpoint</code> , which can be seen in the <code>breakpoint navigator</code></p>
+<p><img src="412/image-20200607124622132.png" style="zoom:50%;" /></p>
+<h2 id="Evaluate-Obj-C-code-in-Swift-frames-with-expression-l-objc-O-lt-expr-gt"><a href="#Evaluate-Obj-C-code-in-Swift-frames-with-expression-l-objc-O-lt-expr-gt" class="headerlink" title="Evaluate Obj-C code in Swift frames with expression -l objc -O -- &lt;expr&gt;"></a>Evaluate Obj-C code in Swift frames with <code>expression -l objc -O -- &lt;expr&gt;</code></h2><p>In swift frames, we can’t use <code>pointers</code> or private func as we do in  obj-c frames. So here comes <code></code>expression -l objc -O – <expr>`.  This can help use them as we do in obj-c frames.  </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">// In swift</span><br><span class="line">expression -l objc -O -- [`self.view`  recursiveDescription]</span><br><span class="line"></span><br><span class="line">// In Obj-c </span><br><span class="line">[self.view  recursiveDescription]</span><br></pre></td></tr></table></figure>
+<p>By using the  <code>command alis</code> , we can short cut it. </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">command alis poc expression -l -objc -O --</span><br></pre></td></tr></table></figure>
+<p><img src="media/15902152252875/image-20200607141219843.png" alt="image-20200607141219843"></p>
+<h2 id="Flush-view-changes-to-the-screen-using-“expression-CATransaction-flush-”"><a href="#Flush-view-changes-to-the-screen-using-“expression-CATransaction-flush-”" class="headerlink" title="Flush view changes to the screen using “expression CATransaction.flush()”"></a>Flush view changes to the screen using “expression CATransaction.flush()”</h2><h4 id="unsafeBitCast"><a href="#unsafeBitCast" class="headerlink" title="unsafeBitCast"></a>unsafeBitCast</h4><p>We can use <code>unsafeBitCast</code>  in Swift.  To do the type cast, we have to provide the correct type. </p>
+<p>Print its property or change its property: </p>
+<p><img src="media/15902152252875/image-20200607142019406.png" alt="image-20200607142019406"></p>
+<p>Use <code>CATransaction.flush</code> to apply the view module changes to the screen’s frame buffer. </p>
+<h2 id="Add-custom-LLDB-commands-using-aliases-and-scripts-Alias-examples"><a href="#Add-custom-LLDB-commands-using-aliases-and-scripts-Alias-examples" class="headerlink" title="Add custom LLDB commands using aliases and scripts. Alias examples:"></a>Add custom LLDB commands using aliases and scripts. Alias examples:</h2><ul>
+<li>download nudge LLDB script provided by the Apple. <a target="_blank" rel="noopener" href="https://developer.apple.com/videos/play/wwdc2018/412/">https://developer.apple.com/videos/play/wwdc2018/412/</a> </li>
+<li>Add to <code>~/.lldbinit</code></li>
+<li>Add  custom alias in the lldbinit</li>
+</ul>
+<p><img src="media/15902152252875/image-20200607143100209.png" alt="image-20200607143100209"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">command alias poc expression -l objc -O --</span><br><span class="line">command alias flush expression -l objc -- (void)[CATransaction flush]</span><br></pre></td></tr></table></figure>
+<h2 id="Customizing-Data-Formatters"><a href="#Customizing-Data-Formatters" class="headerlink" title="Customizing Data Formatters"></a>Customizing Data Formatters</h2><p><a target="_blank" rel="noopener" href="https://developer.apple.com/videos/play/wwdc2019/429">https://developer.apple.com/videos/play/wwdc2019/429</a></p>
+</section>
+    <!-- Tags START -->
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <a href="/tags#Debug" >
+    <span class="tag-code">Debug</span>
+  </a>
+
+  <a href="/tags#LLDB" >
+    <span class="tag-code">LLDB</span>
+  </a>
+
+      </div>
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/2020/06/07/20200607-beyond-po/">
+        <span class="nav-arrow">← </span>
+        
+          Beyond &quot;po&quot;
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/2020/07/05/20200705Behind-the-Scenes-of-the-%E2%80%A2Xcode-Build-Process/">
+        
+          Behind the Scenes of the Xcode Build Process
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+    
+      <div class="money-like">
+        <div class="reward-btn">
+          赏
+          <span class="money-code">
+            <span class="alipay-code">
+              <div class="code-image"></div>
+              <b>使用支付宝打赏</b>
+            </span>
+            <span class="wechat-code">
+              <div class="code-image"></div>
+              <b>使用微信打赏</b>
+            </span>
+          </span>
+        </div>
+        <p class="notice">若你觉得我的文章对你有帮助，欢迎点击上方按钮对我打赏</p>
+      </div>
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">扫描二维码，分享此文章</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Utterances START -->
+      <div id="utterances"></div>
+      <script src="https://utteranc.es/client.js"
+        repo="null"
+        issue-term="pathname"
+        theme="github-light"
+        crossorigin="anonymous"
+        async></script>    
+      <!-- Utterances END -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#Advanced-debug-in-Xcode-and-LLDB"><span class="toc-nav-text">Advanced debug in Xcode and LLDB</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Configure-behaviors-to-dedicate-a-tab-for-debugging"><span class="toc-nav-text">Configure behaviors to dedicate a tab for debugging</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#LLDB-expressions-can-modify-program-state"><span class="toc-nav-text">LLDB expressions can modify program state</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Symbolic-Breakpoint"><span class="toc-nav-text">Symbolic Breakpoint</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E2%80%9Cpo-arg1%E2%80%9D-arg2-etc-in-assembly-frames-to-print-function-arguments"><span class="toc-nav-text">“po $arg1” ($arg2, etc) in assembly frames to print function arguments</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Create-dependent-breakpoints-using-%E2%80%9Cbreakpoint-set-%E2%80%93one-shot-true%E2%80%9D"><span class="toc-nav-text">Create dependent breakpoints using “breakpoint set –one-shot true”</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Skip-lines-of-code"><span class="toc-nav-text">Skip lines of code</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Pause-when-variables-are-modified-by-using-watchpoints"><span class="toc-nav-text">Pause when variables are modified by using watchpoints</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Evaluate-Obj-C-code-in-Swift-frames-with-expression-l-objc-O-lt-expr-gt"><span class="toc-nav-text">Evaluate Obj-C code in Swift frames with expression -l objc -O -- &lt;expr&gt;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Flush-view-changes-to-the-screen-using-%E2%80%9Cexpression-CATransaction-flush-%E2%80%9D"><span class="toc-nav-text">Flush view changes to the screen using “expression CATransaction.flush()”</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#unsafeBitCast"><span class="toc-nav-text">unsafeBitCast</span></a></li></ol></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Add-custom-LLDB-commands-using-aliases-and-scripts-Alias-examples"><span class="toc-nav-text">Add custom LLDB commands using aliases and scripts. Alias examples:</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Customizing-Data-Formatters"><span class="toc-nav-text">Customizing Data Formatters</span></a></li></ol></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://suelan.github.io/2020/06/07/20200607-Advanced-debug-in-Xcode-and-LLDB/';
+    var banner = 'undefined'
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+    // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', '/css/images/error_icon.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== '/css/images/error_icon.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+  })();
+</script>
+
+
+  <script>
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+  </script>
+
+
+
+
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2021 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a target="_blank" rel="noopener" href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      hljs.configure({useBR: true});
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+
+  </body>
+</html>

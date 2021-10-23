@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="RY&#39;s blog">
+  <meta name="keyword" content="hexo-theme, vuejs">
+  
+    <link rel="shortcut icon" type="image/ico" href="[object Object]"/>
+  
+  <title>
+    
+      EXC_BREAKPOINT when forced unwrapping optional in Swift | RY &#39;s Blog
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+    
+<script src="/js/qrious.js"></script>
+
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+  
+    
+<script src="/js/local-search.js"></script>
+
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div>
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>RY 's Blog</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/series/" class="item-link">Series</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/project/" class="item-link">Projects</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+      
+        <li class="menu-item menu-item-search right-list">
+    <a role="button" class="popup-trigger">
+        <i class="fa fa-search fa-fw"></i>
+    </a>
+</li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/series/" class="menu-link">Series</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/project/" class="menu-link">Projects</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+    
+      <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+            <span class="search-icon">
+                <i class="fa fa-search"></i>
+            </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocapitalize="off"
+                    placeholder="Please enter your keyword(s) to search." spellcheck="false"
+                    type="search" class="search-input">
+            </div>
+            <span class="popup-btn-close">
+                <i class="fa fa-times-circle"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+    
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>EXC_BREAKPOINT when forced unwrapping optional in Swift</h2>
+  <p class="post-date">2021-07-24</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><p>When unforced unwrapping optional in Swift, we will see the exception type in crash report is <code>Exception Type:  EXC_BREAKPOINT (SIGTRAP)</code> instead of <code>EXC_BAD_ACCESS</code> in Objective-C. That intrigued me. So I did some investigations on it. </p>
+<p>As Mike Ash mentioned in <a target="_blank" rel="noopener" href="https://www.mikeash.com/pyblog/friday-qa-2014-08-01-exploring-swift-memory-layout-part-ii.html">the article about swift memory layout</a></p>
+<blockquote>
+<p>Swift optionals are represented just like Objective-C: a plain address when pointing to an object, and all zeroes for nil.</p>
+</blockquote>
+<p>He gave an example like this, there are 4 variables</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> obj: <span class="type">NSObject</span>? <span class="operator">=</span> <span class="type">NSObject</span>()</span><br><span class="line"><span class="keyword">let</span> nilobj: <span class="type">NSObject</span>? <span class="operator">=</span> <span class="literal">nil</span></span><br><span class="line"><span class="keyword">let</span> explicitobj: <span class="type">NSObject</span>! <span class="operator">=</span> <span class="type">NSObject</span>()</span><br><span class="line"><span class="keyword">let</span> explicitnilobj: <span class="type">NSObject</span>! <span class="operator">=</span> <span class="literal">nil</span></span><br></pre></td></tr></table></figure>
+<p>Basically, they lay out in memory like this:<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">806040c1957f0000</span><br><span class="line">0000000000000000</span><br><span class="line">70e440c1957f0000</span><br><span class="line">0000000000000000</span><br></pre></td></tr></table></figure><br>Optional variable either contains a valid object address or all zero, so-call <code>nil</code> in Swift, which is different from <code>nil</code> in OC. While, <code>0000000000000000</code> in address space actually is an illegal region to access, iOS system raises an exception if you trying to do so. </p>
+<h3 id="PAGEZERO-in-Mach-O-Executable"><a href="#PAGEZERO-in-Mach-O-Executable" class="headerlink" title="PAGEZERO  in Mach-O Executable"></a>PAGEZERO  in Mach-O Executable</h3><blockquote>
+<p>__PAGEZERO: On 32-bit systems, this is a single page (4 KB) of memory, with all of its access permissions revoked. On 64-bit systems, this corresponds to the entire 32-bit address space — i.e. the first 4 GB. This is useful for trapping NULL pointer references (as NULL is really “0”), or integer-as-pointer references (as all values up to 4,095 in 32-bit, or 4 GB in 64-bit, fall within this page). Because access permissions — read, write, and execute — are all revoked, any attempt to dereference memory addresses that lie within this page will trigger a hardware page fault from the MMU, which in turn leads to a trap, which the kernel can trap. The kernel will convert the trap to a C++ exception or a POSIX signal for a bus error (SIGBUS).      —- Mac OS and iOS internals </p>
+</blockquote>
+<p>When the executable is loaded into memory, the first <code>4G</code> memory region for this process is <code>non-executable, non-writable, non-readable</code>. Trying to access to this region of memory is illegal. </p>
+<h3 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h3><p>I wrote a demo to access  underlying value of an optional  by adding an exclamation point (<code>!</code>) to the end of the optional’s name. </p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ViewController</span>: <span class="title">UIViewController</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">func</span> <span class="title">viewDidLoad</span>()</span> &#123;</span><br><span class="line">        <span class="keyword">super</span>.viewDidLoad()</span><br><span class="line">        <span class="comment">// Do any additional setup after loading the view.</span></span><br><span class="line">        <span class="keyword">let</span> image <span class="operator">=</span> <span class="type">UIImage</span>(named: <span class="string">&quot;aMissingIcon&quot;</span>)<span class="operator">!</span></span><br><span class="line">        <span class="built_in">print</span>(image.size)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Analyse-Crash-Report"><a href="#Analyse-Crash-Report" class="headerlink" title="Analyse Crash Report"></a>Analyse Crash Report</h3><h3 id="Exception-Type"><a href="#Exception-Type" class="headerlink" title="Exception Type"></a>Exception Type</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Exception Type:  EXC_BREAKPOINT (SIGTRAP)</span><br><span class="line">Exception Codes: 0x0000000000000001, 0x000000010074596c</span><br><span class="line">Termination Signal: Trace/BPT trap: 5</span><br><span class="line">Termination Reason: Namespace SIGNAL, Code 0x5</span><br><span class="line">Terminating Process: exc handler [12523]</span><br><span class="line">Triggered by Thread:  0</span><br></pre></td></tr></table></figure>
+<h4 id="EXC-BREAKPOINT-SIGTRAP"><a href="#EXC-BREAKPOINT-SIGTRAP" class="headerlink" title="EXC_BREAKPOINT (SIGTRAP)"></a>EXC_BREAKPOINT (SIGTRAP)</h4><p><code>EXC_BREAKPOINT (SIGTRAP)</code> is a trace trap interrupted the process. It gives an attached debugger, if any, a chance to interrupt the process at a specific point in its execution.  So when iOS system raises this exception since my process is trying to <code>access</code>  <code>0x00000000</code>, Xcode debugger can pause the process and show me this fatal error. </p>
+<p><img src="./image-20210217115027905.png" alt="image-20210217115027905"></p>
+<blockquote>
+<p>On ARM processors, this appears as <code>EXC_BREAKPOINT (SIGTRAP).</code>On <code>x86_64</code> processors, this appears as <code>EXC_BAD_INSTRUCTION (SIGILL)</code>.</p>
+</blockquote>
+<p>The Swift runtime uses trace traps for specific types of unrecoverable errors—see <a target="_blank" rel="noopener" href="https://developer.apple.com/documentation/xcode/diagnosing_issues_using_crash_reports_and_device_logs/identifying_the_cause_of_common_crashes/addressing_crashes_from_swift_runtime_errors">Addressing Crashes from Swift Runtime Errors</a> for information on those errors. </p>
+<h3 id="Backtrace-in-Crashed-Thread"><a href="#Backtrace-in-Crashed-Thread" class="headerlink" title="Backtrace in Crashed Thread"></a>Backtrace in Crashed Thread</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Thread 0 Crashed:</span><br><span class="line">0   InvalideMemoryDemo            	0x000000010074596c 0x100740000 + 22892</span><br><span class="line">1   InvalideMemoryDemo            	0x00000001007458d8 0x100740000 + 22744</span><br><span class="line">2   InvalideMemoryDemo            	0x000000010074598c 0x100740000 + 22924</span><br></pre></td></tr></table></figure>
+<h3 id="Disassembling-executable-in-Hopper"><a href="#Disassembling-executable-in-Hopper" class="headerlink" title="Disassembling executable in Hopper"></a>Disassembling executable in Hopper</h3><p>Go to file offset <code>22892</code></p>
+<p><img src="./image-20210217121336204.png" alt="image-20210217121336204"></p>
+<p> <code>BRK</code> is Breakpoint instruction to cause a Software Breakpoint Instruction exception.</p>
+<p>Assembly code </p>
+<p><img src="./image-20210217121006944.png" alt="image-20210217121006944"></p>
+<p>Compiler already did optimizations for us.  It will use <code>cbz</code> command to compare value in register <code>x19</code> with zero. If it is zero, then go to label <code>loc_10000596c</code>, which causes a Software Breakpoint Instruction exception.</p>
+<p><img src="./image-20210217121336204.png" alt="image-20210217121336204"></p>
+<p>From Thread State in in the crash report, we got <code>x19: 0x0000000000000000</code>. So here it goes to  <code>loc_10000596c</code> to raise <code>EXC_BREAKPOINT</code> exception.  That is what we see in the crash report. </p>
+<p><img src="./image-20210217121128060.png" alt="image-20210217121128060"></p>
+<p>seems, nothing fancy. To be continue …</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://www.mikeash.com/pyblog/friday-qa-2014-08-01-exploring-swift-memory-layout-part-ii.html">https://www.mikeash.com/pyblog/friday-qa-2014-08-01-exploring-swift-memory-layout-part-ii.html</a> </li>
+<li><a target="_blank" rel="noopener" href="https://www.objc.io/issues/6-build-tools/mach-o-executables/#sections">https://www.objc.io/issues/6-build-tools/mach-o-executables/#sections</a></li>
+<li><a target="_blank" rel="noopener" href="https://developer.apple.com/documentation/xcode/diagnosing_issues_using_crash_reports_and_device_logs/understanding_the_exception_types_in_a_crash_report#3582420">https://developer.apple.com/documentation/xcode/diagnosing_issues_using_crash_reports_and_device_logs/understanding_the_exception_types_in_a_crash_report#3582420</a></li>
+<li><a target="_blank" rel="noopener" href="https://developer.apple.com/documentation/xcode/diagnosing_issues_using_crash_reports_and_device_logs/identifying_the_cause_of_common_crashes/addressing_crashes_from_swift_runtime_errors">https://developer.apple.com/documentation/xcode/diagnosing_issues_using_crash_reports_and_device_logs/identifying_the_cause_of_common_crashes/addressing_crashes_from_swift_runtime_errors</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.swift.org/swift-book/LanguageGuide/TheBasics.html#//apple_ref/doc/uid/TP40014097-CH5-ID330">https://docs.swift.org/swift-book/LanguageGuide/TheBasics.html#//apple_ref/doc/uid/TP40014097-CH5-ID330</a></li>
+</ul>
+</section>
+    <!-- Tags START -->
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <a href="/tags#Swift" >
+    <span class="tag-code">Swift</span>
+  </a>
+
+      </div>
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/2021/03/19/20210319-FBRetainCycleDetector/">
+        <span class="nav-arrow">← </span>
+        
+          Understand How MLeaksFinder and FBRetainCycleDetector automatically detect memory leaks
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/2021/08/13/20210813-react-native-instrument-profile/">
+        
+          react-native-instrument
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+    
+      <div class="money-like">
+        <div class="reward-btn">
+          赏
+          <span class="money-code">
+            <span class="alipay-code">
+              <div class="code-image"></div>
+              <b>使用支付宝打赏</b>
+            </span>
+            <span class="wechat-code">
+              <div class="code-image"></div>
+              <b>使用微信打赏</b>
+            </span>
+          </span>
+        </div>
+        <p class="notice">若你觉得我的文章对你有帮助，欢迎点击上方按钮对我打赏</p>
+      </div>
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">扫描二维码，分享此文章</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Utterances START -->
+      <div id="utterances"></div>
+      <script src="https://utteranc.es/client.js"
+        repo="null"
+        issue-term="pathname"
+        theme="github-light"
+        crossorigin="anonymous"
+        async></script>    
+      <!-- Utterances END -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#PAGEZERO-in-Mach-O-Executable"><span class="toc-nav-text">PAGEZERO  in Mach-O Executable</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Example"><span class="toc-nav-text">Example</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Analyse-Crash-Report"><span class="toc-nav-text">Analyse Crash Report</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Exception-Type"><span class="toc-nav-text">Exception Type</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#EXC-BREAKPOINT-SIGTRAP"><span class="toc-nav-text">EXC_BREAKPOINT (SIGTRAP)</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Backtrace-in-Crashed-Thread"><span class="toc-nav-text">Backtrace in Crashed Thread</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Disassembling-executable-in-Hopper"><span class="toc-nav-text">Disassembling executable in Hopper</span></a></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://suelan.github.io/2021/07/24/20210724-EXC-BREAKPOINT-in-forced-unwrapping-optional/';
+    var banner = 'undefined'
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+    // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', '/css/images/error_icon.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== '/css/images/error_icon.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+  })();
+</script>
+
+
+  <script>
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+  </script>
+
+
+
+
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2021 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a target="_blank" rel="noopener" href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      hljs.configure({useBR: true});
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+
+  </body>
+</html>
