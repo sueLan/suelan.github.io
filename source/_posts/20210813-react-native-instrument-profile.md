@@ -94,10 +94,10 @@ To test it, I integrate these `CxxNativeModulePerfLogger` to [`RNTester`](https:
 
 ![image-20210926174136104](https://tva1.sinaimg.cn/large/008i3skNgy1gv18fv7bi9j61ht0u0wjn02.jpg)
 
-For example, after scrolling a FlatList, I checked `async_method_call` volume. I saw `createView` , `setChildren` and `managedChildren` mthods  in `UIManager`  are called frequently. In `1.91` second, `createView` called for 2886 times, costing `1.16` seconds. Although the average duration is about `402.27us`  , which may looks like it is not a big deal; considering its frequency, this method finally tops first in our analysis panel. In this `summary` panel,  you can see `total`, `min`, and `avg`  time intervals for a specific method. 
+For example, after scrolling a FlatList, I checked `async_method_call` volume. I saw `createView` , `setChildren` and `managedChildren` mthods  in `UIManager`  are called frequently. In `1.91` seconds, `createView` are called 2886 times, taking up `1.16` seconds. Although the average duration for this method is about `402.27us` , which may look like not a big deal; considering its high frequency, this method finally tops first in our analysis panel. 
 
 ![image-20210926175209847](https://tva1.sinaimg.cn/large/008i3skNgy1gv18hjuyerj61jk0u0ti402.jpg)
 
-Also, you may would like to check the time interval to load module data. 
+In the `summary` panel,  you can also see `total`, `min`, and `avg`  time intervals for any other specific method. Besides, you may would like to check the time interval to load module data. 
 
 ![image-20210926180112597](https://tva1.sinaimg.cn/large/008i3skNgy1gv18hn21d0j61g70u0agn02.jpg)
