@@ -231,9 +231,9 @@
 <li><code>sync_method_call</code> :  collect data for synchronous methods running through JSBridge</li>
 </ul>
 <p><img src="https://tva1.sinaimg.cn/large/008i3skNgy1gv18fv7bi9j61ht0u0wjn02.jpg" alt="image-20210926174136104"></p>
-<p>For example, after scrolling a FlatList, I checked <code>async_method_call</code> volume. I saw <code>createView</code> , <code>setChildren</code> and <code>managedChildren</code> mthods  in <code>UIManager</code>  are called frequently. In <code>1.91</code> second, <code>createView</code> called for 2886 times, costing <code>1.16</code> seconds. Although the average duration is about <code>402.27us</code>  , which may looks like it is not a big deal; considering its frequency, this method finally tops first in our analysis panel. In this <code>summary</code> panel,  you can see <code>total</code>, <code>min</code>, and <code>avg</code>  time intervals for a specific method. </p>
+<p>For example, after scrolling a FlatList, I checked <code>async_method_call</code> volume. I saw <code>createView</code> , <code>setChildren</code> and <code>managedChildren</code> mthods  in <code>UIManager</code>  are called frequently. In <code>1.91</code> seconds, <code>createView</code> are called 2886 times, taking up <code>1.16</code> seconds. Although the average duration for this method is about <code>402.27us</code> , which may look like not a big deal; considering its high frequency, this method finally tops first in our analysis panel. </p>
 <p><img src="https://tva1.sinaimg.cn/large/008i3skNgy1gv18hjuyerj61jk0u0ti402.jpg" alt="image-20210926175209847"></p>
-<p>Also, you may would like to check the time interval to load module data. </p>
+<p>In the <code>summary</code> panel,  you can also see <code>total</code>, <code>min</code>, and <code>avg</code>  time intervals for any other specific method. Besides, you may would like to check the time interval to load module data. </p>
 <p><img src="https://tva1.sinaimg.cn/large/008i3skNgy1gv18hn21d0j61g70u0agn02.jpg" alt="image-20210926180112597"></p>
 </section>
     <!-- Tags START -->
