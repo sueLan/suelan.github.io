@@ -228,7 +228,7 @@ h2.article-head {
   float: left;
 }
 .money-like .money-code .alipay-code .code-image {
-  background-image: url("img/donate.jpg");
+  background-image: url("images/donate.jpg");
   background-size: contain;
   background-repeat: no-repeat;
   width: 4.5em;
@@ -238,7 +238,7 @@ h2.article-head {
   float: right;
 }
 .money-like .money-code .wechat-code .code-image {
-  background-image: url("img/donate.jpg");
+  background-image: url("images/donate.jpg");
   background-size: contain;
   background-repeat: no-repeat;
   width: 4.5em;
@@ -360,7 +360,7 @@ h2.article-head {
   }
 }
 .logo {
-  background: url("img/avatar.png");
+  background: url("images/avatar.jpeg");
   background-size: contain;
   width: 40px;
   height: 40px;

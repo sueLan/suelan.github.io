@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="RY&#39;s blog">
+  <meta name="keyword" content="hexo-theme, vuejs">
+  
+    <link rel="shortcut icon" type="image/ico" href="[object Object]"/>
+  
+  <title>
+    
+      Exploring Swift Concurrency | RY &#39;s Blog
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+    
+<script src="/js/qrious.js"></script>
+
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+  
+    
+<script src="/js/local-search.js"></script>
+
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div>
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>RY 's Blog</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/series/" class="item-link">Series</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/project/" class="item-link">Projects</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+      
+        <li class="menu-item menu-item-search right-list">
+    <a role="button" class="popup-trigger">
+        <i class="fa fa-search fa-fw"></i>
+    </a>
+</li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/series/" class="menu-link">Series</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/project/" class="menu-link">Projects</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+    
+      <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+            <span class="search-icon">
+                <i class="fa fa-search"></i>
+            </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocapitalize="off"
+                    placeholder="Please enter your keyword(s) to search." spellcheck="false"
+                    type="search" class="search-input">
+            </div>
+            <span class="popup-btn-close">
+                <i class="fa fa-times-circle"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+    
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>Exploring Swift Concurrency</h2>
+  <p class="post-date">2022-11-06</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><blockquote>
+<p>Since Apple introduce Swift Concurrency, I’ve been always having an idea to write something about swift concurrency. But then I got a new job, and work has taken quite a lot of my time and energy; thus hardly i can find spare time to write something interesting.</p>
+</blockquote>
+<p>In iOS development realm, we have several ways to write asynchronous code and parallel code.  People usually use <code>closures</code> and <code>completion handlers</code> to write asynchronous code. But too many closures and completion handler make code become more complicated. </p>
+<p>Here is an example from WWDC, it is to fetch thumbnail from cloud. </p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">fetchThumbnail</span>(<span class="params">for</span> <span class="params">id</span>: <span class="type">String</span>, <span class="params">completion</span>: <span class="keyword">@escaping</span> (<span class="type">UIImage</span>?, <span class="type">Error</span>?) -&gt; <span class="type">Void</span>)</span> &#123;</span><br><span class="line">    <span class="keyword">guard</span> <span class="keyword">let</span> url <span class="operator">=</span> <span class="type">URL</span>(string: <span class="string">&quot;https://itunes.apple.com/search?term=taylor+swift&amp;entity=album&quot;</span>) <span class="keyword">else</span> &#123;</span><br><span class="line">        completion(<span class="literal">nil</span>, <span class="type">NSError</span>(domain: <span class="type">FetchUrlDomain</span>, code: <span class="operator">-</span><span class="number">1</span>))</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">let</span> task <span class="operator">=</span> <span class="type">URLSession</span>.shared.dataTask(with: url) &#123; data, response, error <span class="keyword">in</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">let</span> error <span class="operator">=</span> error &#123;</span><br><span class="line">            completion(<span class="literal">nil</span>, error)</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (response <span class="keyword">as?</span> <span class="type">HTTPURLResponse</span>)<span class="operator">?</span>.statusCode <span class="operator">!=</span> <span class="number">200</span> &#123;</span><br><span class="line">            completion(<span class="literal">nil</span>, <span class="type">NSError</span>(domain: <span class="type">FetchUrlDomain</span>, code: <span class="operator">-</span><span class="number">4</span>))</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">guard</span> <span class="keyword">let</span> image <span class="operator">=</span> <span class="type">UIImage</span>(data: data<span class="operator">!</span>) <span class="keyword">else</span> &#123;</span><br><span class="line">                completion(<span class="literal">nil</span>, <span class="type">NSError</span>(domain: <span class="type">FetchUrlDomain</span>, code: <span class="operator">-</span><span class="number">2</span>))</span><br><span class="line">                <span class="keyword">return</span></span><br><span class="line">            &#125;</span><br><span class="line">            image.prepareThumbnail(of: <span class="type">CGSize</span>(width: <span class="number">40</span>, height: <span class="number">40</span>), completionHandler: &#123; thumbnail <span class="keyword">in</span></span><br><span class="line">                <span class="keyword">guard</span> <span class="keyword">let</span> thumbnail <span class="operator">=</span> thumbnail <span class="keyword">else</span> &#123;</span><br><span class="line">                    completion(<span class="literal">nil</span>, <span class="type">NSError</span>(domain: <span class="type">FetchUrlDomain</span>, code: <span class="operator">-</span><span class="number">3</span>))</span><br><span class="line">                    <span class="keyword">return</span></span><br><span class="line">                &#125;</span><br><span class="line">                </span><br><span class="line">                completion(thumbnail, <span class="literal">nil</span>)</span><br><span class="line">            &#125;)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    task.resume()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>We can see some problem from the above codes snippet: </p>
+<ol>
+<li>Pyramid of doom</li>
+</ol>
+<ul>
+<li>deeply-nested closures make the code difficult to read and keep trace of.   </li>
+</ul>
+<ol start="2">
+<li>Error handling </li>
+</ol>
+<ul>
+<li>callbacks make error handling difficult and verbose. There are 6 places in a single function to handle the error </li>
+</ul>
+<ol start="3">
+<li>Conditional execution is hard and error-prone</li>
+</ol>
+<ul>
+<li>After get data from cloud, it has to go to different condition branch to handle different situation</li>
+</ul>
+<ol start="4">
+<li>Many mistakes are easy to make</li>
+</ol>
+<ul>
+<li>simply returning without calling the correct completion-handler block. When forgotten, it is hard to debug<br>You can check out more problems for using too many closures and completion handlers here <a target="_blank" rel="noopener" href="https://github.com/apple/swift-evolution/blob/main/proposals/0296-async-await.md#motivation-completion-handlers-are-suboptimal">proposal-async-await.md</a></li>
+</ul>
+<p>As we’ve seen so many problems from closures and completion handlers. Apple introduce asynchronous function or so-called async-await to Swift. In fact, async/await pattern has been embraced in many languages</p>
+<blockquote>
+<p>F# added asynchronous workflows with await points in version 2.0 in 2007<br>Microsoft released a version of C# with async/await for the first time in the Async CTP (2011).<br>Haskell lead developer Simon Marlow created the async package in 2012.[9]<br>Python added support for async/await with version 3.5 in 2015<br>TypeScript added support for async/await with version 1.7 in 2015.<br>Javascript added support for async/await in 2017 as part of ECMAScript 2017 JavaScript edition.<br>Rust added support for async/await with version 1.39.0 in 2019<br>C++ added support for async/await with version 20 in 2020<br>Swift added support for async/await with version 5.5 in 2021, adding 2 new keywords async and await.</p>
+</blockquote>
+<p>After applying async/await to <code>fetchThumbnail</code> function, it becomes far more concise.<br><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">fetchThumbnailV2</span>(<span class="params">for</span> <span class="params">id</span>: <span class="type">String</span>)</span> <span class="keyword">async</span> <span class="keyword">throws</span> -&gt; <span class="type">UIImage</span> &#123;</span><br><span class="line">    <span class="keyword">guard</span> <span class="keyword">let</span> url <span class="operator">=</span> <span class="type">URL</span>(string: <span class="string">&quot;https://itunes.apple.com/search?term=taylor+swift&amp;entity=album&quot;</span>) <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="type">NSError</span>(domain: <span class="type">FetchUrlDomain</span>, code: <span class="operator">-</span><span class="number">1</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">let</span>(data, response) <span class="operator">=</span> <span class="keyword">try</span> <span class="keyword">await</span> <span class="type">URLSession</span>.shared.data(for: <span class="type">URLRequest</span>(url: url))</span><br><span class="line">    <span class="keyword">guard</span> (response <span class="keyword">as?</span> <span class="type">HTTPURLResponse</span>)<span class="operator">?</span>.statusCode <span class="operator">==</span> <span class="number">200</span> <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="type">NSError</span>(domain: <span class="type">FetchUrlDomain</span>, code: <span class="operator">-</span><span class="number">4</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">let</span> image <span class="operator">=</span> <span class="type">UIImage</span>(data: data)</span><br><span class="line">    <span class="keyword">guard</span> <span class="keyword">let</span> thumbnail <span class="operator">=</span> <span class="keyword">await</span> image<span class="operator">?</span>.byPreparingThumbnail(ofSize: <span class="type">CGSize</span>(width: <span class="number">40</span>, height: <span class="number">40</span>)) <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="type">NSError</span>(domain: <span class="type">FetchUrlDomain</span>, code: <span class="operator">-</span><span class="number">3</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> thumbnail</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="What-is-async-await-function"><a href="#What-is-async-await-function" class="headerlink" title="What is async/await function"></a>What is async/await function</h2><h3 id="define-async-function"><a href="#define-async-function" class="headerlink" title="define async function:"></a>define async function:</h3><p><code>async</code>: enable a function to suspend. </p>
+<ul>
+<li>The thread wont’ be blocked and other tasks can run on it when current func is suspended.<br><code>await</code>: marks where an async function may suspend execution;</li>
+<li>indicate <code>suspension point</code> in an async function where it has to give up its thread. </li>
+<li>the thread is free to execute other work </li>
+<li>suspend its caller too, so the caller should be async too </li>
+<li>Onced awaited call completes, execution resumes after the await. </li>
+</ul>
+<p>Function types can be marked explicitly as async, indicating that the function is asynchronous.<br><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">asyncFuncA</span>()</span> <span class="keyword">async</span> -&gt; [<span class="type">String</span>] &#123;</span><br><span class="line">    <span class="keyword">return</span> xxx; </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ayncFuncB</span>(<span class="params">param</span>: <span class="type">String</span>)</span> <span class="keyword">async</span> -&gt; [<span class="type">String</span>] &#123;</span><br><span class="line">    <span class="keyword">let</span> result <span class="operator">=</span>  <span class="keyword">await</span> asyncFucA() <span class="comment">// ayncFuncB suspended and give up control of the trhead. System come to schedule task executions on the thread  </span></span><br><span class="line">    <span class="keyword">return</span> result                   <span class="comment">// ayncFuncB resumes and return result to its caller    </span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">thread: --&gt;Fun B              --&gt;FuncB</span><br><span class="line">        (await)               (resume)</span><br><span class="line">system:         --------------</span><br><span class="line">                  (schedule)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>Besides, a closure can have async function type.<br><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123; () <span class="keyword">async</span> -&gt; <span class="type">Int</span> <span class="keyword">in</span></span><br><span class="line">  <span class="built_in">print</span>(<span class="string">&quot;here&quot;</span>)</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">await</span> getInt()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="How-to-use-async-await-function"><a href="#How-to-use-async-await-function" class="headerlink" title="How to use  async/await function"></a>How to use  async/await function</h2><h3 id="call-async-function"><a href="#call-async-function" class="headerlink" title="call async function"></a>call async function</h3><ol>
+<li>call it in asynchronous context, or you would get the following error if you don’t want to do so<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">error: `async` function cannot be called from non-asynchronous context</span><br></pre></td></tr></table></figure>
+asynchronous context could be: </li>
+</ol>
+<ul>
+<li>asynchronous function body </li>
+<li>asynchronous clossures </li>
+<li>ashnchronous <code>Task</code> body</li>
+</ul>
+<ol start="2">
+<li>write <code>await</code> in front of the call to mark the possible suspension point<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> result <span class="operator">=</span>  <span class="keyword">await</span> asyncFucA() <span class="comment">// ayncFuncB suspended and give up control of the trhead. System come to schedule task executions on the thread  </span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>The possible suspension points in this piece of code marked with <code>await</code> indicate that the current piece of code might pause execution while waiting for the asynchronous function or method to return. </p>
+<blockquote>
+<p>This is also called <code>yielding the thread</code> because, behind the scenes, Swift suspends the execution of your code on the current thread and runs some other code on that thread instead</p>
+</blockquote>
+<h3 id="call-async-function-in-a-sync-context"><a href="#call-async-function-in-a-sync-context" class="headerlink" title="call async function in a sync context"></a>call async function in a sync context</h3><p><code>async</code> enables a function to suspend - when a function suspends itself, it suspends its callers too. So its callers must be <code>async</code> as well. When you want to call an async function from a sync function, you can use an <code>async task</code> function. An async task packages up the work in the closure and sends it to the system for immediate execution on the next available thread, like the async function on a global dispatch queue.</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> &#123;</span><br><span class="line">    <span class="keyword">await</span> ayncFuncB()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="use-asynchronous-sequences"><a href="#use-asynchronous-sequences" class="headerlink" title="use asynchronous sequences"></a>use asynchronous sequences</h3><blockquote>
+<p><a target="_blank" rel="noopener" href="https://developer.apple.com/videos/play/wwdc2021/10058/">wwdc: Meet AsyncSequence</a><br>basically, AsyncSequence is just a sequence, but async </p>
+</blockquote>
+<p> A <code>for-await-in loop</code> potentially suspends execution at the beginning of each iteration, when it’s waiting for the next element to be available. </p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">extension</span> <span class="title">URL</span> </span>&#123;</span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">Lines</span>: <span class="title">AsyncSequence</span> </span>&#123; <span class="comment">/* ... */</span> &#125;</span><br><span class="line">  <span class="function"><span class="keyword">func</span> <span class="title">lines</span>()</span> <span class="keyword">async</span> -&gt; <span class="type">Lines</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> <span class="keyword">try</span> <span class="keyword">await</span> line <span class="keyword">in</span> myFile.lines() &#123;</span><br><span class="line"> <span class="comment">// doing something</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p> Although different from synchronous <code>for-in-loop</code>, <code>for-await-in loop</code> potentially give up thread control at the beginning of each iteration.But when using asynchronous sequence, elements in the asynchronous sequence is executed one after another. Besides, an error might occurs at each iteration, and you can use <code></code>for-try-await-in loop` </p>
+<p> This time, Apple bring a bunch of new APIs leveraging asynchronous sequence </p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// bytes: AsyncBytes in FileHanlde</span></span><br><span class="line"><span class="keyword">for</span> <span class="keyword">try</span> <span class="keyword">await</span> line <span class="keyword">in</span> <span class="type">FileHandle</span>.standardInput.bytes.lines &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">let</span> (bytes, response) <span class="operator">=</span> <span class="keyword">try</span> <span class="keyword">await</span> <span class="type">URLSession</span>.shared.bytes(from: url)</span><br></pre></td></tr></table></figure>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> notification <span class="operator">=</span> <span class="keyword">await</span> <span class="type">NotificationCenter</span>.default.notifications(named: .<span class="type">NSSystemTimeZoneDidChange</span>).first(where: &#123; noti <span class="keyword">in</span> &#125;)</span><br></pre></td></tr></table></figure>
+<p>you can use your own types in a for-await-in loop by adding conformance to the </p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://developer.apple.com/documentation/swift/sequence">Sequence</a></li>
+<li><a target="_blank" rel="noopener" href="https://developer.apple.com/documentation/swift/asyncsequence">AsyncSequence</a></li>
+</ul>
+<p>Check out an example from <a target="_blank" rel="noopener" href="https://github.com/apple/swift-evolution/blob/main/proposals/0298-asyncsequence.md#proposed-solution">proposals-asyncsequence</a> </p>
+<h2 id="Concurrency-Structure"><a href="#Concurrency-Structure" class="headerlink" title="Concurrency Structure"></a>Concurrency Structure</h2><blockquote>
+<p>Structured concurrency provides a paradigm for spawning concurrent child tasks in scoped task groups, establishing a well-defined hierarchy of tasks which allows for cancellation, error propagation, priority management, and other tricky details of concurrency management to be handled transparently.</p>
+</blockquote>
+<h3 id="async-let-bindings"><a href="#async-let-bindings" class="headerlink" title="async let bindings"></a>async let bindings</h3><p>async-let </p>
+<ul>
+<li>left side of the <code>=</code>, it defines a local constant, a placeholder waiting to be initialed </li>
+<li>right side of the <code>=</code>, initializer expression is evaluated in a separate, concurrently-executing child task. After child task is completed, fullfill the value or propogate error</li>
+</ul>
+<p>![][./let-binding.png]</p>
+<p>When trying to call asynchronous functions in parallel, async-let will come to help. For example: </p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> firstPhoto <span class="operator">=</span> <span class="keyword">await</span> downloadPhoto(named: photoNames[<span class="number">0</span>])</span><br><span class="line"><span class="keyword">let</span> secondPhoto <span class="operator">=</span> <span class="keyword">await</span> downloadPhoto(named: photoNames[<span class="number">1</span>])</span><br><span class="line"><span class="keyword">let</span> thirdPhoto <span class="operator">=</span> <span class="keyword">await</span> downloadPhoto(named: photoNames[<span class="number">2</span>])</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> photos <span class="operator">=</span> [firstPhoto, secondPhoto, thirdPhoto]</span><br><span class="line">show(photos)</span><br></pre></td></tr></table></figure>
+<p> This piece of code has some drawbacks: although the download is asynchronous and lets other work happen while it progresses, only one call to downloadPhoto(named:) runs at a time. Each photo downloads completely before the next one starts downloading.</p>
+<p> To call an asynchronous function and let it run in parallel with code like this: </p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="keyword">let</span> firstPhoto <span class="operator">=</span> downloadPhoto(named: photoNames[<span class="number">0</span>])</span><br><span class="line"><span class="keyword">async</span> <span class="keyword">let</span> secondPhoto <span class="operator">=</span> downloadPhoto(named: photoNames[<span class="number">1</span>])</span><br><span class="line"><span class="keyword">async</span> <span class="keyword">let</span> thirdPhoto <span class="operator">=</span> downloadPhoto(named: photoNames[<span class="number">2</span>])</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> photos <span class="operator">=</span> <span class="keyword">await</span> [firstPhoto, secondPhoto, thirdPhoto]</span><br><span class="line">show(photos)</span><br></pre></td></tr></table></figure>
+<p>While using async let binding, 3 child tasks created and executed parellely while not blocking current thread and they run parallelly, and fullfill <code>firstPhoto</code><br>, <code>secondPhoto</code> and <code>thirdPhoto</code> later. After 3 constants all fullfiled values, it goes to show photos.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">-&gt; download firstPhoto --------------   |</span><br><span class="line">---&gt; download secondPhoto -----------   | </span><br><span class="line">-------&gt; download downloadPhoto -----   | </span><br><span class="line">                                        |  await --&gt; show photos</span><br></pre></td></tr></table></figure>
+<h3 id="Task"><a href="#Task" class="headerlink" title="Task"></a>Task</h3><p>A task is the basic unit of concurrency in the system. Every asynchronous function is executing in a task.</p>
+<ul>
+<li>A task can be in one of three states:</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">suspended      &lt;---&gt;       running    ---&gt;  completed</span><br></pre></td></tr></table></figure>
+<ul>
+<li>task operation<ul>
+<li><a target="_blank" rel="noopener" href="https://developer.apple.com/documentation/swift/task/cancel(">cancellation</a>), task will not stop immediately after cancel  </li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><code>Child tasks</code>: Each task can create and have child tasks. Child tasks inherit some of the structure of their parent task, including its priority, but can run concurrently with it.</li>
+</ul>
+<p><img src="./task_parent.png" alt=""><br>In this picture, <code>fetchOne</code> task create two child tasks, data and metadata by using async-let binding, construct a well-structured task tree. </p>
+<h4 id="Structured-Task"><a href="#Structured-Task" class="headerlink" title="Structured Task"></a>Structured Task</h4><blockquote>
+<p><a target="_blank" rel="noopener" href="https://developer.apple.com/videos/play/wwdc2021/10134">Explore structured concurrency in Swift</a></p>
+</blockquote>
+<ul>
+<li><p>Parent task can be completed only after all child tasks completed<br><img src="./task_parent_tree_complete.png" alt=""></p>
+</li>
+<li><p>one child task failed, an error throw; Swift automatically marks another task as cancelled<br><img src="./task-tree.png" alt=""></p>
+</li>
+<li><p>when a task is called, it won’t be stoped immediately, just marked the result of it is unneeded. After data task is cancelled, its subtasks will be cancelled as well.<br><img src="./task_tree_cancel.png" alt=""></p>
+</li>
+<li>use task group and get result from task group<br><img src="./task_group.png" alt=""></li>
+</ul>
+<h2 id="Actor"><a href="#Actor" class="headerlink" title="Actor"></a>Actor</h2><blockquote>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/apple/swift-evolution/blob/main/proposals/0306-actors.md">actor proposal</a> </li>
+<li><a target="_blank" rel="noopener" href="https://developer.apple.com/videos/play/wwdc2021/10133/">Protect mutable state with Swift actors</a></li>
+</ul>
+</blockquote>
+<h3 id="Basic"><a href="#Basic" class="headerlink" title="Basic"></a>Basic</h3><ul>
+<li>provide a way to solve the data race in Swift concurrency programming </li>
+<li>similar capabilities to structs, enums, and classes</li>
+<li>it is reference type </li>
+<li>Unlike classes, actors allow only a single thread to access their mutable state at a time, which is called as <code>data isolation</code>, enforced statically by the Swift compiler through a set of limitations on the way in which actors and their instance members can be used,</li>
+</ul>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">actor <span class="type">Counter</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> value <span class="operator">=</span> <span class="number">0</span></span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="title">increment</span>()</span> -&gt; <span class="type">Int</span> &#123;</span><br><span class="line">        value <span class="operator">+=</span> <span class="number">1</span></span><br><span class="line">        <span class="keyword">return</span> value</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="title">resetSlowly</span>(<span class="params">to</span> <span class="params">newVlaue</span>: <span class="type">Int</span>)</span> &#123;</span><br><span class="line">        value <span class="operator">=</span> <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> <span class="keyword">_</span> <span class="keyword">in</span> <span class="number">0</span><span class="operator">..&lt;</span>newVlaue &#123;</span><br><span class="line">            increment()</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> counter <span class="operator">=</span> <span class="type">Counter</span>()</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> <span class="keyword">_</span> <span class="keyword">in</span> <span class="number">0</span><span class="operator">...</span><span class="number">100</span> &#123;</span><br><span class="line">    <span class="type">Task</span>.detached &#123;</span><br><span class="line">        <span class="built_in">print</span>(<span class="keyword">await</span> counter.increment())</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>Because the actor allows only one task at a time to access its mutable state, if code from another task is already interacting with the logger, this code suspends while it waits to access the property.</p>
+<h3 id="User-case"><a href="#User-case" class="headerlink" title="User case"></a>User case</h3><p>This is a common pattern: a class with a private queue and some properties that should only be accessed on the queue. We replace this manual queue management with an actor class:</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">actor <span class="class"><span class="keyword">class</span> <span class="title">PlayerRefreshController</span> </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> players: [<span class="type">String</span>] <span class="operator">=</span> []</span><br><span class="line">  <span class="keyword">var</span> gameSession: <span class="type">GameSession</span></span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">func</span> <span class="title">refreshPlayers</span>()</span> <span class="keyword">async</span> &#123; <span class="operator">...</span> &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="Things-to-note-about-this-example"><a href="#Things-to-note-about-this-example" class="headerlink" title="Things to note about this example:"></a>Things to note about this example:</h4><ul>
+<li>Declaring a class to be an actor is similar to giving a class <code>a private queue</code> and <code>synchronizing all access to its private state through that queue</code>.</li>
+<li>Because this synchronization is now understood by the compiler, you cannot forget to use the queue to protect state: the compiler will ensure that you are running on the queue in the class’s methods, and it will prevent you from accessing the state outside those methods.</li>
+<li>Because the compiler is responsible for doing this, it can be smarter about optimizing away synchronization, like when a method starts by calling an async function on a different actor.</li>
+</ul>
+<h3 id="Sendable-types"><a href="#Sendable-types" class="headerlink" title="Sendable types"></a>Sendable types</h3><blockquote>
+<p><a target="_blank" rel="noopener" href="https://github.com/apple/swift-evolution/blob/main/proposals/0302-concurrent-value-and-concurrent-closures.md">senable type roposal</a></p>
+</blockquote>
+<ul>
+<li>safe to share concurrently, each copy independent<ul>
+<li>Value types</li>
+<li>Actor types</li>
+<li>Immutable classes</li>
+<li>internally-synchronized class </li>
+<li>@Sendable function types</li>
+</ul>
+</li>
+</ul>
+</section>
+    <!-- Tags START -->
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/2021/10/02/20211001-signpost-custome-instrument/">
+        <span class="nav-arrow">← </span>
+        
+          How to use SignPost
+        
+      </a>
+    
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+  
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">scan qr code and share this article</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Utterances START -->
+      <div id="utterances"></div>
+      <script src="https://utteranc.es/client.js"
+        repo="null"
+        issue-term="pathname"
+        theme="github-light"
+        crossorigin="anonymous"
+        async></script>    
+      <!-- Utterances END -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#What-is-async-await-function"><span class="toc-nav-text">What is async&#x2F;await function</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#define-async-function"><span class="toc-nav-text">define async function:</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#How-to-use-async-await-function"><span class="toc-nav-text">How to use  async&#x2F;await function</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#call-async-function"><span class="toc-nav-text">call async function</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#call-async-function-in-a-sync-context"><span class="toc-nav-text">call async function in a sync context</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#use-asynchronous-sequences"><span class="toc-nav-text">use asynchronous sequences</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Concurrency-Structure"><span class="toc-nav-text">Concurrency Structure</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#async-let-bindings"><span class="toc-nav-text">async let bindings</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Task"><span class="toc-nav-text">Task</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#Structured-Task"><span class="toc-nav-text">Structured Task</span></a></li></ol></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Actor"><span class="toc-nav-text">Actor</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Basic"><span class="toc-nav-text">Basic</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#User-case"><span class="toc-nav-text">User case</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#Things-to-note-about-this-example"><span class="toc-nav-text">Things to note about this example:</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Sendable-types"><span class="toc-nav-text">Sendable types</span></a></li></ol></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://suelan.github.io/2022/11/06/20221106-swift-concurrency/';
+    var banner = 'undefined'
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+    // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', '/css/images/error_icon.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== '/css/images/error_icon.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+  })();
+</script>
+
+
+  <script>
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+  </script>
+
+
+
+
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2022 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a target="_blank" rel="noopener" href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      hljs.configure({useBR: true});
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+
+  </body>
+</html>
