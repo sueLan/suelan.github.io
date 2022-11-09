@@ -202,7 +202,7 @@
   <!-- Article START -->
   <article class="post-article">
     <section class="markdown-content"><p>Flatten the list so that all the nodes appear in a single-level, doubly linked list. You are given the head of the first level of the list.</p>
-<a id="more"></a>
+<span id="more"></span>
 <p>题目： <a href="[Loading...](https://leetcode.com/problems/flatten-a-multilevel-doubly-linked-list/">430. Flatten a Multilevel Doubly Linked List</a><br>)</p>
 <p>分析：<br><img src="/img/ed6ee62a-3dcb-4189-9404-14b91692d436/da80f35a.png" alt="da80f35a.png"></p>
 <p> 当遇到有child的Node，先用<code>*next</code>存cur-&gt;next; 把cur-&gt;next指针指向child, child-&gt;pre指向cur； 接着以child为起点找到该曾最后一个Node，让它指向<code>*next</code>的节点。 接着以原来的child为cur Node重新开始一轮。 </p>
@@ -258,7 +258,7 @@
       <!-- Utterances START -->
       <div id="utterances"></div>
       <script src="https://utteranc.es/client.js"
-        repo="null"
+        repo=""
         issue-term="pathname"
         theme="github-light"
         crossorigin="anonymous"
@@ -284,7 +284,7 @@
 <script>
   (function () {
     var url = 'https://suelan.github.io/2019/05/12/LeetCode-Flatten-a-Multilevel-Doubly-Linked-List/';
-    var banner = 'undefined'
+    var banner = ''
     if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
       $('#article-banner').css({
         'background-image': 'url(' + banner + ')'

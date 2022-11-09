@@ -201,7 +201,7 @@
 <main class="app-body flex-box">
   <!-- Article START -->
   <article class="post-article">
-    <section class="markdown-content"><p> Let’s firstly see how <code>Darknet</code> construct a neural network. See at <code>detector.c</code> <code>test_detector</code> function, it construct a network by parsing  the <code>xxx.cfg</code> file and <code>xxx.weights</code> file. In my case, they are yolo3-tiny.cfg and yolo3-tiny.weights<br> <a id="more"></a> </p>
+    <section class="markdown-content"><p> Let’s firstly see how <code>Darknet</code> construct a neural network. See at <code>detector.c</code> <code>test_detector</code> function, it construct a network by parsing  the <code>xxx.cfg</code> file and <code>xxx.weights</code> file. In my case, they are yolo3-tiny.cfg and yolo3-tiny.weights<br> <span id="more"></span> </p>
 <p>I am trying to understand <a target="_blank" rel="noopener" href="https://pjreddie.com/darknet/yolov2/">Darknet source code</a> that implements YOLO algorithm. First, I run the detector.</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./darknet detect cfg/yolov3-tiny.cfg yolov3-tiny.weights data/dog.jpg</span><br></pre></td></tr></table></figure>
 <h2 id="Parse-the-argumenets"><a href="#Parse-the-argumenets" class="headerlink" title="Parse the argumenets"></a>Parse the argumenets</h2><p>In <code>main</code> function, it goes to function <code>test_detector</code> according to the first argument<code>detect</code>. </p>
@@ -305,7 +305,7 @@
       <!-- Utterances START -->
       <div id="utterances"></div>
       <script src="https://utteranc.es/client.js"
-        repo="null"
+        repo=""
         issue-term="pathname"
         theme="github-light"
         crossorigin="anonymous"
@@ -331,7 +331,7 @@
 <script>
   (function () {
     var url = 'https://suelan.github.io/2019/05/08/The-Implementation-of-Convolutional-and-MaxPool-layer/';
-    var banner = 'undefined'
+    var banner = ''
     if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
       $('#article-banner').css({
         'background-image': 'url(' + banner + ')'
