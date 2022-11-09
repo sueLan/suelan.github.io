@@ -202,11 +202,11 @@
   <!-- Article START -->
   <article class="post-article">
     <section class="markdown-content"><h2 id="Description"><a href="#Description" class="headerlink" title="Description"></a>Description</h2><p>There is an expensive copy operation for data buffer when loading and parsing JS Bundle in React Native.  In my case, I have a <code>4.8</code> MB JS bundle. Xcode instrument profiler shows it takes up 15.81 MB trying to copy a <code>NSData</code> object in  <code>ensureNullTerminated</code> function in <code>NSDataBigString</code> class.</p>
-<p><img src="instrument-profile.png" alt="image"></p>
-<p>This is the brief process for <code>RCTBridge</code> loading JS bundle<br><img src="image-load.png" alt="image"></p>
+<p><img src="/instrument-profile.png" alt="image"></p>
+<p>This is the brief process for <code>RCTBridge</code> loading JS bundle<br><img src="/image-load.png" alt="image"></p>
 <p>In Objc, <code>NSData</code> is a static byte buffer that bridges to Data, which is a byte buffer in a contiguous region of memory. Here, <code>NSDataBigString</code> class holds <code>NSData</code> object constructed from JS bundle. </p>
-<p><img src="nsdata.png" alt="image"></p>
-<p>Inside react-native framework, it has to treat this data buffer in a contiguous region of memory as a <a target="_blank" rel="noopener" href="https://en.cppreference.com/w/c/string/byte#:~:text=A%20null%2Dterminated%20byte%20string,(the%20terminating%20null%20character">null-terminated byte string (NTBS)</a>.&amp;text=For%20example%2C%20the%20character%20array,%22cat%22%20in%20ASCII%20encoding.) . </p>
+<p><img src="/nsdata.png" alt="image"></p>
+<p>Inside react-native framework, it has to treat this data buffer in a contiguous region of memory as a <a target="_blank" rel="noopener" href="https://en.cppreference.com/w/c/string/byte#:~:text=A%20null%2Dterminated%20byte%20string,(the%20terminating%20null%20character).&text=For%20example%2C%20the%20character%20array,%22cat%22%20in%20ASCII%20encoding.">null-terminated byte string (NTBS)</a> . </p>
 <blockquote>
 <p>A null-terminated byte string (NTBS) is a sequence of nonzero bytes followed by a byte with value zero (the terminating null character). Each byte in a byte string encodes one character of some character set. For example, the character array {‘\x63’,’\x61’,’\x74’,’\0’} is an NTBS holding the string “cat” in ASCII encoding.</p>
 </blockquote>
@@ -216,11 +216,11 @@
 <ol>
 <li>open <code>RNTester</code> in <code>react-native</code> repo. <code>react-native/packages/rn-tester</code></li>
 <li>find <code>ensureNullTerminated</code>  and set a breakpoint there </li>
-<li>run the <code>RNTester</code> </li>
+<li>run the <code>RNTester</code></li>
 </ol>
-<h2 id="Snack-code-example-screenshot-or-link-to-a-repository"><a href="#Snack-code-example-screenshot-or-link-to-a-repository" class="headerlink" title="Snack, code example, screenshot, or link to a repository:"></a>Snack, code example, screenshot, or link to a repository:</h2><p><img src="code-snippet.png" alt="image"></p>
+<h2 id="Snack-code-example-screenshot-or-link-to-a-repository"><a href="#Snack-code-example-screenshot-or-link-to-a-repository" class="headerlink" title="Snack, code example, screenshot, or link to a repository:"></a>Snack, code example, screenshot, or link to a repository:</h2><p><img src="/code-snippet.png" alt="image"></p>
 <h2 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h2><ul>
-<li>Add <code>\0</code> character ahead of time when building JS bundle. By doing this, you can avoid this copy operation during bundle loading in App launching phase. </li>
+<li>Add <code>\0</code> character ahead of time when building JS bundle. By doing this, you can avoid this copy operation during bundle loading in App launching phase.</li>
 </ul>
 <h2 id="Ref"><a href="#Ref" class="headerlink" title="Ref"></a>Ref</h2><ul>
 <li><a target="_blank" rel="noopener" href="https://github.com/facebook/react-native/issues/30145">https://github.com/facebook/react-native/issues/30145</a></li>

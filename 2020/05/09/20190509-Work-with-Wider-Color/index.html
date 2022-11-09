@@ -205,21 +205,21 @@
 <h2 id="Basic-concepts-about-color"><a href="#Basic-concepts-about-color" class="headerlink" title="Basic concepts about color"></a>Basic concepts about color</h2><h3 id="What-is-Color-Space"><a href="#What-is-Color-Space" class="headerlink" title="What is Color Space"></a>What is Color Space</h3><blockquote>
 <p>A color space is a specific organization of colors. In combination with physical device profiling, it allows for reproducible representations of color, in both analog and digital representations.            — Wiki</p>
 </blockquote>
-<p><img src="media/15884935782947/15884941050187.jpg" alt=""></p>
+<p><img src="/media/15884935782947/15884941050187.jpg"></p>
 <p>This is the standard RGB space, which is the default color space in iOS. </p>
 <h4 id="Color-Primaries"><a href="#Color-Primaries" class="headerlink" title="Color Primaries"></a>Color Primaries</h4><blockquote>
 <p>Color primaries generally fall at the most intense value that you can get with that particular color channel.</p>
 </blockquote>
 <p>Like, in sRGB space, the color primaries are </p>
 <blockquote>
-<p>RGB {0.0, 0.0, 0.0} = Black<br>RGB {1.0, 1.0, 1.0} = White<br>RGB {1.0, 0.0, 0.0} = Red</p>
+<p>RGB {0.0, 0.0, 0.0} &#x3D; Black<br>RGB {1.0, 1.0, 1.0} &#x3D; White<br>RGB {1.0, 0.0, 0.0} &#x3D; Red</p>
 </blockquote>
 <h4 id="Color-gamut"><a href="#Color-gamut" class="headerlink" title="Color gamut"></a>Color gamut</h4><p>  All of the colors that can be defined as a combination of those individual color channels. </p>
-<h2 id="Display-P3"><a href="#Display-P3" class="headerlink" title="Display P3"></a>Display P3</h2><p><img src="media/15884935782947/15885097554778.jpg" alt=""></p>
+<h2 id="Display-P3"><a href="#Display-P3" class="headerlink" title="Display P3"></a>Display P3</h2><p><img src="/media/15884935782947/15885097554778.jpg"></p>
 <p>In the above image, the colored region represents the outer limits of perception in a human’s color vision. </p>
 <p>The inner black triangle represents sRGB’s limits of presentation.<br>In contrast, the DCI-P3 standard, and the Wide Color implementation, has a larger area underneath the triangle, representing the greater array of displayable color possible.</p>
 <ul>
-<li>16bit per color channel for P3 and beyond </li>
+<li>16bit per color channel for P3 and beyond</li>
 </ul>
 <h3 id="Extended-Range-sRGB"><a href="#Extended-Range-sRGB" class="headerlink" title="Extended Range sRGB"></a>Extended Range sRGB</h3><ul>
 <li>Display P3<ul>
@@ -227,11 +227,11 @@
 </ul>
 </li>
 <li>Extended Range sRGB<ul>
-<li>{1.358, -0.074, -0.012}<h2 id="Wider-Color"><a href="#Wider-Color" class="headerlink" title="Wider Color"></a>Wider Color</h2></li>
+<li>{1.358, -0.074, -0.012}</li>
 </ul>
 </li>
 </ul>
-<blockquote>
+<h2 id="Wider-Color"><a href="#Wider-Color" class="headerlink" title="Wider Color"></a>Wider Color</h2><blockquote>
 <p>Wide color displays support a P3 color space, which can produce richer, more saturated colors than sRGB. As a result, photos and videos that use wide color are more lifelike, and visual data and status indicators that use wide color are more impactful.</p>
 </blockquote>
 <h2 id="Color-Management"><a href="#Color-Management" class="headerlink" title="Color Management"></a>Color Management</h2><p>Application Content Types</p>
@@ -251,15 +251,17 @@
 <p>The job of color management is to ensure that an image looks the same on any output device no matter what color space it is encoded in.</p>
 </blockquote>
 <h3 id="How-does-it-work"><a href="#How-does-it-work" class="headerlink" title="How does it work?"></a>How does it work?</h3><ul>
-<li>Every image has an associated color space (color profile)</li>
+<li><p>Every image has an associated color space (color profile)</p>
+</li>
 <li><p>Color matching maps image colors to output device</p>
 <ul>
-<li><img src="media/15884935782947/15885122964828.jpg" alt=""></li>
+<li><img src="/media/15884935782947/15885122964828.jpg"></li>
 </ul>
 </li>
 <li><p>Not for free: Every pixel needs to be color matched</p>
 </li>
-<li>Potentially lossy: Color fidelity is lost when output has smaller gamut. For example, going down from P3 color space to sRGB color space. </li>
+<li><p>Potentially lossy: Color fidelity is lost when output has smaller gamut. For example, going down from P3 color space to sRGB color space.</p>
+</li>
 </ul>
 <p>Opti in System: </p>
 <ul>
@@ -267,7 +269,8 @@
 </li>
 <li><p>Color matching operations are easily hardware accelerated</p>
 </li>
-<li>Properly tagged content requires no code to display properly</li>
+<li><p>Properly tagged content requires no code to display properly</p>
+</li>
 </ul>
 <h2 id="Design-Considerations-for-Wide-Gamut"><a href="#Design-Considerations-for-Wide-Gamut" class="headerlink" title="Design Considerations for Wide Gamut"></a>Design Considerations for Wide Gamut</h2><ul>
 <li>Use wide gamut content where it makes sense</li>
@@ -280,7 +283,7 @@
 <li>Don’t “assign” P3 profile. It just remaps the existing color information into new color space. The colors are stretched, and the design file will be inevitably altered. </li>
 <li>Convert to P3 instead</li>
 </ul>
-<h2 id="Tools"><a href="#Tools" class="headerlink" title="Tools"></a>Tools</h2><p> <img src="media/15884935782947/15885134344507.jpg" alt=""></p>
+<h2 id="Tools"><a href="#Tools" class="headerlink" title="Tools"></a>Tools</h2><p> <img src="/media/15884935782947/15885134344507.jpg"></p>
 <h2 id="Color-Specification"><a href="#Color-Specification" class="headerlink" title="Color Specification"></a>Color Specification</h2><p>When communicating with designers, Be specific about color space!</p>
 <ul>
 <li><p>Use Display P3 instead of sRGB when working with wide gamut designs</p>
@@ -293,6 +296,8 @@
 </ul>
 <h2 id="Drawing-colors"><a href="#Drawing-colors" class="headerlink" title="Drawing colors"></a>Drawing colors</h2><h3 id="Constructing-Wide-Gamut-Colors"><a href="#Constructing-Wide-Gamut-Colors" class="headerlink" title="Constructing Wide Gamut Colors"></a>Constructing Wide Gamut Colors</h3><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">NSColor</span>(displayP3Red: <span class="number">1.0</span>, green: <span class="number">0.0</span>, blue: <span class="number">0.0</span>, alpha: <span class="number">1.0</span>)  </span><br><span class="line"><span class="type">UIColor</span>(displayP3Red: <span class="number">1.0</span>, green: <span class="number">0.0</span>, blue: <span class="number">0.0</span>, alpha: <span class="number">1.0</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <h3 id="Constructing-Extended-Range-sRGB-Colors"><a href="#Constructing-Extended-Range-sRGB-Colors" class="headerlink" title="Constructing Extended Range sRGB Colors"></a>Constructing Extended Range sRGB Colors</h3><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">NSColor</span>(red: <span class="number">1.1</span>, green: <span class="operator">-</span>.<span class="number">25</span>, blue: <span class="number">0.0</span>, alpha: <span class="number">1.0</span>)  </span><br><span class="line"><span class="type">UIColor</span>(red: <span class="number">1.1</span>, green: <span class="operator">-</span>.<span class="number">25</span>, blue: <span class="number">0.0</span>, alpha: <span class="number">1.0</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
 <h3 id="Rendering"><a href="#Rendering" class="headerlink" title="Rendering"></a>Rendering</h3><p>Optimizing your app’s drawing for wide gamut displays</p>
 <p>❌ Don’t use <code>UIGraphicsBeginImageContext</code>. It doesn’t support wider color. </p>
 <blockquote>
@@ -301,12 +306,15 @@
 <p><code>UIGraphicsBeginImageContext</code> not only cannot create contexts with more than 8 bits per color channel, but also cannot represent colors in extended range sRGB. Sadlly, existing interface has no ability to create a context in non-sRGB color space. </p>
 <p>So, they introduce <code>UIGraphicsImageRenderer(size: CGSize)</code> </p>
 <figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">let</span> renderer <span class="operator">=</span> <span class="type">UIGraphicsImageRenderer</span>(size: <span class="type">CGSize</span>(width: <span class="number">250</span>, height: <span class="number">250</span>))</span><br><span class="line"><span class="keyword">let</span> image <span class="operator">=</span>  renderer.image &#123; rendererContext <span class="keyword">in</span></span><br><span class="line">    <span class="keyword">let</span> bounds <span class="operator">=</span> rendererContext.format.bounds</span><br><span class="line">    <span class="keyword">let</span> rects <span class="operator">=</span> bounds.divided(atDistance: bounds.size.width<span class="operator">/</span><span class="number">2</span>, from: .minXEdge)</span><br><span class="line">    </span><br><span class="line">    <span class="type">UIColor</span>(displayP3Red: <span class="number">1.0</span>, green: <span class="number">0.0</span>, blue: <span class="number">1.0</span>, alpha: <span class="number">1.0</span>).set()</span><br><span class="line">    rendererContext.fill(rects.slice)</span><br><span class="line">    </span><br><span class="line">    <span class="type">UIColor</span>(red: <span class="number">1.0</span>, green: <span class="number">0.0</span>, blue: <span class="number">1.0</span>, alpha: <span class="number">1.0</span>).set()</span><br><span class="line">    rendererContext.fill(rects.slice)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>Fully color managed by default</li>
 <li>Supports extended range sRGB color space</li>
 <li>Manages CGContext lifetime</li>
 </ul>
-<h3 id="Draw"><a href="#Draw" class="headerlink" title="Draw"></a>Draw</h3><p><code>UIView</code>, <code>UIImageView</code>, Color managed since iOS 9.3<br><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">draw(<span class="keyword">_</span> rect: <span class="type">CGRect</span>) <span class="comment">// called in the extended sRGB color space</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="Draw"><a href="#Draw" class="headerlink" title="Draw"></a>Draw</h3><p><code>UIView</code>, <code>UIImageView</code>, Color managed since iOS 9.3 </p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">draw(<span class="keyword">_</span> rect: <span class="type">CGRect</span>) <span class="comment">// called in the extended sRGB color space</span></span><br></pre></td></tr></table></figure>
+
 <p>For <code>UIView</code>, use the view’s layer’s <code>contentsFormat</code> property</p>
 <p>Valid CALayer contents formats:</p>
 <ul>

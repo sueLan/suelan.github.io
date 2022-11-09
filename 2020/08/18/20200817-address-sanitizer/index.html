@@ -215,47 +215,47 @@
 <li><p>Edit Scheme </p>
 </li>
 <li><p>turn on the <code>Address Sanitizer</code> </p>
-<p><img src="image-20200816172927364.png" alt="image-20200816172927364"></p>
+<p><img src="/image-20200816172927364.png" alt="image-20200816172927364"></p>
 </li>
-<li><p>re-compile the App </p>
+<li><p>re-compile the App</p>
 </li>
 </ul>
 <p>This can be used together with <code>Malloc Scribble</code>.</p>
 <h3 id="Xcode-Debuger-UI"><a href="#Xcode-Debuger-UI" class="headerlink" title="Xcode Debuger UI"></a>Xcode Debuger UI</h3><ol>
 <li><p>showing errors </p>
-<p><img src="image-20200816210717157.png" alt="image-20200816210717157"></p>
+<p><img src="/image-20200816210717157.png" alt="image-20200816210717157"></p>
 </li>
 <li><p>stacktrace </p>
-<p><img src="image-20200816210812044.png" alt="image-20200816210812044" style="zoom:50%;" /></p>
+<img src="image-20200816210812044.png" alt="image-20200816210812044" style="zoom:50%;" />
 </li>
 <li><p>memory allocation </p>
-<p><img src="image-20200816210745829.png" alt="image-20200816210745829"></p>
+<p><img src="/image-20200816210745829.png" alt="image-20200816210745829"></p>
 </li>
 <li><p>Heap object </p>
 <ol>
-<li>faulty addresss </li>
+<li>faulty addresss</li>
 </ol>
 </li>
 <li><p>Expand Memory View. It shows the allocation and deallocation backtrace of the memory. Also we can see the bytes of the object in the memory </p>
 <ol>
 <li>the black bytes : valid memory </li>
-<li>the grey bytes: invalid memory </li>
+<li>the grey bytes: invalid memory</li>
 </ol>
 </li>
 </ol>
-<p><img src="image-20200816213933801.png" alt="image-20200816213933801"></p>
+<p><img src="/image-20200816213933801.png" alt="image-20200816213933801"></p>
 <p>We can also see the bytes of the memory  by <code>view Memory of xxx</code></p>
-<p><img src="image-20200816213627715.png" alt="image-20200816213627715"></p>
+<p><img src="/image-20200816213627715.png" alt="image-20200816213627715"></p>
 <p>Besides, in the <code>LLDB</code>, we can run <code>memory history</code> to get the backtrace of the allocation and deallocation. </p>
-<p><img src="image-20200816214150578.png" alt="image-20200816214150578"></p>
-<h2 id="Use-Cases"><a href="#Use-Cases" class="headerlink" title="Use Cases"></a>Use Cases</h2><h3 id="Heap-buffer-overflow"><a href="#Heap-buffer-overflow" class="headerlink" title="Heap buffer overflow"></a>Heap buffer overflow</h3><p><img src="image-20200816211332451.png" alt="image-20200816211332451"></p>
+<p><img src="/image-20200816214150578.png" alt="image-20200816214150578"></p>
+<h2 id="Use-Cases"><a href="#Use-Cases" class="headerlink" title="Use Cases"></a>Use Cases</h2><h3 id="Heap-buffer-overflow"><a href="#Heap-buffer-overflow" class="headerlink" title="Heap buffer overflow"></a>Heap buffer overflow</h3><p><img src="/image-20200816211332451.png" alt="image-20200816211332451"></p>
 <p>case from here <a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=rJFoMq-RI7c">https://www.youtube.com/watch?v=rJFoMq-RI7c</a></p>
-<h3 id="Use-out-of-scope-stack-memory"><a href="#Use-out-of-scope-stack-memory" class="headerlink" title="Use out of scope stack memory"></a>Use out of scope stack memory</h3><p><img src="image-20200816211144445.png" alt="image-20200816211144445"></p>
+<h3 id="Use-out-of-scope-stack-memory"><a href="#Use-out-of-scope-stack-memory" class="headerlink" title="Use out of scope stack memory"></a>Use out of scope stack memory</h3><p><img src="/image-20200816211144445.png" alt="image-20200816211144445"></p>
 <p><code>value</code> is a variable that inside the <code>if</code> scope. If you assign its address to <code>integer_pointer</code> and  access its memory outside the scope by using  <code>*integer_pointer</code> , it triggers <code>use of out of scope stack memory</code> </p>
-<h3 id="Use-stack-memory-after-return"><a href="#Use-stack-memory-after-return" class="headerlink" title="Use stack memory after return"></a>Use stack memory after return</h3><p><img src="image-20200816211204763.png" alt="image-20200816211204763"></p>
+<h3 id="Use-stack-memory-after-return"><a href="#Use-stack-memory-after-return" class="headerlink" title="Use stack memory after return"></a>Use stack memory after return</h3><p><img src="/image-20200816211204763.png" alt="image-20200816211204763"></p>
 <p>In the c function, <code>return_address_of_stack</code> it return <code>&amp;a</code>, the address of <code>a</code> variable. While <code>a</code> is a stack variable in this function, the function returns, the stack frame will be released.  At. that time, if we try to use  <code>a</code> again, it triggers <code>use of stack memory after return</code>. </p>
 <p>Use of deallocated memory </p>
-<p><img src="image-20200816213422013.png" alt="image-20200816213422013"></p>
+<p><img src="/image-20200816213422013.png" alt="image-20200816213422013"></p>
 <h2 id="When-to-Use-Address-Sanitizer"><a href="#When-to-Use-Address-Sanitizer" class="headerlink" title="When to Use Address Sanitizer"></a>When to Use Address Sanitizer</h2><ul>
 <li>You project is mixed with C languages and Swift</li>
 <li>Memory corruptions and crashes, which are hard to reproduce and find out the root cause</li>
@@ -268,44 +268,50 @@
 <li>Build and Test</li>
 </ul>
 <h4 id="Command-Line"><a href="#Command-Line" class="headerlink" title="Command Line"></a>Command Line</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ xcodebuild -scheme &quot;Jogr&quot; test -enableAddressSanitizer YES</span><br></pre></td></tr></table></figure>
+
 <h2 id="Under-the-Hood"><a href="#Under-the-Hood" class="headerlink" title="Under the Hood"></a>Under the Hood</h2><h3 id="How-Address-Sanitizer-works"><a href="#How-Address-Sanitizer-works" class="headerlink" title="How Address Sanitizer works"></a>How Address Sanitizer works</h3><p>When we enable the address sanitizer and compile a executable, Xcode pass a flag to Clang when compiling. </p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-fsanitize=address</span><br></pre></td></tr></table></figure>
+
 <p>After building, the instrumented executable will contain memory checks. Besides, at runtime, this binary links with <code>Asan</code> runtime dylib that contains more checks and the dylib is required by the instrumentation. </p>
 <h5 id="How-this-memory-check-works"><a href="#How-this-memory-check-works" class="headerlink" title="How this memory check works?"></a>How this memory check works?</h5><p>It will check the allocations in our process. In the following graph, the blue region is the memory we allocted.  In the right side, it is the <code>Shadow memory</code> maintained by <code>Address saninitzer</code> , which tracks the real memory in the left side, telling whether the real memory is address-accessible or not.   The <code>Redzones</code> are the poisoned memory. </p>
-<p><img src="image-20200816120042864.png" alt="image-20200816120042864"></p>
+<p><img src="/image-20200816120042864.png" alt="image-20200816120042864"></p>
 <p>If the executable is compiled by enabling the Address sanitizer, every time before it access to memory, there is prefix instruction to check if this memory is<code>poisoned</code>.  If it was, the Address Sanitizer will generate a diagnostics report shown above. </p>
-<p><img src="image-20200816120700174.png" alt="image-20200816120700174"></p>
+<p><img src="/image-20200816120700174.png" alt="image-20200816120700174"></p>
 <p>The following graph shows the process is trying to access to a poisoned memory and it trigger <code>Crash</code> and genrate a diagnostic report. </p>
-<p><img src="image-20200816120921377.png" alt="image-20200816120921377"></p>
+<p><img src="/image-20200816120921377.png" alt="image-20200816120921377"></p>
 <h4 id="How-the-lookup-table-works"><a href="#How-the-lookup-table-works" class="headerlink" title="How the lookup table works"></a>How the lookup table works</h4><p>In address sanitizer, the loop up in the shadow memory should be very fast so that it will be less overhead. To achieve that, they main a look up table where every 8 bytes real memory in user process are tracked by 1 byte in the shadow memory. Even so, the loop up table is large. So they don’t allocate memory region for the lookup table. Instead, they reserve the  memory region for shadow usage.  </p>
-<p><img src="image-20200816121732422.png" alt="image-20200816121732422" style="zoom:50%;" /></p>
+<img src="image-20200816121732422.png" alt="image-20200816121732422" style="zoom:50%;" />
+
 <p>Supposed the address of the real memory usage in the process is <code>Addr</code>. The address of the related shadow memory is <code>Add &gt;&gt; 3 + Offset</code>. If the value in the bytes in the shadow memory isn’t <code>0</code>,  we know the real memory is poisoned. </p>
-<p><img src="image-20200816121722926.png" alt="image-20200816121722926"></p>
+<p><img src="/image-20200816121722926.png" alt="image-20200816121722926"></p>
 <h3 id="The-heap-object-allocation"><a href="#The-heap-object-allocation" class="headerlink" title="The heap object allocation"></a>The heap object allocation</h3><p>The default Malloc implementation layout out objects in memory one after another for optimizing memory consumption.  But address sanitizer replace default Malloc implementation by using it is own allocate implementation, which lays out objects further apart from each other. </p>
-<p><img src="image-20200816123141896.png" alt="image-20200816123141896"></p>
+<p><img src="/image-20200816123141896.png" alt="image-20200816123141896"></p>
 <p>All the unused memory between objects are marked as poisoned, marked as <code>red</code> in the shadow memory.  Once  a object is free, the related shadow memory is marked as <code>red</code>, poisoned too.  Also, address sanitizer will delay reuse of free memory. So it can catch the heap buffer overflow, double-free errors, user-free etc. </p>
-<h3 id="Stack-variables"><a href="#Stack-variables" class="headerlink" title="Stack variables"></a>Stack variables</h3><p><img src="image-20200816150456865.png" alt="image-20200816150456865"></p>
+<h3 id="Stack-variables"><a href="#Stack-variables" class="headerlink" title="Stack variables"></a>Stack variables</h3><p><img src="/image-20200816150456865.png" alt="image-20200816150456865"></p>
 <p>When enabling the Address sanitizer and compiling the executable, some red zone will be inserted between two stack variables, so stack red zones are poisoned at the runtime. </p>
-<h3 id="Global-variables"><a href="#Global-variables" class="headerlink" title="Global variables"></a>Global variables</h3><p><img src="image-20200816151834767.png" alt="image-20200816151834767"></p>
+<h3 id="Global-variables"><a href="#Global-variables" class="headerlink" title="Global variables"></a>Global variables</h3><p><img src="/image-20200816151834767.png" alt="image-20200816151834767"></p>
 <p>They do the similar things during the compiling time for the global variables, </p>
 <h2 id="Overhead"><a href="#Overhead" class="headerlink" title="Overhead"></a>Overhead</h2><ul>
 <li><p>CPU slowdown usually between 2x–5x</p>
 <ul>
-<li>In normal case, CPU slowdown 2x-3x. In some edge case, they have seen the slowdown 5x. </li>
+<li>In normal case, CPU slowdown 2x-3x. In some edge case, they have seen the slowdown 5x.</li>
 </ul>
 </li>
 <li><p>Memory overhead 2x–3x</p>
 </li>
-<li>AddressSanitizer uses more real memory than a native run. Exact overhead depends on the allocations sizes. The smaller the allocations you make the bigger the overhead is.</li>
-<li>AddressSanitizer uses more stack memory. We have seen up to 3x increase.</li>
+<li><p>AddressSanitizer uses more real memory than a native run. Exact overhead depends on the allocations sizes. The smaller the allocations you make the bigger the overhead is.</p>
+</li>
+<li><p>AddressSanitizer uses more stack memory. We have seen up to 3x increase.</p>
+</li>
 </ul>
 <p>Still, this overhead is smaller than other tools that can do the same job. </p>
 <h2 id="The-difference-in-Assembly-code"><a href="#The-difference-in-Assembly-code" class="headerlink" title="The difference in Assembly code"></a>The difference in Assembly code</h2><p>Let’s write a simple Objective-c function, and build a executable. </p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">- (void)testAllocation</span><br><span class="line">&#123;</span><br><span class="line">    NSString *f = @&quot;RY&quot;;</span><br><span class="line">    NSArray *a = @[@1];</span><br><span class="line">    NSLog(@&quot;%@, %@&quot;, f, a);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>The left side is the Assembly code for normal code; the right side is the Assembly code after enabling the Address Sanitizer. </p>
-<p><img src="image-20200816171459459.png" alt="image-20200816171459459"></p>
+<p><img src="/image-20200816171459459.png" alt="image-20200816171459459"></p>
 <p>The one with Address Sanitizer enabled adds checks. The following is the shadow memory check. If the value in <code>w3</code> , the value from the shadow memory is zero. It goes the <code>loc100004894</code> label, continue to run. But if not, it will call <code>imp___stubs____asan_report_store8</code> to generate the Address sanitizer report. </p>
-<p><img src="image-20200816172007233.png" alt="image-20200816172007233"></p>
+<p><img src="/image-20200816172007233.png" alt="image-20200816172007233"></p>
 <ul>
 <li><p><a target="_blank" rel="noopener" href="https://developer.apple.com/library/archive/documentation/Security/Conceptual/SecureCodingGuide/Articles/BufferOverflows.html">Avoiding Buffer Overflows and Underflows</a></p>
 </li>
@@ -315,7 +321,8 @@
 </li>
 <li><p><a target="_blank" rel="noopener" href="https://clang.llvm.org/docs/AddressSanitizer.html">AddressSanitizer in LLVM doc</a></p>
 </li>
-<li><a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=rJFoMq-RI7c">https://www.youtube.com/watch?v=rJFoMq-RI7c</a></li>
+<li><p><a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=rJFoMq-RI7c">https://www.youtube.com/watch?v=rJFoMq-RI7c</a></p>
+</li>
 </ul>
 </section>
     <!-- Tags START -->

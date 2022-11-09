@@ -206,100 +206,117 @@
 </blockquote>
 <p>The new building system introduced in Xcode 10 is written by Swift from scratch, and brings lots of improved performance and reliability.  So what happens when we press <code>CMD + B</code> in Xcode? </p>
 <p>In general, Xcode has to do tasks like preprocess source files and compile them by compiler,  link source code by linker, copy and process resources like headers, asset catalogues and storyboards, And finally code sign and maybe even do some custom work in a shell script or a make file like building API documentation for your framework or running code linting and validation tools.</p>
-<p><img src="image-20200705224132928.png" alt="image-20200705224132928"></p>
+<p><img src="/image-20200705224132928.png" alt="image-20200705224132928"></p>
 <h2 id="Build-Task-dependency-and-execution-order"><a href="#Build-Task-dependency-and-execution-order" class="headerlink" title="Build Task dependency and execution order"></a>Build Task dependency and execution order</h2><p>Building tasks are executed in a particular order. </p>
-<p><img src="image-20200705170528761.png" alt="image-20200705170528761" style="zoom:50%;" /></p>
+<img src="image-20200705170528761.png" alt="image-20200705170528761" style="zoom:50%;" />
+
 <p>The building system use the dependency information to determine which tasks should be run and what task can be run in parallel.  This is called <code>dependency order</code>.  </p>
 <p> We know that a compiler can produce <code>.o</code> files from <code>.m</code> files. Then a linker consumes a number of object files and produces executable or library output. The following graphic shows the dependency info between compilation and linking tasks.  </p>
-<p><img src="image-20200705170723485.png" alt="image-20200705170723485"></p>
+<p><img src="/image-20200705170723485.png" alt="image-20200705170723485"></p>
 <h3 id="Build-tasks-are-executed-in-dependency-order"><a href="#Build-tasks-are-executed-in-dependency-order" class="headerlink" title="Build tasks are executed in dependency order"></a>Build tasks are executed in dependency order</h3><ol>
-<li>The  building system will process the project and represented building tasks as a Directed Graph </li>
+<li>The  building system will process the project and represented building tasks as a Directed Graph</li>
 </ol>
 <blockquote>
 <p>What happens when you press build? So the first step is for the build system to take the build description, your Xcode project file.Parse it, take into account all the files in your project, your targets and the dependency relationships.Your build settings, and turn it into a tree-like structure called a directed graph.<br> And this represents all the dependencies between the input and output files in your project and the tasks that will be executed to process them.</p>
 </blockquote>
-<p><img src="image-20200705172316201.png" alt="image-20200705172316201"></p>
+<p><img src="/image-20200705172316201.png" alt="image-20200705172316201"></p>
 <ol start="2">
 <li><p>Then the low-level execution engine get the dependency specifications from the above graph and figures out which tasks to execute.</p>
-<p><img src="image-20200705225725510.png" alt="image-20200705225725510" style="zoom:80%;" /></p>
-</li>
+<img src="image-20200705225725510.png" alt="image-20200705225725510" style="zoom:80%;" /></li>
 </ol>
 <h3 id="Discovered-Dependencies"><a href="#Discovered-Dependencies" class="headerlink" title="Discovered Dependencies"></a>Discovered Dependencies</h3><p>When clang compile <code>PetController.m</code> source file into object file, <code>PetController.d</code> file  is also generated, which contains a listing of information about which header files were included by that source file. Next time you build, if you change any of the header files that <code>PetController.d</code> includes, the building system will recompile <code>PetController.m</code>. </p>
-<p><img src="image-20200705225819662.png" alt="image-20200705225819662" style="zoom:50%;" /></p>
+<img src="image-20200705225819662.png" alt="image-20200705225819662" style="zoom:50%;" />
+
+
+
 <h3 id="Incremental-builds"><a href="#Incremental-builds" class="headerlink" title="Incremental builds"></a>Incremental builds</h3><p>Having accurate dependency information is very important in order for incremental builds to work correctly and efficiently, in this case,  the build system only execute a subset of the tasks on the building tasks graph</p>
 <p><strong>how does the build system actually detect changes?</strong></p>
 <ol>
 <li>Each time in the building graph has a signature, which computed from stat info of inputs and other task metadata. </li>
-<li>Building system tracks signatures of current and previous build, and compared them to determine whether a task should be run. </li>
+<li>Building system tracks signatures of current and previous build, and compared them to determine whether a task should be run.</li>
 </ol>
 <p>For example, in the following picture, building system only has to run these 3 highlight tasks when only <code>PetViewVontroler.m</code> changed</p>
-<p><img src="image-20200705231435967.png" alt="image-20200705231435967"></p>
+<p><img src="/image-20200705231435967.png" alt="image-20200705231435967"></p>
 <h2 id="How-can-we-help-the-build-system"><a href="#How-can-we-help-the-build-system" class="headerlink" title="How can we help the build system?"></a>How can we help the build system?</h2><p>The answer is to handle the dependency properly so that the build system can order tasks correctly and build in parallel to save time. </p>
 <h4 id="Where-do-dependencies-come-from"><a href="#Where-do-dependencies-come-from" class="headerlink" title="Where do dependencies come from?"></a>Where do dependencies come from?</h4><ul>
 <li><p>Built in. The build system ships with rules for the compiler, the linker, the asset catalogue and story board processors and so on.<br> And these rules define what kind of files are accepted as inputs as well as what outputs are produced.</p>
 </li>
 <li><p>Target dependencies, which roughly determine the order in which targets are built.</p>
-<p><img src="image-20200705232141133.png" alt="image-20200705232141133" style="zoom:50%;" /></p>
+<img src="image-20200705232141133.png" alt="image-20200705232141133" style="zoom:50%;" />
 </li>
 <li><p>Implicit dependencies </p>
-<p><img src="image-20200705232159289.png" alt="image-20200705232159289" style="zoom:50%;" /></p>
+<img src="image-20200705232159289.png" alt="image-20200705232159289" style="zoom:50%;" />
 </li>
 <li><p>Build phase dependencies.  The tasks associated with each of these phrases are usually running groups according to the order in which the phases are listed. But the build system might ignore that order if it knows better.</p>
-<p><img src="image-20200705232220121.png" alt="image-20200705232220121" style="zoom:50%;" /></p>
+<img src="image-20200705232220121.png" alt="image-20200705232220121" style="zoom:50%;" />
 </li>
 <li><p>Scheme order dependencies. </p>
-<p>If you have the parallelize build check box enabled in your scheme settings, you get better build performance and the order of your targets in your scheme doesn’t matter.  However, if you turn parallelize build off, Xcode will attempt to build their, your targets in the order you listed them in the build action of the scheme one by one.<br><img src="image-20200705232238281.png" alt="image-20200705232238281" style="zoom:50%;" /></p>
-</li>
+<p>If you have the parallelize build check box enabled in your scheme settings, you get better build performance and the order of your targets in your scheme doesn’t matter.  However, if you turn parallelize build off, Xcode will attempt to build their, your targets in the order you listed them in the build action of the scheme one by one.</p>
+<img src="image-20200705232238281.png" alt="image-20200705232238281" style="zoom:50%;" /></li>
 </ul>
 <h4 id="What-we-can-do"><a href="#What-we-can-do" class="headerlink" title="What we can do?"></a>What we can do?</h4><ul>
 <li><p>Declare inputs and outputs to help the build system avoid rerunning the script tasks unnecessarily</p>
-<p><img src="image-20200705232718754.png" alt="image-20200705232718754" style="zoom:50%;" /></p>
+<img src="image-20200705232718754.png" alt="image-20200705232718754" style="zoom:50%;" />
 </li>
 <li><p>Avoid Auto-link for project dependencies.  </p>
 <blockquote>
 <p>This setting allows the compiler to automatically link to the frameworks corresponding to any modules you import without having to explicitly link them in your link library’s build phase. However, it’s important to note that auto-link does not establish dependency on that framework at the build system level. So it won’t guarantee that the target you depend on is actually built before you try to link against it.</p>
 </blockquote>
-<p><img src="image-20200705232921705.png" alt="image-20200705232921705" style="zoom:50%;" /></p>
+<img src="image-20200705232921705.png" alt="image-20200705232921705" style="zoom:50%;" />
 </li>
 <li><p>Add explicit dependencies </p>
 </li>
-<li>You might also need to create project references by dragging and dropping another Xcode project into your project’s file navigator in order to reveal the targets of other projects you depend on.</li>
+<li><p>You might also need to create project references by dragging and dropping another Xcode project into your project’s file navigator in order to reveal the targets of other projects you depend on.</p>
+</li>
 </ul>
 <h2 id="Clang-compiler"><a href="#Clang-compiler" class="headerlink" title="Clang compiler"></a><a target="_blank" rel="noopener" href="https://clang.llvm.org/">Clang compiler</a></h2><h3 id="Header-map"><a href="#Header-map" class="headerlink" title="Header map"></a>Header map</h3><blockquote>
 <p><code>Header map</code> is used by the Xcode build system to know where the header files are.</p>
 </blockquote>
 <p>In Objective-C, a header file is a promise, saying that the implementation exists somewhere else. If you only update the <code>header</code> file, adding a new function A,  without implementation of the function in <code>m</code> file, you broke your promise. Then you use function A in class B.   This doesn’t break during compile time, because compiler trusts the promise, saying that there is a function A symbol exists, but during link,  we usually got <code>symbol undefined</code> error. </p>
 <h3 id="1-How-does-Clang-find-your-header-files"><a href="#1-How-does-Clang-find-your-header-files" class="headerlink" title="1. How does Clang find your header files?"></a>1. How does Clang find your header files?</h3><p>We can copy the arguments from the Xcode building log when Clang compiles a single <code>.m</code> file, then using command line to see more details. </p>
-<p><img src="image-20200705234147883.png" alt="image-20200705234147883" style="zoom:50%;" /></p>
+<img src="image-20200705234147883.png" alt="image-20200705234147883" style="zoom:50%;" />
+
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">clang &lt;list of arguments&gt; -c Cat.mm -o Cat.o -v</span><br></pre></td></tr></table></figure>
+
+
+
 <p>First, Clang will start searching the header in header map files. </p>
-<p><img src="image-20200705234506914.png" alt="image-20200705234506914" style="zoom:50%;" /></p>
-<p><img src="image-20200705234528306.png" alt="image-20200705234528306" style="zoom:50%;" /></p>
-<h4 id="What-are-header-maps"><a href="#What-are-header-maps" class="headerlink" title="What are header maps"></a>What are header maps</h4><p><img src="image-20200705234700573.png" alt="image-20200705234700573" style="zoom:50%;" /></p>
+<img src="image-20200705234506914.png" alt="image-20200705234506914" style="zoom:50%;" />
+
+<img src="image-20200705234528306.png" alt="image-20200705234528306" style="zoom:50%;" />
+
+<h4 id="What-are-header-maps"><a href="#What-are-header-maps" class="headerlink" title="What are header maps"></a>What are header maps</h4><img src="image-20200705234700573.png" alt="image-20200705234700573" style="zoom:50%;" />
+
+
+
 <p>In the header map, for the first two keys <code>PetKit.h</code> and <code>Cat.h</code> , it just simply append the framework name, make them as <code>PetKit/PetKit.h</code> and <code>PetKit/Cat.h</code>. This keep existing projects working when you use <code>import &lt;Cat.h&gt;</code> or <code>import Cat.h</code>,  but there might be issues down the road with Clang modules.  So it is recommended that you always <code>specify the framework name</code> when you include a public or private header file from your own framework. </p>
 <h4 id="Suggestion-for-importing-headers-explicitly-in-your-source-code-to-help-Clang-find-the-header"><a href="#Suggestion-for-importing-headers-explicitly-in-your-source-code-to-help-Clang-find-the-header" class="headerlink" title="Suggestion for importing headers explicitly in your source code to help Clang find the header:"></a>Suggestion for importing headers explicitly in your source code to help Clang find the header:</h4><ul>
 <li>Always explicit a framework name when you introduce a public and private header </li>
 <li>always add the header to the project </li>
-<li>Always use unique name for header avoid shadowing other headers </li>
+<li>Always use unique name for header avoid shadowing other headers</li>
 </ul>
 <h3 id="2-How-does-Clang-find-system-header-files"><a href="#2-How-does-Clang-find-system-header-files" class="headerlink" title="2. How does Clang find system header files?"></a>2. How does Clang find system header files?</h3><p><code>Headermap</code> is only for developers’ code. So, in the case of finding system header files, Clang focus on two directories. </p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$(SDKROOT)/usr/include </span><br><span class="line">$(SDKROOT)/System/Library/Frameworks.(framework directory).</span><br></pre></td></tr></table></figure>
+
 <p>Take <code>import &lt;Foundation/Foundatoin.h&gt;</code> as an example, Clang appends <code>Foundation/Foundation.h</code> to the <code>(SDKROOT)/usr/includ</code>, and search the header in this path.</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$(SDKROOT)/usr/include/Foundation/Foundation.h</span><br></pre></td></tr></table></figure>
-<p>If it doesn’t find the header under <code>$(SDKROOT)/usr/include</code> ,  it continues to find header file in framework directory. </p>
+
+<p>If it doesn’t find the header under <code>$(SDKROOT)/usr/include </code> ,  it continues to find header file in framework directory. </p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$SDKROOT/System/Library/Frameworks/Foundation.framework/Headers/Foundation.h</span><br></pre></td></tr></table></figure>
+
 <h3 id="Process-your-file"><a href="#Process-your-file" class="headerlink" title="Process your file"></a>Process your file</h3><p>Xcode -&gt; Product -&gt;. Perform Action -&gt; Preprocess “”. This is the action to create preprocessed file for us, where the <code>import ...</code>  statement is substituted with the contents of that file.</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#import &lt;Foundation/Foundation.h&gt;</span><br></pre></td></tr></table></figure>
+
 <p>Clang has to find and process over 800 header files for this single include statement. That’s over 9 megabyte of source code that has to be parsed and verified.</p>
 <p>After preprocessing: </p>
-<p><img src="image-20200706000118839.png" alt="image-20200706000118839"></p>
+<p><img src="/image-20200706000118839.png" alt="image-20200706000118839"></p>
 <p>How does Clang do to avoid these redundant and heavy job?  </p>
 <h3 id="Clang-module"><a href="#Clang-module" class="headerlink" title="Clang module"></a>Clang module</h3><p>To speed up the building,  by using module, Clang can parse the header only once and store the information <code>in the disk</code>, then <code>reuse the cache</code> next time. </p>
 <p> In order to achieve this, Clang module should have  properties. </p>
 <ul>
 <li><p>Context-free </p>
 <p>ignore the context-related statement. Like, macro definitions</p>
-<p><img src="image-20200706091410725.png" alt="image-20200706091410725"></p>
+<p><img src="/image-20200706091410725.png" alt="image-20200706091410725"></p>
 </li>
 <li><p>Self-contained </p>
 <p>have to specify all the dependencies.</p>
@@ -309,29 +326,32 @@
 <p>A Module Map describes how a certain set of header files translate onto your module.</p>
 </blockquote>
 <p>This is the <code>module map</code> file for Foundation.framework. </p>
-<p><img src="image-20200706092447210.png" alt="image-20200706092447210" style="zoom: 50%;" /></p>
+<img src="image-20200706092447210.png" alt="image-20200706092447210" style="zoom: 50%;" />
+
 <ul>
 <li><p>It obviously describes what is the name of the module which is, Foundation.</p>
 </li>
 <li><p>it also specifies what headers are part of this module.  <code>Foundation.h</code> is a umbrella header.  If you want to find <code>NSString</code> header, you have to look into <code>Foundation.h</code> file. </p>
-<p><img src="image-20200706091927374.png" alt="image-20200706091927374" style="zoom:50%;" /></p>
-</li>
+<img src="image-20200706091927374.png" alt="image-20200706091927374" style="zoom:50%;" /></li>
 </ul>
 <h4 id="Build-Module"><a href="#Build-Module" class="headerlink" title="Build Module"></a>Build Module</h4><p>While building the foundation module, we have to build its dependency too. </p>
-<p><img src="image-20200706095037818.png" alt="image-20200706095037818" style="zoom:50%;" /></p>
+<img src="image-20200706095037818.png" alt="image-20200706095037818" style="zoom:50%;" />
+
 <h4 id="Module-Cache"><a href="#Module-Cache" class="headerlink" title="Module Cache"></a>Module Cache</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ clang -fmodules —DENABLE_CHINCHILLA=1 ...</span><br></pre></td></tr></table></figure>
+
 <p>The command line arguments for building a module can affect the content of your module. Clang will hash all those arguments and store the modules we created for this particular compiler invocation in a directory matching that hash.</p>
-<p><img src="image-20200706095441247.png" alt="image-20200706095441247" style="zoom:50%;" /></p>
+<img src="image-20200706095441247.png" alt="image-20200706095441247" style="zoom:50%;" />
+
 <h2 id="How-about-Swift"><a href="#How-about-Swift" class="headerlink" title="How about Swift"></a>How about Swift</h2><p>When compiling Objective-C files,  the compiler compiles each file separately and in parallel, by process the <code>import</code> statement, and then compiling the file. As we know, unlike Objective-C, Swift doesn’t have headers. So First, the compiler has to find declarations both within the Swift target and also coming from Objective-C.  Further, it has to generate interfaces describing the contents of the file. </p>
 <h3 id="Finding-declarations"><a href="#Finding-declarations" class="headerlink" title="Finding declarations"></a>Finding declarations</h3><ul>
 <li><p>Within a Swift target </p>
-<p>In the following example, the compiler will check the type in the <code>PetView</code>‘s initializer ‘, firstly, it parses the <code>PetView</code> and knows the declaration of the initializer is well formed. And then, it checks the call inside the     PetViewController`. </p>
+<p>In the following example, the compiler will check the type in the <code>PetView</code>‘s initializer ‘, firstly, it parses the <code>PetView</code> and knows the declaration of the initializer is well formed. And then, it checks the call inside the 	PetViewController&#96;.</p>
 </li>
 </ul>
-<p><img src="image-20200709093711492.png" alt="image-20200709093711492"></p>
-<p>​    So, actually, when compiling one Swift file, the compiler will parse all the other Swift files in the target. When compiling files separately and in parallel, it causes repeated parsing all files to find declarations.</p>
-<h4 id=""><a href="#" class="headerlink" title=""></a><img src="image-20200709095907259.png" alt="image-20200709095907259"></h4><p> In order to improve performance, Xcode 10 combines the files into groups to reuse parsing within a group, and only repeat parsing across groups.</p>
-<p><img src="image-20200709095800665.png" alt="image-20200709095800665"></p>
+<p><img src="/image-20200709093711492.png" alt="image-20200709093711492"></p>
+<p>​	So, actually, when compiling one Swift file, the compiler will parse all the other Swift files in the target. When compiling files separately and in parallel, it causes repeated parsing all files to find declarations.</p>
+<h4 id=""><a href="#" class="headerlink" title=""></a><img src="/image-20200709095907259.png" alt="image-20200709095907259"></h4><p> In order to improve performance, Xcode 10 combines the files into groups to reuse parsing within a group, and only repeat parsing across groups.</p>
+<p><img src="/image-20200709095800665.png" alt="image-20200709095800665"></p>
 <ul>
 <li><p>Find declarations from Objective-C </p>
 <p>In fact, <code>Swiftc</code> compiler embeds <code>clang</code>, so   we can can import clang frameworks directly</p>
@@ -347,12 +367,12 @@
 <h3 id="Generating-interface"><a href="#Generating-interface" class="headerlink" title="Generating interface"></a>Generating interface</h3><ul>
 <li><p>How your Objective-C header will be imported into Swift</p>
 <p>In this <code>PetViewController.h</code>, you use the button in the top-left corner of the source editor, see <code>generated interface</code>. </p>
-<p><img src="image-20200710110626097.png" alt="image-20200710110626097"></p>
+<p><img src="/image-20200710110626097.png" alt="image-20200710110626097"></p>
 </li>
 <li><p>To use Swift in Objective-C </p>
-<p><img src="image-20200710112907949.png" alt="image-20200710112907949"></p>
+<p><img src="/image-20200710112907949.png" alt="image-20200710112907949"></p>
 <ul>
-<li>For classes extending NSObject and methods/properties marked <code>@objc</code></li>
+<li>For classes extending NSObject and methods&#x2F;properties marked <code>@objc</code></li>
 <li>Apps and unit tests: both public and internal declarations</li>
 <li>Frameworks: Only <code>public declarations</code></li>
 <li>Compiler ties Objective-C class to mangled Swift class name. The Objective-C name includes the module name <code>PetWall</code> . This is to prevent conflict when two modules define class with same name</li>
@@ -370,9 +390,10 @@
 </ul>
 </li>
 </ul>
-<h3 id="swfitmodule-vs-header"><a href="#swfitmodule-vs-header" class="headerlink" title="swfitmodule vs header"></a>swfitmodule vs header</h3><p>  <code>swfitmodule</code> file is serialized, binary representation of module’s declarations, which will be deserialised by compiler  to check the types when you use them. So this <code>swfitmodule</code> is a bit like <code>like a generated Objective-C header</code>. But instead of text, it’s a binary representation. Besides, it does include the names and types of <code>private declarations</code> so that we can refer to them in the debugger. In addition, it includes the <code>bodies of inlineable</code>functions<code>,  like</code>static inline function`s in Objective-C  header</p>
+<h3 id="swfitmodule-vs-header"><a href="#swfitmodule-vs-header" class="headerlink" title="swfitmodule vs header"></a>swfitmodule vs header</h3><p>  <code>swfitmodule</code> file is serialized, binary representation of module’s declarations, which will be deserialised by compiler  to check the types when you use them. So this <code>swfitmodule</code> is a bit like <code>like a generated Objective-C header</code>. But instead of text, it’s a binary representation. Besides, it does include the names and types of <code>private declarations</code> so that we can refer to them in the debugger. In addition, it includes the <code>bodies of inlineable</code>functions<code>,  like </code>static inline function&#96;s in Objective-C  header</p>
 <pre><code>![image-20200710113202143](image-20200710113202143.png) 
-</code></pre><p>  <img src="image-20200709100603559.png" alt="image-20200709100603559"></p>
+</code></pre>
+<p>  <img src="/image-20200709100603559.png" alt="image-20200709100603559"></p>
 <p>   For incremental builds, the compiler produces partial Swift module files and then <code>merges</code> them into a single <code>swift module</code> file, and  a single Objective-C header. </p>
 <h3 id="In-summary"><a href="#In-summary" class="headerlink" title="In summary:"></a>In summary:</h3><ul>
 <li>Swift uses Objective-C declarations by Bridging header.</li>
@@ -380,7 +401,7 @@
 <li>In Objective-C Clang find where the header file is by header map files.  </li>
 <li>In Swift, <code>swfitmodule</code> is a bit like like a generated Objective-C header</li>
 </ul>
-<p><img src="generated_header.png" alt=""></p>
+<p><img src="/generated_header.png"></p>
 <h2 id="Linker"><a href="#Linker" class="headerlink" title="Linker"></a>Linker</h2><h3 id="What-is-Linker"><a href="#What-is-Linker" class="headerlink" title="What is Linker?"></a>What is Linker?</h3><p>Linking is the final task in building an executable Mach-O. What it does it to combine the output of all compiler invocations into a executable. </p>
 <p>Take two kinds of input files </p>
 <ul>
@@ -400,7 +421,7 @@
 <h3 id="Object-Files"><a href="#Object-Files" class="headerlink" title="Object Files"></a>Object Files</h3><p>Object file, <code>.o</code> file is the output of individual compiler actions. A non-executable Mach-O file containing code and data fragments. </p>
 <ul>
 <li>Each fragment is represented by a symbol. </li>
-<li>Fragment may reference <code>undefined</code> symbol. </li>
+<li>Fragment may reference <code>undefined</code> symbol.</li>
 </ul>
 <h3 id="Libraries"><a href="#Libraries" class="headerlink" title="Libraries"></a>Libraries</h3><blockquote>
 <p> Libraries define symbols that are not built as part of your target</p>
@@ -419,6 +440,7 @@
 <li>a textual representation of them that are easier for us to use</li>
 </ol>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">archs:           [ armv7, armv7s, arm64 ]</span><br><span class="line">platform:        ios</span><br><span class="line">install-name:    /usr/lib/libsqlite3.dylib</span><br><span class="line">current-version: 216.4</span><br><span class="line">compatibility-version: 9.0</span><br><span class="line">exports:         </span><br><span class="line">  - archs:           [ armv7, armv7s, arm64 ]</span><br><span class="line">    symbols:         [ __sqlite3_lockstate, __sqlite3_purgeEligiblePagerCacheMemory, </span><br><span class="line">                       __sqlite3_system_busy_handler, __sqlite_auto_profile, </span><br><span class="line">                       __sqlite_auto_profile_syslog, __sqlite_auto_trace, </span><br><span class="line">                       __sqlite_auto_trace_syslog, _sqlite3OsShmHasMultipleLinks, </span><br><span class="line">                       _sqlite3OsShmRenamedWhileOpen, _sqlite3OsShmWasTruncated, </span><br><span class="line">                       _sqlite3OsShmWasUnlinkedWhileOpen, _sqlite3VersionNumber, </span><br></pre></td></tr></table></figure>
+
 <p>from <a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/31450690/why-xcode-7-shows-tbd-instead-of-dylib">stackoverflow</a></p>
 </li>
 </ul>
@@ -434,22 +456,24 @@
 </ul>
 <h3 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h3><p>The left side is the source, the right side is the object file.  </p>
 <p>Firstly, let’s look at the <code>purrFile</code> variable, it is <code>static</code>  , and  <code>nonexported</code> name.  So it doesn’t appear in the object file.  </p>
-<p><img src="image-20200710150601150.png" alt="image-20200710150601150" style="zoom:50%;" /></p>
+<img src="image-20200710150601150.png" alt="image-20200710150601150" style="zoom:50%;" />
+
 <p>Then, here comes  an actual symbol <code>-[Cat purr]</code>. </p>
-<p><img src="image-20200710150636666.png" alt="image-20200710150636666"></p>
+<p><img src="/image-20200710150636666.png" alt="image-20200710150636666"></p>
 <p>Then, we see two instructions to pass the variable <code>purrFile</code> into <code>playSound</code> function. It is because,  we don’t have concrete address for  <code>purrFile</code> and we don’t know where this string is going to end up in the final executable.  But in  <code>ARM64</code>, it could take at most two instructions.  </p>
 <ul>
-<li><a target="_blank" rel="noopener" href="https://developer.arm.com/documentation/dui0802/b/A64-General-Instructions/ADRP">adrp</a> </li>
+<li><a target="_blank" rel="noopener" href="https://developer.arm.com/documentation/dui0802/b/A64-General-Instructions/ADRP">adrp</a></li>
 </ul>
 <p>So the compiler leaves the symbolic values <code>PAGE</code> and <code>PAGEOFF</code> that the linker will come in and fix up later.<br> Finally,  we’ve loaded that string into register  <code>x0</code> . </p>
-<p><img src="image-20200710150648959.png" alt="image-20200710150648959"></p>
+<p><img src="/image-20200710150648959.png" alt="image-20200710150648959"></p>
 <p><code>__Z9playSoundPKc</code>  is a C++ <code>demangle symbol</code>  </p>
-<p><img src="image-20200710150707825.png" alt="image-20200710150707825"></p>
-<p><img src="image-20200710154006829.png" alt="image-20200710154006829"></p>
+<p><img src="/image-20200710150707825.png" alt="image-20200710150707825"></p>
+<p><img src="/image-20200710154006829.png" alt="image-20200710154006829"></p>
 <p>When linking, linker takes a number of object files as input, and create a file to put them in.  In the <code>__TEXT</code> segment, it copies the executable code from the object file.  Then, in another segment, it copy the string. Now, the linker knows the absolute addresses of the string symbol, it will rewrite the instruction using a specific address. Meanwhile, the second instruction just went away, it replaced it with a null instruction <code>that does nothing</code>. <a target="_blank" rel="noopener" href="https://developer.arm.com/documentation/dui0802/b/A64-General-Instructions/NOP?lang=en">nop</a></p>
-<p><img src="image-20200710154246392.png" alt="image-20200710154246392"></p>
+<p><img src="/image-20200710154246392.png" alt="image-20200710154246392"></p>
 <p> Then the linker has to resolve the <code>undefined symbol</code>, <code>__Z9playSoundKc</code>.  </p>
-<p><img src="image-20200710155242689.png" alt="image-20200710155242689" style="zoom:50%;" /></p>
+<img src="image-20200710155242689.png" alt="image-20200710155242689" style="zoom:50%;" />
+
 <p>We start looking through the <code>.o</code> file in the <code>.a</code> archive file, and found out matching symbol for <code>playSound</code>. Then, linker put this symbol into the <code>PetKit</code>.   While copying code, it rewrite<code>_open</code> symbol as <code>_open$stub</code>. Why? because <code>_open</code> is in the lib system TBD file, which means it is in the system library. The linker needs to put more information in the Application executable file to make it call this function properly. </p>
 <p>So, it makes a fake function, <code>_open$stub</code>  , where it actually loads from the<code>$open</code> pointer and jumps to it. </p>
 <ul>
@@ -457,8 +481,8 @@
 <li><code>ldr</code> (load register) loads data from a memory location into a register. </li>
 <li><a target="_blank" rel="noopener" href="https://developer.arm.com/documentation/dui0802/b/A64-General-Instructions/BR?lang=en">br</a></li>
 </ul>
-<p><img src="image-20200710160920246.png" alt="image-20200710160920246"></p>
-<p><img src="image-20200710161911500.png" alt="image-20200710161911500"></p>
+<p><img src="/image-20200710160920246.png" alt="image-20200710160920246"></p>
+<p><img src="/image-20200710161911500.png" alt="image-20200710161911500"></p>
 <ul>
 <li><a target="_blank" rel="noopener" href="https://developer.apple.com/videos/play/wwdc2018/408">Building faster in Xcode</a></li>
 <li><a target="_blank" rel="noopener" href="https://www.onswiftwings.com/posts/build-time-optimization-part1/">build time optimization</a></li>

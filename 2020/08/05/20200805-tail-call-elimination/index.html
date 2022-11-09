@@ -202,17 +202,17 @@
   <!-- Article START -->
   <article class="post-article">
     <section class="markdown-content"><blockquote>
-<p>Tail call optimization, callee reusing the stack of the caller, is currently supported on x86/x86-64, PowerPC, and WebAssembly. It is performed on x86/x86-64 and PowerPC - <a target="_blank" rel="noopener" href="http://llvm.org/docs/CodeGenerator.html#tail-call-optimization">lldb</a></p>
+<p>Tail call optimization, callee reusing the stack of the caller, is currently supported on x86&#x2F;x86-64, PowerPC, and WebAssembly. It is performed on x86&#x2F;x86-64 and PowerPC - <a target="_blank" rel="noopener" href="http://llvm.org/docs/CodeGenerator.html#tail-call-optimization">lldb</a></p>
 </blockquote>
 <h2 id="Basic-Knowledge"><a href="#Basic-Knowledge" class="headerlink" title="Basic Knowledge"></a>Basic Knowledge</h2><h3 id="Registers"><a href="#Registers" class="headerlink" title="Registers"></a>Registers</h3><blockquote>
 <p>Processor operations mostly involve processing data. This data can be stored in memory and accessed from thereon. However, reading data from and storing data into memory slows down the processor, as it involves complicated processes of sending the data request across the control bus and into <code>the memory storage unit</code> and getting the data through the same channel. To speed up the processor operations, the processor includes some <code>internal memory storage locations</code>, called <strong>registers</strong>.</p>
 <p>The registers store data elements for processing without having to access the memory. A limited number of registers are built into the processor chip. – <a target="_blank" rel="noopener" href="https://www.tutorialspoint.com/assembly_programming/assembly_registers.htm">https://www.tutorialspoint.com/assembly_programming/assembly_registers.htm</a> </p>
 </blockquote>
 <p>In ARM 64, the following graph shows the registers’ roles.</p>
-<p><img src="image-20200805000244292.png" alt="image-20200805000244292"></p>
+<p><img src="/image-20200805000244292.png" alt="image-20200805000244292"></p>
 <ul>
 <li>The first eight registers, r0-r7, are used to pass argument values into a subroutine and to return result values from a function. </li>
-<li>The frame record for the innermost frame (belonging to the most recent routine invocation) shall be pointed to by the <code>Frame Pointer register</code> (FP). The lowest addressed double-word shall point to the <code>previous frame record</code> and the highest addressed double-word shall contain the value passed in LR on entry to the current function. </li>
+<li>The frame record for the innermost frame (belonging to the most recent routine invocation) shall be pointed to by the <code>Frame Pointer register</code> (FP). The lowest addressed double-word shall point to the <code>previous frame record</code> and the highest addressed double-word shall contain the value passed in LR on entry to the current function.</li>
 </ul>
 <h3 id="Stack-Structure"><a href="#Stack-Structure" class="headerlink" title="Stack Structure"></a>Stack Structure</h3><blockquote>
 <p>The stack is a <code>contiguous area of memory</code> that may be used for storage of local variables and for passing additional arguments to subroutines when there are insufficient argument registers available.The stack implementation is <em>full-descending</em>, with <code>the current extent of the stack</code> held in the special-purpose register <code>SP</code>.   –<a target="_blank" rel="noopener" href="https://developer.arm.com/documentation/ihi0055/b/">Procedure Call Standard for the ARM 64-bit Architecture (AArch64)- AArch64 ABI release 1.0</a></p>
@@ -229,7 +229,7 @@
 </ul>
 <p>In this environment, the stack frame size is not fixed.</p>
 <p>Another stack frame layout graph comes from <a target="_blank" rel="noopener" href="https://developer.arm.com/documentation/ihi0055/b/">Procedure Call Standard for the ARM 64-bit Architecture (AArch64)- AArch64 ABI release 1.0</a></p>
-<p><img src="image-20200805222941420.png" alt="image-20200805222941420"></p>
+<p><img src="/image-20200805222941420.png" alt="image-20200805222941420"></p>
 <h3 id="Passing-Arguments"><a href="#Passing-Arguments" class="headerlink" title="Passing Arguments"></a>Passing Arguments</h3><blockquote>
 <p>When functions (routines) call other functions (subroutines), they may need to pass arguments to them. The called subroutines access these arguments as <em>parameters</em>. Conversely, some subroutines pass a <em>result</em> or return value to their callers. In the ARMv6 environment, arguments may be passed on the runtime stack or in registers; in addition, some vector arguments are also passed passed in registers. Results are returned in registers or in memory. To efficiently pass values between callers and callees, GCC follows strict rules when it generates a program’s object code. - <a target="_blank" rel="noopener" href="https://developer.apple.com/library/archive/documentation/Xcode/Conceptual/iPhoneOSABIReference/Articles/ARMv6FunctionCallingConventions.html#//apple_ref/doc/uid/TP40009021-SW8">ARMv6</a></p>
 </blockquote>
@@ -242,41 +242,55 @@
 <li><p>Otherwise, <code>the caller shall reserve a block of memory of sufficient size and alignment to hold the result</code>. The address of the memory block shall be passed as an additional argument to the function in <code>x8</code>. <code>The callee may modify the result memory block</code> at any point during the execution of the subroutine (there is no requirement for the callee to preserve the value stored in x8).</p>
 </li>
 </ul>
-<h2 id="Tail-call-Elimination"><a href="#Tail-call-Elimination" class="headerlink" title="Tail call Elimination"></a>Tail call Elimination</h2><h3 id="Normal-Case"><a href="#Normal-Case" class="headerlink" title="Normal Case"></a>Normal Case</h3><p>Let’s say we have a method <code>drawRect</code>, which calls <code>CGContextDrawPath</code></p>
+<h2 id="Tail-call-Elimination"><a href="#Tail-call-Elimination" class="headerlink" title="Tail call Elimination"></a>Tail call Elimination</h2><h3 id="Normal-Case"><a href="#Normal-Case" class="headerlink" title="Normal Case"></a>Normal Case</h3><p>Let’s say we have a method <code>drawRect</code>, which calls <code> CGContextDrawPath</code></p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">- (void) drawRect: (NSRect) rect &#123;</span><br><span class="line">  // draw stuff</span><br><span class="line">  ...</span><br><span class="line">  CGContextDrawPath(_path, kCGStroke);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><img src="./image-20200804224933284.png" alt="image-20200804224933284" style="zoom:50%;" /></p>
+
+<img src="./image-20200804224933284.png" alt="image-20200804224933284" style="zoom:50%;" />
+
 <p>The above picture is the stack right before UIKit calls the <code>drawRect</code> method. This graph comes from <a target="_blank" rel="noopener" href="https://developer.apple.com/videos/play/wwdc2015/412/?time=729">WWDC</a>. </p>
 <p>Here, <code>fp</code>  is the<a target="_blank" rel="noopener" href="https://chortle.ccsu.edu/assemblytutorial/Chapter-28/ass28_4.html"> frame pointer</a>  .<code>lr</code> is the <code>link register</code>, which holds the next instruction to execute in the caller function( routines) that called the current function(subroutines). So the current function, <code>subroutines</code> know how to return to its caller. </p>
-<p>When UIKit calls <code>drawRect</code>, firstly,  <code>drawRect</code> will establish its call frame by pushing the <code>return</code> address from the link registe(<code>lr</code> )and <code>previous value</code>of the frame pointer ( <code>frame Ptr</code>), on the stack. As we said before,  there are registers store these two data. </p>
+<p>When UIKit calls <code>drawRect</code>, firstly,  <code>drawRect</code> will establish its call frame by pushing the <code>return</code> address from the link registe(<code>lr</code> )and <code>previous value </code>of the frame pointer ( <code>frame Ptr</code>), on the stack. As we said before,  there are registers store these two data. </p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">+0x00 push &#123;r4, r5, r6, fp, lr&#125;</span><br></pre></td></tr></table></figure>
+
 <p> the frame poniter, <code>fp</code> , will store a new address,  the value in <code>sp</code>  + 12. Then, <code>fp</code> will be set up on a new base just as the following graph shows. </p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">+0x02 add fp, sp, #12</span><br></pre></td></tr></table></figure>
-<p><img src="./image-20200805094701153.png" alt="image-20200805094701153" style="zoom:50%;" /></p>
+
+<img src="./image-20200805094701153.png" alt="image-20200805094701153" style="zoom:50%;" />
+
+
+
 <p>Then, <code>drawRect</code> makes room for storing local variables,  and has its call frame on the stack. </p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">+0x04 sub sp, #180</span><br></pre></td></tr></table></figure>
-<p><img src="./image-20200805094754924.png" alt="image-20200805094754924" style="zoom:50%;" /></p>
+
+<img src="./image-20200805094754924.png" alt="image-20200805094754924" style="zoom:50%;" />
+
 <p>Next, <code>drawRect</code> calls <code>CGContextDrawPath</code>,  which will also set up its call frame on the stack. </p>
-<p><img src="./image-20200805094818787.png" alt="image-20200805094818787" style="zoom:50%;" /></p>
+<img src="./image-20200805094818787.png" alt="image-20200805094818787" style="zoom:50%;" />
+
 <blockquote>
 <p><a target="_blank" rel="noopener" href="https://developer.apple.com/videos/play/wwdc2015-412/?time=700">The way time profiler works, it uses a service in the kernel </a><a target="_blank" rel="noopener" href="https://developer.apple.com/videos/play/wwdc2015-412/?time=703">that will sample what the CPUs are doing </a><a target="_blank" rel="noopener" href="https://developer.apple.com/videos/play/wwdc2015-412/?time=705">at about 1000x per second.</a>In this case, if we take a sample, we see that we’re running inside of context draw path.</p>
 <p><a target="_blank" rel="noopener" href="https://developer.apple.com/videos/play/wwdc2015-412/?time=714">Then the kernal looks at the frame Pointer register to see </a><a target="_blank" rel="noopener" href="https://developer.apple.com/videos/play/wwdc2015-412/?time=718">where the base of that function’s frame is </a><a target="_blank" rel="noopener" href="https://developer.apple.com/videos/play/wwdc2015-412/?time=721">and find the return address of who called it.</a> </p>
 </blockquote>
 <h3 id="Backtrace"><a href="#Backtrace" class="headerlink" title="Backtrace"></a>Backtrace</h3><p>So, what is Backtrace? Well,  by using frame pointer that was pushed on the stack,  we know the the base address of the caller’s stack frame. Since every call frame of the method has store the base address  of its caller’s stack frame, we can use this to go through the chain of the call frames in this stack.  </p>
-<p><img src="/image-20200805094837070.png" alt="image-20200805094837070" style="zoom:50%;" /></p>
+<img src="/image-20200805094837070.png" alt="image-20200805094837070" style="zoom:50%;" />
+
 <h3 id="Optimized-case"><a href="#Optimized-case" class="headerlink" title="Optimized case"></a>Optimized case</h3><p>In <code>drawRect</code>, after calling <code>CGContextDrawPath</code> , it is going to  <code>return</code>, which means actually it will <code>pop stack frame</code>, <code>restore fp</code>, and then <code>jump back to caller</code> . </p>
-<p><img src="image-20200805231739717.png" alt="image-20200805231739717" style="zoom:50%;" /></p>
+<img src="image-20200805231739717.png" alt="image-20200805231739717" style="zoom:50%;" />
+
 <p>Since <code>CGContextDrawPath</code> needs nothing from <code>drawRect</code>, the params it needs arn’t from the call frame of <code>drawRect</code> , the compiler does an optimization here.  It rearranges the code as follow. I <code>pops stack frame</code> of <code>drawRect</code> firstly, <code>restores fp</code>,  then calls  <code>CGContextDrawPath</code> . So it doesn’t have to <code>jump back to caller</code>  , the address stored in the <code>lr</code> register. </p>
 <p>Figure 1. it is going to  <code>pops stack frame</code></p>
-<p><img src="image-20200805232447437.png" alt="image-20200805232447437"></p>
+<p><img src="/image-20200805232447437.png" alt="image-20200805232447437"></p>
 <p>Figure 2. after  poping stack frame of <code>drawRect</code>, the call frame of drawRect doesn’t exist on the Stack any more.  Then <code>sp</code> moves.</p>
-<p><img src="image-20200805232642308.png" alt="image-20200805232642308"></p>
+<p><img src="/image-20200805232642308.png" alt="image-20200805232642308"></p>
 <p>Figure 3. after restoring <code>fp</code> to the base address of its caller’s frame pointer, the <code>return address</code> and <code>frame ptr</code> of <code>drawRect</code> don’t exist on the Stack any more.  Then <code>sp</code> moves.</p>
-<p><img src="image-20200805232724011.png" alt="image-20200805232724011"></p>
+<p><img src="/image-20200805232724011.png" alt="image-20200805232724011"></p>
 <p>Finally, it calls <code>CGContextDrawPath</code>, which establish its own call frame on the Stack. So, the stack is like this now. </p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">+0x76 b.w &quot;CGContextDrawPath$shim&quot;</span><br></pre></td></tr></table></figure>
-<p><img src="image-20200805234014273.png" alt="image-20200805234014273" style="zoom:50%;" /></p>
+
+<img src="image-20200805234014273.png" alt="image-20200805234014273" style="zoom:50%;" />
+
 <h3 id="The-difference-in-the-Call-Tree"><a href="#The-difference-in-the-Call-Tree" class="headerlink" title="The difference in the Call Tree"></a>The difference in the Call Tree</h3><p>The left side is the normal case, the right side is the optimized case where then call frame of <code>drawRect</code> will be removed from the stack in the optimized case. It looks like <code>CGContextDrawPath</code> is directedly called from <code>drawLayout:inContext</code> .</p>
-<p><img src="image-20200805234610955.png" alt="image-20200805234610955"></p>
+<p><img src="/image-20200805234610955.png" alt="image-20200805234610955"></p>
 <h3 id="The-benifit-of-Tail-call-Elimination"><a href="#The-benifit-of-Tail-call-Elimination" class="headerlink" title="The benifit of Tail call Elimination"></a>The benifit of Tail call Elimination</h3><ul>
 <li>Saves stack memory </li>
 <li>Keeps caches hot, and reuses the memory</li>
@@ -284,22 +298,20 @@
 </ul>
 <h3 id="Disabling"><a href="#Disabling" class="headerlink" title="Disabling"></a>Disabling</h3><p>set this compiler flag when building,  you can get better call tree in the Time Profiler when profiling app. </p>
 <ul>
-<li>CFLAGS=“-fno-optimize-sibling-calls”</li>
+<li>CFLAGS&#x3D;“-fno-optimize-sibling-calls”</li>
 </ul>
 <h3 id="Call-Semantics"><a href="#Call-Semantics" class="headerlink" title="Call Semantics"></a>Call Semantics</h3><p>There is a useful trick to indentify if this is a Tail call Elimination case. That is to</p>
 <p><code>look at the disaeembly and call sight of the last call</code></p>
-<p><img src="image-20200806092252238.png" alt="image-20200806092252238"></p>
+<p><img src="/image-20200806092252238.png" alt="image-20200806092252238"></p>
 <ul>
 <li><p>In normal call, it uses <code>a Branch and Link family of instructions</code> (bl)</p>
 <ul>
 <li><p>Sets <code>lr</code> to  next address and jumps to the caller</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Caller: +0x174 blx &quot;CGContextDrawPath $shim”</span><br></pre></td></tr></table></figure>
-</li>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Caller: +0x174 blx &quot;CGContextDrawPath $shim”</span><br></pre></td></tr></table></figure></li>
 </ul>
 </li>
 <li><p>In optimized call, Tail Calls use <code>simple branches</code> (b) , directedly jump into the function</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Caller: +0x174 b.w &quot;CGContextDrawPath $shim”</span><br></pre></td></tr></table></figure>
-</li>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Caller: +0x174 b.w &quot;CGContextDrawPath $shim”</span><br></pre></td></tr></table></figure></li>
 </ul>
 </section>
     <!-- Tags START -->

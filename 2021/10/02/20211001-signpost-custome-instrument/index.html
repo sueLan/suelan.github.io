@@ -203,7 +203,7 @@
   <article class="post-article">
     <section class="markdown-content"><p><code>SignPost</code> is part of the <code>os_log</code> family delivered by Apple for iOS10 and above. It allows developers to place performance-focused time markers which can be displayed in Instrument for visualization. Or we can say, <code>SignPost</code> APIs enable us add some lightweight instrumentation to code for collection and visualization by performance analysis tooling. Now, here comes two basic concepts in <code>os_signpost</code> APIs. </p>
 <ul>
-<li><code>intervals</code>:  interesting periods of time. <code>os_signpost</code> interval begin and end matching  matching begins and ends is restricted to single threads.</li>
+<li><code>intervals </code>:  interesting periods of time. <code>os_signpost</code> interval begin and end matching  matching begins and ends is restricted to single threads.</li>
 <li><code>events</code>: single points in time</li>
 </ul>
 <h2 id="Instruments"><a href="#Instruments" class="headerlink" title="Instruments"></a>Instruments</h2><p>As I said, we can use it with signpost logs to  </p>
@@ -213,6 +213,7 @@
 </ul>
 <p>Here comes a piece of code demonstrating how to use <code>OSLog</code>   </p>
 <figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os.signpost</span><br><span class="line"></span><br><span class="line"><span class="comment">// 1. create a container of related log messages. Each log contains a subsystem and a category, which you define and helpful when sorting and displaying them. Can see category in console.log  </span></span><br><span class="line"><span class="keyword">let</span> refreshLog <span class="operator">=</span> <span class="type">OSLog</span>(subsystem: <span class="string">&quot;com.example.your-app&quot;</span>, category: <span class="string">&quot;RefreshOperations&quot;</span>)</span><br><span class="line"> </span><br><span class="line"><span class="comment">// 2. A different signpost name for this different interval</span></span><br><span class="line">os_signpost(.begin, log: refreshLog, name: <span class="string">&quot;Refresh Panel&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> element <span class="keyword">in</span> panel.elements &#123;</span><br><span class="line">  os_signpost(.begin, log: refreshLog, name: <span class="string">&quot;Fetch Asset&quot;</span>) fetchAsset(for: element)</span><br><span class="line">  os_signpost(.end, log: refreshLog, name: <span class="string">&quot;Fetch Asset&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line">os_signpost(.end, log: refreshLog, name: <span class="string">&quot;Refresh Panel&quot;</span>)</span><br><span class="line"> </span><br></pre></td></tr></table></figure>
+
 <h3 id="Signpost-Names"><a href="#Signpost-Names" class="headerlink" title="Signpost Names"></a>Signpost Names</h3><ul>
 <li>The string literal identifies signpost intervals</li>
 <li>The name must match at .begin and .end</li>
@@ -223,13 +224,17 @@
 <li>While running,use the same IDs for each pair of <code>.begin</code> and <code>.end</code></li>
 </ul>
 <figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> spid <span class="operator">=</span> <span class="type">OSSignpostID</span>(log: refreshLog)</span><br><span class="line">os_signpost(.begin, log: refreshLog, name: <span class="string">&quot;Fetch Asset&quot;</span>, signpostID: spid)</span><br><span class="line"></span><br><span class="line">os_signpost(.end, log: refreshLog, name: <span class="string">&quot;Fetch Asset&quot;</span>, signpostID: spid)</span><br></pre></td></tr></table></figure>
+
 <h3 id="Making-Signpost-IDs"><a href="#Making-Signpost-IDs" class="headerlink" title="Making Signpost IDs"></a>Making Signpost IDs</h3><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> spid <span class="operator">=</span> <span class="type">OSSignpostID</span>(log: refreshLog, object: element)</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>Signpost IDs are process-scoped</li>
 <li>Making from object is convenient if you have the same object at .begin and .end</li>
 </ul>
-<h2 id="Organizing-Signposts-A-Hierarchy"><a href="#Organizing-Signposts-A-Hierarchy" class="headerlink" title="Organizing Signposts: A Hierarchy"></a>Organizing Signposts: A Hierarchy</h2><p>You can use <code>subsystem</code>, <code>category</code> and <code>name</code> to organize signposts.<br><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">log <span class="operator">=</span> <span class="type">OSLog</span>(subsystem: <span class="string">&quot;com.example.your-app&quot;</span>, category: <span class="string">&quot;RefreshOperations&quot;</span>)</span><br><span class="line">os_signpost(.begin, log: log, name: <span class="string">&quot;Fetch Asset&quot;</span>, signpostID: spid)</span><br></pre></td></tr></table></figure></p>
-<p><img src="image-20210108175744504.png" alt="image-20210108175744504"></p>
+<h2 id="Organizing-Signposts-A-Hierarchy"><a href="#Organizing-Signposts-A-Hierarchy" class="headerlink" title="Organizing Signposts: A Hierarchy"></a>Organizing Signposts: A Hierarchy</h2><p>You can use <code>subsystem</code>, <code>category</code> and <code>name</code> to organize signposts. </p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">log <span class="operator">=</span> <span class="type">OSLog</span>(subsystem: <span class="string">&quot;com.example.your-app&quot;</span>, category: <span class="string">&quot;RefreshOperations&quot;</span>)</span><br><span class="line">os_signpost(.begin, log: log, name: <span class="string">&quot;Fetch Asset&quot;</span>, signpostID: spid)</span><br></pre></td></tr></table></figure>
+
+<p><img src="/image-20210108175744504.png" alt="image-20210108175744504"></p>
 <h3 id="Custom-Metadata-in-Signpost-Arguments"><a href="#Custom-Metadata-in-Signpost-Arguments" class="headerlink" title="Custom Metadata in Signpost Arguments"></a>Custom Metadata in Signpost Arguments</h3><p>You can add more data when calling <code>os_signpost</code> </p>
 <ul>
 <li>Add context to the .begin and .end</li>
@@ -239,53 +244,57 @@
 <li>The format string is a fixed cost, so feel free to be descriptive!</li>
 </ul>
 <figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">os_signpost(.begin, log: log, name: <span class="string">&quot;Compute Physics&quot;</span>, <span class="string">&quot;%d %d %d %d&quot;</span>,</span><br><span class="line">x1, y1, x2, y2)</span><br></pre></td></tr></table></figure>
+
 <h3 id="Signpost-Events"><a href="#Signpost-Events" class="headerlink" title="Signpost Events"></a>Signpost Events</h3><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">os_signpost(.event, log: log, name: <span class="string">&quot;Fetch Asset&quot;</span>,</span><br></pre></td></tr></table></figure>
-<p>To add events between <code>.begin</code> and <code>.end</code>. They will become <code>Points of Interest</code> displayed in instrument later. </p>
+<p>To add events between <code>.begin</code> and <code>.end</code>. They will become <code>Points of Interest </code> displayed in instrument later. </p>
 <h2 id="Signposts-Are-Lightweight"><a href="#Signposts-Are-Lightweight" class="headerlink" title="Signposts Are Lightweight"></a>Signposts Are Lightweight</h2><ul>
 <li>Built to minimize observer effect</li>
 <li>Built for fine-grained measurement in a short time span</li>
 </ul>
 <h2 id="Enabling-and-Disabling-Signpost-Categories"><a href="#Enabling-and-Disabling-Signpost-Categories" class="headerlink" title="Enabling and Disabling Signpost Categories"></a>Enabling and Disabling Signpost Categories</h2><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">OSLog</span>.disabled</span><br></pre></td></tr></table></figure>
+
 <figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"> </span><br><span class="line"><span class="keyword">let</span> refreshLog: <span class="type">OSLog</span></span><br><span class="line"><span class="keyword">if</span> <span class="type">ProcessInfo</span>.processInfo.environment.keys.contains(<span class="string">&quot;SIGNPOSTS_FOR_REFRESH&quot;</span>) &#123;</span><br><span class="line">   refreshLog <span class="operator">=</span> <span class="type">OSLog</span>(subsystem: <span class="string">&quot;com.example.your-app&quot;</span>, category: <span class="string">&quot;RefreshOperations&quot;</span>) </span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">   refreshLog <span class="operator">=</span> .disabled</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <h2 id="Signposts-in-C"><a href="#Signposts-in-C" class="headerlink" title="Signposts in C"></a>Signposts in C</h2><p>Well, if you want to use <code>os_signpost</code> in C, Apple also provides a series of APIs for C. </p>
-<p><img src="image-20210108180102653.png" alt="image-20210108180102653"></p>
+<p><img src="/image-20210108180102653.png" alt="image-20210108180102653"></p>
 <h3 id="Points-of-Interest"><a href="#Points-of-Interest" class="headerlink" title="Points of Interest"></a>Points of Interest</h3><p>We may want to focus on timing of some important events. We can promote these events by using <code>points of interest</code>  as the category of <code>OSLog</code> .  Instrument then will look for this special category and display it in a separated sections. </p>
-<p><img src="image-20210117174557365.png" alt="image-20210117174557365"></p>
+<p><img src="/image-20210117174557365.png" alt="image-20210117174557365"></p>
 <p>We later can see these events displayed  and correlate these events with other performance data.  </p>
 <p>In non-swift source code, we can use <code>OS_LOG_CATEGORY_POINTS_OF_INTEREST</code>.  And use <code>os_signpost(.event, ...)</code> to emit import events. </p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#ifndef __swift__</span><br><span class="line">#define OS_LOG_CATEGORY_POINTS_OF_INTEREST &quot;PointsOfInterest&quot;</span><br><span class="line">#endif</span><br></pre></td></tr></table></figure>
-<p><img src="image-20210117224415205.png" alt="image-20210117224415205"></p>
+
+<p><img src="/image-20210117224415205.png" alt="image-20210117224415205"></p>
 <p>In Instrument, we can use <code>Points of Interest</code> template. </p>
 <h2 id="How-to-use-it-in-Instrument"><a href="#How-to-use-it-in-Instrument" class="headerlink" title="How to use it in Instrument"></a>How to use it in Instrument</h2><p>After opening the instrument, we can chose <code>Logging template</code> </p>
-<p><img src="image-20210117172127316.png" alt="image-20210117172127316"></p>
+<p><img src="/image-20210117172127316.png" alt="image-20210117172127316"></p>
 <p>Or we can add <code>os_signpost</code>  here</p>
-<p><img src="image-20210117170856013.png" alt="image-20210117170856013"></p>
-<p>What I like most in Instrument is that we can always zoom in and zoom out to select the region we interest.<br><img src="demostration.gif" alt=""></p>
+<p><img src="/image-20210117170856013.png" alt="image-20210117170856013"></p>
+<p>What I like most in Instrument is that we can always zoom in and zoom out to select the region we interest.<br><img src="/demostration.gif"></p>
 <h3 id="Analysis-time-of-the-intervals"><a href="#Analysis-time-of-the-intervals" class="headerlink" title="Analysis time of the intervals"></a>Analysis time of the intervals</h3><p>Choose <code>summary:Intervals</code> . We can see the summary of intervals. The count, duration, min duration, average duration, maximum duration of each signpost we collects. </p>
-<p><img src="image-20210117230659066.png" alt="image-20210117230659066"></p>
+<p><img src="/image-20210117230659066.png" alt="image-20210117230659066"></p>
 <h3 id="Analysis-the-metadata"><a href="#Analysis-the-metadata" class="headerlink" title="Analysis the metadata"></a>Analysis the metadata</h3><p><code>Summary:Metadata Statistics</code> </p>
 <h4 id="Analysis-Points-of-Interest"><a href="#Analysis-Points-of-Interest" class="headerlink" title="Analysis Points of Interest"></a>Analysis Points of Interest</h4><p>By choosing the <code>Points of Interest</code> section, we can see the points of interest and its meta data. Besides, we can use points of interst together with other section, like Time Profile to check how is the performance like when these importance events happen. </p>
-<p><img src="image-20210117230047705.png" alt="image-20210117230047705"></p>
+<p><img src="/image-20210117230047705.png" alt="image-20210117230047705"></p>
 <h2 id="Options"><a href="#Options" class="headerlink" title="Options"></a>Options</h2><p>The default recording mode is <code>immediate</code>, which means it records all the signposts immediately. This could bring overhead if your app emits thousands of signposts per second.  However, we can still work around that by changing to window mode and only collecting data for the last 5 seconds.  It is very useful to collect data to analyze stutters. </p>
 <p>Steps: </p>
 <ol>
 <li><p>long press the record button and select recording options </p>
-<p><img src="image-20210117182658245.png" alt="image-20210117182658245"></p>
+<p><img src="/image-20210117182658245.png" alt="image-20210117182658245"></p>
 </li>
 <li><p>Expand <code>Grobal Options</code></p>
 </li>
 </ol>
-<p><img src="image-20210117182537413.png" alt="image-20210117182537413"></p>
+<p><img src="/image-20210117182537413.png" alt="image-20210117182537413"></p>
 <ol start="3">
-<li>Choose <code>Last</code>, filling 5 seconds.<br><img src="image-20210117172616368.png" alt="image-20210117172616368"></li>
+<li>Choose <code>Last</code>, filling 5 seconds.<br><img src="/image-20210117172616368.png" alt="image-20210117172616368"></li>
 </ol>
 <p>When recording in <code>Windowed Mode</code> , the Instrument shows a blank white screen with a hint <code>Recording in Windowed Mode</code>.</p>
-<p><img src="image-20210117224703454.png" alt="image-20210117224703454"></p>
+<p><img src="/image-20210117224703454.png" alt="image-20210117224703454"></p>
 <p>When stoping recording, the Instrument showing a progress view and analyzing the collected data. </p>
-<p><img src="image-20210117224757983.png" alt="image-20210117224757983"></p>
+<p><img src="/image-20210117224757983.png" alt="image-20210117224757983"></p>
 <h2 id="Ref"><a href="#Ref" class="headerlink" title="Ref"></a>Ref</h2><ul>
-<li><a target="_blank" rel="noopener" href="https://developer.apple.com/documentation/os/logging">Apple doc/logging</a></li>
-<li><a target="_blank" rel="noopener" href="https://developer.apple.com/videos/play/wwdc2018/405/">WWDC/Measuring Performance Using Logging</a></li>
+<li><a target="_blank" rel="noopener" href="https://developer.apple.com/documentation/os/logging">Apple doc&#x2F;logging</a></li>
+<li><a target="_blank" rel="noopener" href="https://developer.apple.com/videos/play/wwdc2018/405/">WWDC&#x2F;Measuring Performance Using Logging</a></li>
 </ul>
 </section>
     <!-- Tags START -->
