@@ -205,17 +205,16 @@
 <ul>
 <li><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Comparison_of_instant_messaging_protocols">Comparison of instant messaging protocols - Wikipedia</a></li>
 </ul>
-<h2 id="XMPP-Addressing"><a href="#XMPP-Addressing" class="headerlink" title="XMPP Addressing"></a>XMPP Addressing</h2><p>这是一张Client-Server的图，图里的server、client都遵循XMPP协议。叫 XMPP entity. 它们有各自唯一的Address, 格式如‘<a href="mailto:&#x75;&#115;&#x65;&#114;&#110;&#x61;&#109;&#101;&#x40;&#x73;&#101;&#114;&#x76;&#101;&#x72;&#x2e;&#99;&#111;&#x6d;">&#x75;&#115;&#x65;&#114;&#110;&#x61;&#109;&#101;&#x40;&#x73;&#101;&#114;&#x76;&#101;&#x72;&#x2e;&#99;&#111;&#x6d;</a>‘, 叫 JID (Jaber ID)<br> <a target="_blank" rel="noopener" href="https://datatracker.ietf.org/doc/rfc7622/">RFC 7622 - Extensible Messaging and Presence Protocol (XMPP): Address Format</a></p>
+<h2 id="XMPP-Addressing"><a href="#XMPP-Addressing" class="headerlink" title="XMPP Addressing"></a>XMPP Addressing</h2><p>这是一张Client-Server的图，图里的server、client都遵循XMPP协议。叫 XMPP entity. 它们有各自唯一的Address, 格式如<a href="mailto:&#39;username@server.com">&#39;username@server.com</a>‘, 叫 JID (Jaber ID)<br> <a target="_blank" rel="noopener" href="https://datatracker.ietf.org/doc/rfc7622/">RFC 7622 - Extensible Messaging and Presence Protocol (XMPP): Address Format</a></p>
 <p> <img src="/img/32c16f22-9862-45e8-b15f-1b1eceb7b30f/28a215f7.png" alt="28a215f7.png"></p>
 <p>其中resource是拿来做同一账号多客户端标记的， 比如图中<code>User1</code> 从 pc ,phone1 和 phone2登录同一账号，resource分别是 <code>pc</code>, <code>iphone1</code>,<code>iphone2</code></p>
 <h2 id="XMPP-Client-Server-Streams"><a href="#XMPP-Client-Server-Streams" class="headerlink" title="XMPP Client- Server Streams"></a>XMPP Client- Server Streams</h2><p> 客户端与服务端通过长链接方式通信，现在多用WebSocket。当客户端跟服务端握手成功，它们开始用 XML stream通信。</p>
 <p> <img src="/img/32c16f22-9862-45e8-b15f-1b1eceb7b30f/f1565a2e.png" alt="f1565a2e.png">\</p>
 <p>XML stream 总是以  <code>&lt;stream&gt;</code> 开头， <code>&lt;/stream&gt;</code> tag结尾。是xml消息的容器。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">An XML stream is a container for the exchange of XML elements between any two entities over a network. </span><br><span class="line">During the life of the stream, the entity that initiated it can send an unbounded number of XML elements over the stream, either elements used to negotiate the stream (e.g., to complete TLS negotiation or SASL negotiation) or XML stanzas. </span><br></pre></td></tr></table></figure>
-
 <p>下面是client跟server的一次消息交互， 绿色来自client的，黑色消息来自server</p>
 <p>  <img src="/img/32c16f22-9862-45e8-b15f-1b1eceb7b30f/65d38868.png" alt="f97e583b.png"></p>
-<h3 id="XML-stanza"><a href="#XML-stanza" class="headerlink" title="XML stanza"></a>XML stanza</h3><p> An XML stanza is the basic unit of meaning in XMPP. A stanza is a first-level element (at depth&#x3D;1 of the stream) whose element name is “message”, “presence”, or “iq” and whose qualifying namespace is ‘jabber:client’ or ‘jabber:server’. </p>
+<h3 id="XML-stanza"><a href="#XML-stanza" class="headerlink" title="XML stanza"></a>XML stanza</h3><p> An XML stanza is the basic unit of meaning in XMPP. A stanza is a first-level element (at depth=1 of the stream) whose element name is “message”, “presence”, or “iq” and whose qualifying namespace is ‘jabber:client’ or ‘jabber:server’. </p>
 <h3 id="XMPP-Communication-Primitives"><a href="#XMPP-Communication-Primitives" class="headerlink" title="XMPP Communication Primitives"></a>XMPP Communication Primitives</h3><p>A <code>stanza</code> is the smallest piece of XML data a client can send to a server ( server send to client) in one package.</p>
 <p>xmpp中，服务端、客户数据交换时，最小XML数据单位 叫 stanza。如上图，绿色的就是一个stanza，黑色的也是一个stanza。Stanza有几种类型: <code>message</code>, <code>iq</code>, <code>presence</code>。 </p>
 <h4 id="The-Message-Stanza"><a href="#The-Message-Stanza" class="headerlink" title="The Message Stanza"></a>The Message Stanza</h4><p>The <message/> stanza is meant to be used to send data between XMPP entities.</p>
@@ -234,12 +233,12 @@
 <p><img src="/img/32c16f22-9862-45e8-b15f-1b1eceb7b30f/0fbe995b.png" alt="0fbe995b.png"></p>
 <p><code>show</code> 标签里可能会有的几种状态:<br><code>chat</code> : online and available for chat ;<br><code>away</code> : 暂时离开<br><code>xa</code> : 长时间离开<br><code>dnd</code>: 请勿打扰</p>
 <p>如果你想知道别的状态，需要先发消息给Server，subscribe别人。 </p>
-<h4 id="The-IQ-stanza"><a href="#The-IQ-stanza" class="headerlink" title="The IQ stanza"></a>The IQ stanza</h4><p> The IQ( Info&#x2F;Query) stanza is used to get some information from the server ( info about the server or its registered clients) or to apply some settings to the server.</p>
+<h4 id="The-IQ-stanza"><a href="#The-IQ-stanza" class="headerlink" title="The IQ stanza"></a>The IQ stanza</h4><p> The IQ( Info/Query) stanza is used to get some information from the server ( info about the server or its registered clients) or to apply some settings to the server.</p>
 <p> 用来获取消息，或者请求设置</p>
 <p>Type属性中的类型 :get ,set ,result or error. </p>
 <ul>
 <li><code>&lt; iq type=”get”/&gt;</code> stanzas are used to get(ask) some information ( from the server). </li>
-<li><code>&lt;iq type=”set”/&gt;</code> stanzas are used to apply some settings to the server.When you send get&#x2F;set IQ stanzas to the server ,</li>
+<li><code>&lt;iq type=”set”/&gt;</code> stanzas are used to apply some settings to the server.When you send get/set IQ stanzas to the server ,</li>
 <li>it can reply either with an <code>&lt; iq type=”result”/&gt;</code> stanza when your request has been successfully processed by the server or </li>
 <li><code>&lt;iq type=”error”/&gt;</code> stanza when something has gone wrong with your request.The figure below shows an IQ stanza that we send to the server and the reply we get from the server.</li>
 </ul>
@@ -249,22 +248,20 @@
 <p>The server responds with a list of the JID’s contacts wraped within a <code>jabber:iq:roster</code> namespaced <code>&lt;query/&gt;</code>tag.</p>
 <h2 id="本地搭建-Server"><a href="#本地搭建-Server" class="headerlink" title="本地搭建 Server"></a>本地搭建 Server</h2><p>我搭的是ejabberd. 官方安装教程: <a target="_blank" rel="noopener" href="https://docs.ejabberd.im/admin/installation/#install-on-macos">Installing ejabberd | ejabberd Docs</a></p>
 <h4 id="启动服务"><a href="#启动服务" class="headerlink" title="启动服务"></a>启动服务</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">cd /Applications/ejabberd-19.02</span><br><span class="line">//开启服务</span><br><span class="line">./bin/ejabberdctl start  </span><br><span class="line">//状态</span><br><span class="line">./bin/ejabberdctl status  </span><br><span class="line"></span><br><span class="line">// help 查看更多功能哦</span><br><span class="line">./bin/ejabberdctl help </span><br></pre></td></tr></table></figure>
-
 <h4 id="注册账户"><a href="#注册账户" class="headerlink" title="注册账户"></a>注册账户</h4><p>打开 <a target="_blank" rel="noopener" href="http://localhost:5280/admin/">admin 页面</a>, 虚拟主机 -&gt; localhost(可能你的名字不一样) -&gt; 用户。 现在你可以自己创建账户了。</p>
 <p><img src="/img/32c16f22-9862-45e8-b15f-1b1eceb7b30f/578b88b6.png" alt="578b88b6.png"></p>
 <p>如果有自定义需求,配置教程 <a target="_blank" rel="noopener" href="https://docs.ejabberd.im/admin/configuration/#mod-http-ws">Configuring ejabberd | ejabberd Docs</a> </p>
-<h4 id="客户端玩起来"><a href="#客户端玩起来" class="headerlink" title="客户端玩起来"></a>客户端玩起来</h4><p>客户端有很多<a target="_blank" rel="noopener" href="https://xmpp.org/software/clients.html">选择</a>，不过大多数都是渣。如果是WebSocket，用这个 <a target="_blank" rel="noopener" href="https://github.com/processone/xmpp-websocket-client">GitHub - processone&#x2F;xmpp-websocket-client: Test XMPP Websocket client</a> 调试可以看到stanza，挺方便的。</p>
+<h4 id="客户端玩起来"><a href="#客户端玩起来" class="headerlink" title="客户端玩起来"></a>客户端玩起来</h4><p>客户端有很多<a target="_blank" rel="noopener" href="https://xmpp.org/software/clients.html">选择</a>，不过大多数都是渣。如果是WebSocket，用这个 <a target="_blank" rel="noopener" href="https://github.com/processone/xmpp-websocket-client">GitHub - processone/xmpp-websocket-client: Test XMPP Websocket client</a> 调试可以看到stanza，挺方便的。</p>
 <p>如果Mac用户报auth问题，可以打开<code>vim conf/ejabberd.yml</code>, <code>tls</code>配置成<code>false</code><br><img src="/img/32c16f22-9862-45e8-b15f-1b1eceb7b30f/5202ee46.png" alt="5202ee46.png"></p>
-<h4 id="关于js-lib"><a href="#关于js-lib" class="headerlink" title="关于js lib"></a>关于js lib</h4><p>打算用React Native写，lib选了 <a target="_blank" rel="noopener" href="https://github.com/xmppjs/xmpp.js">GitHub - xmppjs&#x2F;xmpp.js: XMPP for JavaScript</a> 。当然 Web多用框架 Strophe.js。这儿有个简单比较<a target="_blank" rel="noopener" href="https://github.com/xmppjs/xmpp.js/issues/217">How do you compare to strophe.js · Issue #217 · xmppjs&#x2F;xmpp.js · GitHub</a></p>
+<h4 id="关于js-lib"><a href="#关于js-lib" class="headerlink" title="关于js lib"></a>关于js lib</h4><p>打算用React Native写，lib选了 <a target="_blank" rel="noopener" href="https://github.com/xmppjs/xmpp.js">GitHub - xmppjs/xmpp.js: XMPP for JavaScript</a> 。当然 Web多用框架 Strophe.js。这儿有个简单比较<a target="_blank" rel="noopener" href="https://github.com/xmppjs/xmpp.js/issues/217">How do you compare to strophe.js · Issue #217 · xmppjs/xmpp.js · GitHub</a></p>
 <h3 id="其他资料"><a href="#其他资料" class="headerlink" title="其他资料"></a>其他资料</h3><ul>
 <li><p>简单介绍 <a target="_blank" rel="noopener" href="https://www.blikoontech.com/xmpp/xmpp-a-soft-friendly-introduction">A friendly introduction to XMPP – blikoon</a></p>
 </li>
 <li><p>官方协议很详细，例子也很形象。 <a target="_blank" rel="noopener" href="https://xmpp.org/rfcs/rfc6120.html#tls">Extensible Messaging and Presence Protocol (XMPP): Core</a></p>
 </li>
-<li><p>如何选择即时通讯应用的数据传输格式 <a target="_blank" rel="noopener" href="http://www.52im.net/thread-276-1-1.html">如何选择即时通讯应用的数据传输格式-其它分享&#x2F;专项技术区 - 即时通讯开发者社区!</a></p>
+<li><p>如何选择即时通讯应用的数据传输格式 <a target="_blank" rel="noopener" href="http://www.52im.net/thread-276-1-1.html">如何选择即时通讯应用的数据传输格式-其它分享/专项技术区 - 即时通讯开发者社区!</a></p>
 </li>
-<li><p>强列建议将Protobuf作为你的即时通讯应用数据传输格式 <a target="_blank" rel="noopener" href="http://www.52im.net/thread-277-1-1.html">强列建议将Protobuf作为你的即时通讯应用数据传输格式-其它分享&#x2F;专项技术区 - 即时通讯开发者社区!</a></p>
-</li>
+<li>强列建议将Protobuf作为你的即时通讯应用数据传输格式 <a target="_blank" rel="noopener" href="http://www.52im.net/thread-277-1-1.html">强列建议将Protobuf作为你的即时通讯应用数据传输格式-其它分享/专项技术区 - 即时通讯开发者社区!</a> </li>
 </ul>
 </section>
     <!-- Tags START -->

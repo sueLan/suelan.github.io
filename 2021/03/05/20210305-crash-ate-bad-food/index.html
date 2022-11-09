@@ -209,17 +209,10 @@
 <li><code>0x8badf00d</code> (pronounced “ate bad food”). The operating system’s watchdog terminated the app. See <a target="_blank" rel="noopener" href="https://developer.apple.com/documentation/xcode/diagnosing_issues_using_crash_reports_and_device_logs/identifying_the_cause_of_common_crashes/addressing_watchdog_terminations">Addressing Watchdog Terminations</a>.</li>
 </ul>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Exception Type:  EXC_CRASH (SIGKILL)</span><br><span class="line">Exception Codes: 0x0000000000000000, 0x0000000000000000</span><br><span class="line">Exception Note:  EXC_CORPSE_NOTIFY</span><br><span class="line">Termination Reason: Namespace SPRINGBOARD, Code 0x8badf00d</span><br><span class="line">Termination Description: SPRINGBOARD, scene-update watchdog transgression: application&lt;.......&gt;:307 exhausted real (wall clock) time allowance of 10.00 seconds | ProcessVisibility: Background | ProcessState: Running | WatchdogEvent: scene-update | WatchdogVisibility: Background | WatchdogCPUStatistics: ( | &quot;Elapsed total CPU time (seconds): 39.500 (user 39.500, system 0.000), 39% CPU&quot;, | &quot;Elapsed application CPU time (seconds): 21.283, 21% CPU&quot; | )</span><br><span class="line">Triggered by Thread:  0</span><br></pre></td></tr></table></figure>
-
-
-
 <h3 id="WatchDog"><a href="#WatchDog" class="headerlink" title="WatchDog"></a>WatchDog</h3><p>As we know, iOS has watchdog oto ensure application not drag down the system responsiveness. If your app has poor performance, watchdog will check then kill you app to make sure the shared resource well allocated.  It is dev’s duty to maintain system responsiveness. The following table showing some cases for watchdog check, it comes from this <a target="_blank" rel="noopener" href="https://developer.apple.com/videos/play/wwdc2011/312/">session</a>,</p>
-<img src="image-20210305194510328.png" alt="image-20210305194510328.png" style="zoom:50%;" />
-
+<p><img src="image-20210305194510328.png" alt="image-20210305194510328.png" style="zoom:50%;" /></p>
 <p>As for scenarios, Slow launch will cause OS to abort your app. <code>20 sec</code>; resume and suspend is also very important <code>10sec</code>; smooth scrolling <code>6s</code> is also a key point. Besides, I also have seen <code>blocking main thread</code>  will cause watchdog kill an app, like this </p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">transgression: application&lt;com.wangya.test2&gt;:21021 exhausted real (wall clock) time allowance of 19.99 seconds </span><br><span class="line">Triggered by Thread:  0</span><br></pre></td></tr></table></figure>
-
-
-
 <p>The <code>Termination Description</code>  in my crash report shows our app <code>exhausted real (wall clock) time allowance of 10.00 seconds</code>.  Besides, the <code>ProcessVisibility</code> shows it is <code>Background</code> and <code>ProcessState</code> is <code>Running</code>.  It seems the crashed happened when it tried to resumed from background. But what caused it? </p>
 <h3 id="Backtrace"><a href="#Backtrace" class="headerlink" title="Backtrace"></a>Backtrace</h3><p>So we have to go to the stack trace in the crashed report. Unfortunately, he gave me a partially symbolicated crash report with <code>CoreData</code> related method remaining hexadecimal memory address. From the frame in our app, i know operations related to <code>CoreData</code> happening in <code>main thread</code>. Then, I have to symbolicate the crash report. </p>
 <h3 id="Symbolicate"><a href="#Symbolicate" class="headerlink" title="Symbolicate"></a>Symbolicate</h3><p>Apple actually has doc to <a target="_blank" rel="noopener" href="https://developer.apple.com/documentation/xcode/diagnosing_issues_using_crash_reports_and_device_logs/adding_identifiable_symbol_names_to_a_crash_report#3403794">symbolicate the Crash Report in Xcode</a>  or <a target="_blank" rel="noopener" href="https://developer.apple.com/documentation/xcode/diagnosing_issues_using_crash_reports_and_device_logs/adding_identifiable_symbol_names_to_a_crash_report#3403800">symbolicate the crash report with the command line</a>. </p>
@@ -233,31 +226,31 @@
 </blockquote>
 <p>Unfortunately, I don’t have  the device on hand to get the symbol information matching the operating system version recorded in the crash report. How to solve it? Well, I still have a way to work around. Let’s start to do that.</p>
 <ol>
-<li><p>Check the os version and hardware model from the crash report. OS Version: <code>iPhone OS 13.3.1 (17D50); Hardware model: </code>Hardware Model:      iPhone11,8&#96;</p>
+<li><p>Check the os version and hardware model from the crash report. OS Version: <code>iPhone OS 13.3.1 (17D50); Hardware model:</code>Hardware Model:      iPhone11,8`</p>
 </li>
 <li><p>download <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/IPSW">IPSW</a>, iPod Software from  <a target="_blank" rel="noopener" href="https://www.theiphonewiki.com/wiki/Firmware/iPhone/11.x">https://www.theiphonewiki.com/wiki/Firmware/iPhone/11.x</a> or <a target="_blank" rel="noopener" href="https://ipsw.me/">https://ipsw.me/</a>; or can decrypte <code>ipsw</code> by yourself following this <a target="_blank" rel="noopener" href="https://gist.github.com/tzmartin/812027b879f6ff4459af">guide</a></p>
 </li>
 <li><p><code>IPSW</code> file actually is <code>zip</code> file, we can change the file extension <code>ipsw</code> to <code>zip</code>. Then unzip it. You can see a big disk image there.</p>
-<p><img src="/image-20210305201936593.png"></p>
+<p><img src="image-20210305201936593.png" alt=""></p>
 <p> Double click it. It will be mounted in filesystem. Then we can see it showing in the <code>Finder</code> </p>
-<p><img src="/image-20210305202238201.png"></p>
+<p><img src="image-20210305202238201.png" alt=""></p>
 </li>
 <li><p>Then go to <code>/System/Library/Caches/com.apple.dyld</code> folder. Drag this file to <code>Hopper</code></p>
-<p><img src="/image-20210305202347747.png"></p>
+<p><img src="image-20210305202347747.png" alt=""></p>
 </li>
 <li><p>Since all executable dylib are shipped into this whole file, we have to filter out <code>CoreData</code> in the search bar. </p>
-<p><img src="/image-20210305202507076.png"></p>
+<p><img src="image-20210305202507076.png" alt=""></p>
 </li>
 <li><p>Get <code>offset</code> from frame in the backtrace in the crash report.  Using <code>go to file offset</code>  in Hopper, <code>option + g</code> to jump to that line of assembly code. I actually have a <a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=GPs3oPFSdo0">talk</a> about how to use exception info, thread state, offset in backtrace in crash report  to analyze crash report. </p>
-<p><img src="/image-20210305204358148.png"></p>
+<p><img src="image-20210305204358148.png" alt=""></p>
 <p>take <code>line 29</code> as an example, it goes to a <code>bl</code> instruction. As we know, in Objective-C, <code>x1</code> stores the sector. So we can quickly figure out the selector is </p>
 <p><a target="_blank" rel="noopener" href="https://developer.apple.com/documentation/coredata/nspersistentstorecoordinator/1468872-executerequest?language=objc">executeRequest:withContext:error:</a></p>
-<p><img src="/image-20210305204545965.png"></p>
+<p><img src="image-20210305204545965.png" alt=""></p>
 <p>Hmm, although it is a little bit tedious, we finanly get more info about what is happening here. </p>
-<p>Basically, when resuming from background, our app triggers a data request operation in <code>CoreData</code>. It is executed in <code>main thread</code> and make the main thread wait this transaction finished. While,  it is a bit of slow to execute this SQL-related transaction here and blocks <code>main thread</code> for extended period of time. Then when watchdog come to check, it terminates our app in order to maintain the system responsiveness.</p>
+<p>Basically, when resuming from background, our app triggers a data request operation in <code>CoreData</code>. It is executed in <code>main thread</code> and make the main thread wait this transaction finished. While,  it is a bit of slow to execute this SQL-related transaction here and blocks <code>main thread</code> for extended period of time. Then when watchdog come to check, it terminates our app in order to maintain the system responsiveness. </p>
 </li>
 </ol>
-<p><img src="/image-20210305210726254.png"></p>
+<p><img src="image-20210305210726254.png" alt=""></p>
 <p>As apple suggests, the watchdog terminates apps that block the main thread for a significant time.  There are some cases of this sort, like </p>
 <ul>
 <li>Synchronous networking</li>
@@ -273,8 +266,7 @@
 </li>
 <li><p><a target="_blank" rel="noopener" href="https://developer.apple.com/documentation/xcode/diagnosing_issues_using_crash_reports_and_device_logs/analyzing_a_crash_report">Analyzing a Crash Report</a></p>
 </li>
-<li><p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/59827727/ios-frequently-getting-exhausted-real-wall-clock-time-allowance-of-10-00-seco">0x8badf00d in main thread</a></p>
-</li>
+<li><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/59827727/ios-frequently-getting-exhausted-real-wall-clock-time-allowance-of-10-00-seco">0x8badf00d in main thread</a></li>
 </ul>
 </section>
     <!-- Tags START -->

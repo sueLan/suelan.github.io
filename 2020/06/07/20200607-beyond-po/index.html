@@ -206,36 +206,35 @@
 </blockquote>
 <h2 id="po-command"><a href="#po-command" class="headerlink" title="po command"></a>po command</h2><p>We usually use <code>po</code> to print object description, which does the same job as <code>expression --object-description</code>. </p>
 <h3 id="Alias-the-command"><a href="#Alias-the-command" class="headerlink" title="Alias the command"></a>Alias the command</h3><p>We can also use <code>command alias</code> to custom it. like </p>
-<p><code>command alias my_po expression --object-description</code> <img src="/15902187135968.jpg" alt="img"></p>
+<p><code>command alias my_po expression --object-description</code> <img src="15902187135968.jpg" alt="img"></p>
 <h3 id="Custom-the-output"><a href="#Custom-the-output" class="headerlink" title="Custom the output"></a>Custom the output</h3><p>We can add <code>debugDescription</code> to custom the output when using <code>po</code></p>
-<p><img src="/image-20200607171902758.png" alt="image-20200607171902758"></p>
-<h3 id="Others-jobs-po-can-do"><a href="#Others-jobs-po-can-do" class="headerlink" title="Others jobs po can do"></a>Others jobs po can do</h3><p><img src="/image-20200607172607792.png" alt="image-20200607172607792"></p>
-<h3 id="What-LLDB-does-behind-the-Po-command"><a href="#What-LLDB-does-behind-the-Po-command" class="headerlink" title="What LLDB does behind the Po command"></a>What LLDB does behind the <code>Po</code> command</h3><p><img src="/15902307367967.jpg?lastModify=1591521218" alt="img"></p>
+<p><img src="image-20200607171902758.png" alt="image-20200607171902758"></p>
+<h3 id="Others-jobs-po-can-do"><a href="#Others-jobs-po-can-do" class="headerlink" title="Others jobs po can do"></a>Others jobs po can do</h3><p><img src="image-20200607172607792.png" alt="image-20200607172607792"></p>
+<h3 id="What-LLDB-does-behind-the-Po-command"><a href="#What-LLDB-does-behind-the-Po-command" class="headerlink" title="What LLDB does behind the Po command"></a>What LLDB does behind the <code>Po</code> command</h3><p><img src="15902307367967.jpg?lastModify=1591521218" alt="img"></p>
 <h2 id="p-command"><a href="#p-command" class="headerlink" title="p command"></a>p command</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">p is a alias of `expression</span><br></pre></td></tr></table></figure>
-
-<p><img src="/15902310620901.jpg?lastModify=1591521218" alt="-w398"></p>
+<p><img src="15902310620901.jpg?lastModify=1591521218" alt="-w398"></p>
 <p>The result of LLDB is given a increasing name, such as <code>$R1</code> and <code>$R2</code> </p>
-<p><img src="/15902311269458.jpg?lastModify=1591521218" alt="-w509"></p>
-<h2 id="Dynamic-type-resolution"><a href="#Dynamic-type-resolution" class="headerlink" title="Dynamic type resolution"></a>Dynamic type resolution</h2><p><img src="/15902347284185.jpg?lastModify=1591521218" alt="img"></p>
+<p><img src="15902311269458.jpg?lastModify=1591521218" alt="-w509"></p>
+<h2 id="Dynamic-type-resolution"><a href="#Dynamic-type-resolution" class="headerlink" title="Dynamic type resolution"></a>Dynamic type resolution</h2><p><img src="15902347284185.jpg?lastModify=1591521218" alt="img"></p>
 <blockquote>
 <p>In Swift, the static representation of a type in the source code and the dynamic type at the runtime, aren’t necessarily the same. For example, a variable might be declared using a protocol of this type. In this example, the static type of <code>cruise</code> is <code>Activity</code>. But at runtime, the variable will have an instance of type <code>Trip</code> which is the dynamic time. If we print the value of <code>cruise</code>, we get back an object of type <code>Trip</code> because LLDB retell results metadata to display the most accurate type for a given variable at a given program point. This is what we call <code>dynamic type resolution</code>.</p>
 </blockquote>
 <p>With the p-command, dynamic type resolution is <code>only</code> performed on the result of the <code>expression</code>.</p>
-<p>This happens because if you remember, LLDB compiles code where running p and the only type it sees is the one in your source code, the static one. It’s the same thing as typing the expression <code>cruise.name</code> in your source code. The static compiler will reject it with an error.  <img src="/15902348043124.jpg?lastModify=1591521218" alt="-w1104"></p>
+<p>This happens because if you remember, LLDB compiles code where running p and the only type it sees is the one in your source code, the static one. It’s the same thing as typing the expression <code>cruise.name</code> in your source code. The static compiler will reject it with an error.  <img src="15902348043124.jpg?lastModify=1591521218" alt="-w1104"></p>
 <p>If you want to evaluate the expression without errors, you need to first cast the object explicitly to its dynamic type and then access the field on the result. This is true both for the debugger and your source code.</p>
-<p><img src="/15902348340793.jpg?lastModify=1591521218" alt="img"></p>
-<h3 id="“p”-Under-the-Hood"><a href="#“p”-Under-the-Hood" class="headerlink" title="“p” Under the Hood"></a>“p” Under the Hood</h3><p><img src="/15902348740856.jpg?lastModify=1591521218" alt="img"></p>
+<p><img src="15902348340793.jpg?lastModify=1591521218" alt="img"></p>
+<h3 id="“p”-Under-the-Hood"><a href="#“p”-Under-the-Hood" class="headerlink" title="“p” Under the Hood"></a>“p” Under the Hood</h3><p><img src="15902348740856.jpg?lastModify=1591521218" alt="img"></p>
 <h3 id="Formatter"><a href="#Formatter" class="headerlink" title="Formatter"></a>Formatter</h3><p>After it performed <code>dynamic type resolution</code> on the result, LLDB passes the resulting object to the <code>formatter subsystem</code> which is the part of LLDB responsible for printing a human readable description of objects.</p>
-<p><img src="/15902349355474.jpg?lastModify=1591521218" alt="-w850"></p>
+<p><img src="15902349355474.jpg?lastModify=1591521218" alt="-w850"></p>
 <h2 id="v-Command"><a href="#v-Command" class="headerlink" title="v Command"></a>v Command</h2><ul>
 <li>The output of <code>v</code> is exactly the same as <code>p</code> as it also relies on the formatter we just described.</li>
 <li><code>v</code> is just an alias we introduced in Xcode 10.2 for the <code>frame</code> variable command</li>
 <li>The v-command doesn’t compile and execute code at all which makes it very fast.</li>
 </ul>
-<p><img src="/15902351819724.jpg?lastModify=1591521218" alt="img"></p>
-<h3 id="v-under-the-hood"><a href="#v-under-the-hood" class="headerlink" title="v under the hood"></a>v under the hood</h3><p><img src="/15902354049114.jpg?lastModify=1591521218" alt="img"></p>
-<h3 id="frame-command"><a href="#frame-command" class="headerlink" title="frame command"></a>frame command</h3><p><img src="/15902352051371.jpg?lastModify=1591521218" alt="-w799"></p>
-<h2 id="po-vs-p-vs-v"><a href="#po-vs-p-vs-v" class="headerlink" title="po vs p vs v"></a>po vs p vs v</h2><p><img src="/15902354519154.jpg?lastModify=1591521218" alt="-w1306"></p>
+<p><img src="15902351819724.jpg?lastModify=1591521218" alt="img"></p>
+<h3 id="v-under-the-hood"><a href="#v-under-the-hood" class="headerlink" title="v under the hood"></a>v under the hood</h3><p><img src="15902354049114.jpg?lastModify=1591521218" alt="img"></p>
+<h3 id="frame-command"><a href="#frame-command" class="headerlink" title="frame command"></a>frame command</h3><p><img src="15902352051371.jpg?lastModify=1591521218" alt="-w799"></p>
+<h2 id="po-vs-p-vs-v"><a href="#po-vs-p-vs-v" class="headerlink" title="po vs p vs v"></a>po vs p vs v</h2><p><img src="15902354519154.jpg?lastModify=1591521218" alt="-w1306"></p>
 </section>
     <!-- Tags START -->
     
