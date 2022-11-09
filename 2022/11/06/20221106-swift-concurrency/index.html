@@ -330,18 +330,18 @@ asynchronous context could be:</li>
 <li><p><code>Child tasks</code>: Each task can create and have child tasks. Child tasks inherit some of the structure of their parent task, including its priority, but can run concurrently with it.</p>
 </li>
 </ul>
-<p><img src="/./task_parent.png"><br>In this picture, <code>fetchOne</code> task create two child tasks, data and metadata by using async-let binding, construct a well-structured task tree. </p>
+<p><img src="./task_parent.png"><br>In this picture, <code>fetchOne</code> task create two child tasks, data and metadata by using async-let binding, construct a well-structured task tree. </p>
 <h4 id="Structured-Task"><a href="#Structured-Task" class="headerlink" title="Structured Task"></a>Structured Task</h4><blockquote>
 <p><a target="_blank" rel="noopener" href="https://developer.apple.com/videos/play/wwdc2021/10134">Explore structured concurrency in Swift</a></p>
 </blockquote>
 <ul>
-<li><p>Parent task can be completed only after all child tasks completed<br><img src="/./task_parent_tree_complete.png"></p>
+<li><p>Parent task can be completed only after all child tasks completed<br><img src="./task_parent_tree_complete.png"></p>
 </li>
-<li><p>one child task failed, an error throw; Swift automatically marks another task as cancelled<br><img src="/./task-tree.png"></p>
+<li><p>one child task failed, an error throw; Swift automatically marks another task as cancelled<br><img src="./task-tree.png"></p>
 </li>
-<li><p>when a task is called, it won’t be stoped immediately, just marked the result of it is unneeded. After data task is cancelled, its subtasks will be cancelled as well.<br><img src="/./task_tree_cancel.png"></p>
+<li><p>when a task is called, it won’t be stoped immediately, just marked the result of it is unneeded. After data task is cancelled, its subtasks will be cancelled as well.<br><img src="./task_tree_cancel.png"></p>
 </li>
-<li><p>use task group and get result from task group<br><img src="/./task_group.png"></p>
+<li><p>use task group and get result from task group<br><img src="./task_group.png"></p>
 </li>
 </ul>
 <h2 id="Actor"><a href="#Actor" class="headerlink" title="Actor"></a>Actor</h2><blockquote>
@@ -386,7 +386,7 @@ asynchronous context could be:</li>
 <p><a target="_blank" rel="noopener" href="https://developer.apple.com/videos/play/wwdc2021/10254/">Swift concurrency: Behind the scenes</a></p>
 </blockquote>
 <p>The widely-used GCD has its darkside like excessive concurrency, like thread explosion, sheduling overhead due to too many threads and memory overhead caused by blocked threads holding stacks.</p>
-<p><strong>Excessive context switch</strong>: CPU runs less efficiently because CUP clock wasted in context switch instead of executing real task.<br><img src="/./thread_context_switch.png"></p>
+<p><strong>Excessive context switch</strong>: CPU runs less efficiently because CUP clock wasted in context switch instead of executing real task.<br><img src="./thread_context_switch.png"></p>
 <ul>
 <li><a target="_blank" rel="noopener" href="https://developer.apple.com/videos/play/wwdc2015/718/">Building Responsive and Efficient Apps with GCD</a></li>
 <li><a target="_blank" rel="noopener" href="https://developer.apple.com/videos/play/wwdc2017/706">Modernizing Grand Central Dispatch Usage</a></li>
@@ -397,18 +397,18 @@ asynchronous context could be:</li>
 </blockquote>
 <p>So, there is no thread switching cost but only function calls. And the concurrency runtime only creates as many threads as device’s CPU cores and maintain cooperative thread pool to avoid thread explorsion and excessive context switches. </p>
 <h3 id="Swift-Runtime"><a href="#Swift-Runtime" class="headerlink" title="Swift Runtime"></a>Swift Runtime</h3><p> In one thread, when a function is called, a function frame will be allocated and put into the thread’s stack. A function frame basically a chunk of memory to store local variables, return address. When that function finishes, function frame’s pop from the stack.</p>
-<p><img src="/./function_stack.png"></p>
+<p><img src="./function_stack.png"></p>
 <p>But in async function, things work a little bit different. </p>
-<p><img src="/./async_function.gif"></p>
+<p><img src="./async_function.gif"></p>
 <p>In this short video, there is an example </p>
 <figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">func</span> <span class="title function_">add</span>(<span class="keyword">_</span> <span class="params">newArtibles</span>: [<span class="type">Articles</span>]) <span class="keyword">async</span> <span class="keyword">throws</span> &#123;</span><br><span class="line">    <span class="keyword">let</span> ids <span class="operator">=</span> <span class="keyword">try</span> <span class="keyword">await</span> database.save(newArtibles, for:<span class="keyword">self</span>)</span><br><span class="line">    <span class="keyword">for</span>(id, article) <span class="keyword">in</span> <span class="built_in">zip</span>(ids, newArtibles) &#123;</span><br><span class="line">        articles[id] <span class="operator">=</span> article</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">func</span> <span class="title function_">updateDatabase</span>(<span class="operator">...</span>) <span class="keyword">async</span> &#123;</span><br><span class="line">    <span class="keyword">await</span> feed.add(articles)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// on Database </span></span><br><span class="line"><span class="keyword">func</span> <span class="title function_">save</span>() <span class="keyword">async</span> <span class="keyword">throws</span> -&gt; [<span class="type">ID</span>] &#123;<span class="operator">...</span>&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 <p>When <code>updateDatabase</code> hits the thread suspend point, its function frame is put in the heap and then <code>add</code> function frame added to the stack, local variables like <code>id</code>, <code>article</code> will be stored inside it; also, there are two frames in heap, storing vriables like <code>newAriticles</code> which is available before and after suspend point <code>await database.save</code>. Such a variable has to be available cross the suspend point. </p>
-<p> <img src="/./async_heap.png"></p>
+<p> <img src="./async_heap.png"></p>
 <p> While system schedues and run other tasks on current thread, frame <code>save</code>, <code>add</code> <code>updateDatabase</code> will be store in the heap.  </p>
-<p> <img src="/./thread_schedule.png">  </p>
+<p> <img src="./thread_schedule.png">  </p>
 <p>When task is resumed, function frame will be in the stack. </p>
-<p> <img src="/./reume_async.png"></p>
+<p> <img src="./reume_async.png"></p>
 </section>
     <!-- Tags START -->
     
