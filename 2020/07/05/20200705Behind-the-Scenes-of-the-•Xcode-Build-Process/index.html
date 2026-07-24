@@ -206,20 +206,20 @@
 </blockquote>
 <p>The new building system introduced in Xcode 10 is written by Swift from scratch, and brings lots of improved performance and reliability.  So what happens when we press <code>CMD + B</code> in Xcode? </p>
 <p>In general, Xcode has to do tasks like preprocess source files and compile them by compiler,  link source code by linker, copy and process resources like headers, asset catalogues and storyboards, And finally code sign and maybe even do some custom work in a shell script or a make file like building API documentation for your framework or running code linting and validation tools.</p>
-<p><img src="/image-20200705224132928.png" alt="image-20200705224132928"></p>
+<p><img src="/2020/07/05/20200705Behind-the-Scenes-of-the-%E2%80%A2Xcode-Build-Process/image-20200705224132928.png" alt="image-20200705224132928"></p>
 <h2 id="Build-Task-dependency-and-execution-order"><a href="#Build-Task-dependency-and-execution-order" class="headerlink" title="Build Task dependency and execution order"></a>Build Task dependency and execution order</h2><p>Building tasks are executed in a particular order. </p>
 <img src="image-20200705170528761.png" alt="image-20200705170528761" style="zoom:50%;" />
 
 <p>The building system use the dependency information to determine which tasks should be run and what task can be run in parallel.  This is called <code>dependency order</code>.  </p>
 <p> We know that a compiler can produce <code>.o</code> files from <code>.m</code> files. Then a linker consumes a number of object files and produces executable or library output. The following graphic shows the dependency info between compilation and linking tasks.  </p>
-<p><img src="/image-20200705170723485.png" alt="image-20200705170723485"></p>
+<p><img src="/2020/07/05/20200705Behind-the-Scenes-of-the-%E2%80%A2Xcode-Build-Process/image-20200705170723485.png" alt="image-20200705170723485"></p>
 <h3 id="Build-tasks-are-executed-in-dependency-order"><a href="#Build-tasks-are-executed-in-dependency-order" class="headerlink" title="Build tasks are executed in dependency order"></a>Build tasks are executed in dependency order</h3><ol>
 <li>The  building system will process the project and represented building tasks as a Directed Graph</li>
 </ol>
 <blockquote>
 <p>What happens when you press build? So the first step is for the build system to take the build description, your Xcode project file.Parse it, take into account all the files in your project, your targets and the dependency relationships.Your build settings, and turn it into a tree-like structure called a directed graph.<br> And this represents all the dependencies between the input and output files in your project and the tasks that will be executed to process them.</p>
 </blockquote>
-<p><img src="/image-20200705172316201.png" alt="image-20200705172316201"></p>
+<p><img src="/2020/07/05/20200705Behind-the-Scenes-of-the-%E2%80%A2Xcode-Build-Process/image-20200705172316201.png" alt="image-20200705172316201"></p>
 <ol start="2">
 <li><p>Then the low-level execution engine get the dependency specifications from the above graph and figures out which tasks to execute.</p>
 <img src="image-20200705225725510.png" alt="image-20200705225725510" style="zoom:80%;" /></li>
@@ -236,7 +236,7 @@
 <li>Building system tracks signatures of current and previous build, and compared them to determine whether a task should be run.</li>
 </ol>
 <p>For example, in the following picture, building system only has to run these 3 highlight tasks when only <code>PetViewVontroler.m</code> changed</p>
-<p><img src="/image-20200705231435967.png" alt="image-20200705231435967"></p>
+<p><img src="/2020/07/05/20200705Behind-the-Scenes-of-the-%E2%80%A2Xcode-Build-Process/image-20200705231435967.png" alt="image-20200705231435967"></p>
 <h2 id="How-can-we-help-the-build-system"><a href="#How-can-we-help-the-build-system" class="headerlink" title="How can we help the build system?"></a>How can we help the build system?</h2><p>The answer is to handle the dependency properly so that the build system can order tasks correctly and build in parallel to save time. </p>
 <h4 id="Where-do-dependencies-come-from"><a href="#Where-do-dependencies-come-from" class="headerlink" title="Where do dependencies come from?"></a>Where do dependencies come from?</h4><ul>
 <li><p>Built in. The build system ships with rules for the compiler, the linker, the asset catalogue and story board processors and so on.<br> And these rules define what kind of files are accepted as inputs as well as what outputs are produced.</p>
@@ -309,14 +309,14 @@
 
 <p>Clang has to find and process over 800 header files for this single include statement. That’s over 9 megabyte of source code that has to be parsed and verified.</p>
 <p>After preprocessing: </p>
-<p><img src="/image-20200706000118839.png" alt="image-20200706000118839"></p>
+<p><img src="/2020/07/05/20200705Behind-the-Scenes-of-the-%E2%80%A2Xcode-Build-Process/image-20200706000118839.png" alt="image-20200706000118839"></p>
 <p>How does Clang do to avoid these redundant and heavy job?  </p>
 <h3 id="Clang-module"><a href="#Clang-module" class="headerlink" title="Clang module"></a>Clang module</h3><p>To speed up the building,  by using module, Clang can parse the header only once and store the information <code>in the disk</code>, then <code>reuse the cache</code> next time. </p>
 <p> In order to achieve this, Clang module should have  properties. </p>
 <ul>
 <li><p>Context-free </p>
 <p>ignore the context-related statement. Like, macro definitions</p>
-<p><img src="/image-20200706091410725.png" alt="image-20200706091410725"></p>
+<p><img src="/2020/07/05/20200705Behind-the-Scenes-of-the-%E2%80%A2Xcode-Build-Process/image-20200706091410725.png" alt="image-20200706091410725"></p>
 </li>
 <li><p>Self-contained </p>
 <p>have to specify all the dependencies.</p>
@@ -348,10 +348,10 @@
 <p>In the following example, the compiler will check the type in the <code>PetView</code>‘s initializer ‘, firstly, it parses the <code>PetView</code> and knows the declaration of the initializer is well formed. And then, it checks the call inside the 	PetViewController&#96;.</p>
 </li>
 </ul>
-<p><img src="/image-20200709093711492.png" alt="image-20200709093711492"></p>
+<p><img src="/2020/07/05/20200705Behind-the-Scenes-of-the-%E2%80%A2Xcode-Build-Process/image-20200709093711492.png" alt="image-20200709093711492"></p>
 <p>​	So, actually, when compiling one Swift file, the compiler will parse all the other Swift files in the target. When compiling files separately and in parallel, it causes repeated parsing all files to find declarations.</p>
-<h4 id=""><a href="#" class="headerlink" title=""></a><img src="/image-20200709095907259.png" alt="image-20200709095907259"></h4><p> In order to improve performance, Xcode 10 combines the files into groups to reuse parsing within a group, and only repeat parsing across groups.</p>
-<p><img src="/image-20200709095800665.png" alt="image-20200709095800665"></p>
+<h4 id=""><a href="#" class="headerlink" title=""></a><img src="/2020/07/05/20200705Behind-the-Scenes-of-the-%E2%80%A2Xcode-Build-Process/image-20200709095907259.png" alt="image-20200709095907259"></h4><p> In order to improve performance, Xcode 10 combines the files into groups to reuse parsing within a group, and only repeat parsing across groups.</p>
+<p><img src="/2020/07/05/20200705Behind-the-Scenes-of-the-%E2%80%A2Xcode-Build-Process/image-20200709095800665.png" alt="image-20200709095800665"></p>
 <ul>
 <li><p>Find declarations from Objective-C </p>
 <p>In fact, <code>Swiftc</code> compiler embeds <code>clang</code>, so   we can can import clang frameworks directly</p>
@@ -367,10 +367,10 @@
 <h3 id="Generating-interface"><a href="#Generating-interface" class="headerlink" title="Generating interface"></a>Generating interface</h3><ul>
 <li><p>How your Objective-C header will be imported into Swift</p>
 <p>In this <code>PetViewController.h</code>, you use the button in the top-left corner of the source editor, see <code>generated interface</code>. </p>
-<p><img src="/image-20200710110626097.png" alt="image-20200710110626097"></p>
+<p><img src="/2020/07/05/20200705Behind-the-Scenes-of-the-%E2%80%A2Xcode-Build-Process/image-20200710110626097.png" alt="image-20200710110626097"></p>
 </li>
 <li><p>To use Swift in Objective-C </p>
-<p><img src="/image-20200710112907949.png" alt="image-20200710112907949"></p>
+<p><img src="/2020/07/05/20200705Behind-the-Scenes-of-the-%E2%80%A2Xcode-Build-Process/image-20200710112907949.png" alt="image-20200710112907949"></p>
 <ul>
 <li>For classes extending NSObject and methods&#x2F;properties marked <code>@objc</code></li>
 <li>Apps and unit tests: both public and internal declarations</li>
@@ -393,7 +393,7 @@
 <h3 id="swfitmodule-vs-header"><a href="#swfitmodule-vs-header" class="headerlink" title="swfitmodule vs header"></a>swfitmodule vs header</h3><p>  <code>swfitmodule</code> file is serialized, binary representation of module’s declarations, which will be deserialised by compiler  to check the types when you use them. So this <code>swfitmodule</code> is a bit like <code>like a generated Objective-C header</code>. But instead of text, it’s a binary representation. Besides, it does include the names and types of <code>private declarations</code> so that we can refer to them in the debugger. In addition, it includes the <code>bodies of inlineable</code>functions<code>,  like </code>static inline function&#96;s in Objective-C  header</p>
 <pre><code>![image-20200710113202143](image-20200710113202143.png) 
 </code></pre>
-<p>  <img src="/image-20200709100603559.png" alt="image-20200709100603559"></p>
+<p>  <img src="/2020/07/05/20200705Behind-the-Scenes-of-the-%E2%80%A2Xcode-Build-Process/image-20200709100603559.png" alt="image-20200709100603559"></p>
 <p>   For incremental builds, the compiler produces partial Swift module files and then <code>merges</code> them into a single <code>swift module</code> file, and  a single Objective-C header. </p>
 <h3 id="In-summary"><a href="#In-summary" class="headerlink" title="In summary:"></a>In summary:</h3><ul>
 <li>Swift uses Objective-C declarations by Bridging header.</li>
@@ -401,7 +401,7 @@
 <li>In Objective-C Clang find where the header file is by header map files.  </li>
 <li>In Swift, <code>swfitmodule</code> is a bit like like a generated Objective-C header</li>
 </ul>
-<p><img src="/generated_header.png"></p>
+<p><img src="/2020/07/05/20200705Behind-the-Scenes-of-the-%E2%80%A2Xcode-Build-Process/generated_header.png"></p>
 <h2 id="Linker"><a href="#Linker" class="headerlink" title="Linker"></a>Linker</h2><h3 id="What-is-Linker"><a href="#What-is-Linker" class="headerlink" title="What is Linker?"></a>What is Linker?</h3><p>Linking is the final task in building an executable Mach-O. What it does it to combine the output of all compiler invocations into a executable. </p>
 <p>Take two kinds of input files </p>
 <ul>
@@ -459,18 +459,18 @@
 <img src="image-20200710150601150.png" alt="image-20200710150601150" style="zoom:50%;" />
 
 <p>Then, here comes  an actual symbol <code>-[Cat purr]</code>. </p>
-<p><img src="/image-20200710150636666.png" alt="image-20200710150636666"></p>
+<p><img src="/2020/07/05/20200705Behind-the-Scenes-of-the-%E2%80%A2Xcode-Build-Process/image-20200710150636666.png" alt="image-20200710150636666"></p>
 <p>Then, we see two instructions to pass the variable <code>purrFile</code> into <code>playSound</code> function. It is because,  we don’t have concrete address for  <code>purrFile</code> and we don’t know where this string is going to end up in the final executable.  But in  <code>ARM64</code>, it could take at most two instructions.  </p>
 <ul>
 <li><a target="_blank" rel="noopener" href="https://developer.arm.com/documentation/dui0802/b/A64-General-Instructions/ADRP">adrp</a></li>
 </ul>
 <p>So the compiler leaves the symbolic values <code>PAGE</code> and <code>PAGEOFF</code> that the linker will come in and fix up later.<br> Finally,  we’ve loaded that string into register  <code>x0</code> . </p>
-<p><img src="/image-20200710150648959.png" alt="image-20200710150648959"></p>
+<p><img src="/2020/07/05/20200705Behind-the-Scenes-of-the-%E2%80%A2Xcode-Build-Process/image-20200710150648959.png" alt="image-20200710150648959"></p>
 <p><code>__Z9playSoundPKc</code>  is a C++ <code>demangle symbol</code>  </p>
-<p><img src="/image-20200710150707825.png" alt="image-20200710150707825"></p>
-<p><img src="/image-20200710154006829.png" alt="image-20200710154006829"></p>
+<p><img src="/2020/07/05/20200705Behind-the-Scenes-of-the-%E2%80%A2Xcode-Build-Process/image-20200710150707825.png" alt="image-20200710150707825"></p>
+<p><img src="/2020/07/05/20200705Behind-the-Scenes-of-the-%E2%80%A2Xcode-Build-Process/image-20200710154006829.png" alt="image-20200710154006829"></p>
 <p>When linking, linker takes a number of object files as input, and create a file to put them in.  In the <code>__TEXT</code> segment, it copies the executable code from the object file.  Then, in another segment, it copy the string. Now, the linker knows the absolute addresses of the string symbol, it will rewrite the instruction using a specific address. Meanwhile, the second instruction just went away, it replaced it with a null instruction <code>that does nothing</code>. <a target="_blank" rel="noopener" href="https://developer.arm.com/documentation/dui0802/b/A64-General-Instructions/NOP?lang=en">nop</a></p>
-<p><img src="/image-20200710154246392.png" alt="image-20200710154246392"></p>
+<p><img src="/2020/07/05/20200705Behind-the-Scenes-of-the-%E2%80%A2Xcode-Build-Process/image-20200710154246392.png" alt="image-20200710154246392"></p>
 <p> Then the linker has to resolve the <code>undefined symbol</code>, <code>__Z9playSoundKc</code>.  </p>
 <img src="image-20200710155242689.png" alt="image-20200710155242689" style="zoom:50%;" />
 
@@ -481,8 +481,8 @@
 <li><code>ldr</code> (load register) loads data from a memory location into a register. </li>
 <li><a target="_blank" rel="noopener" href="https://developer.arm.com/documentation/dui0802/b/A64-General-Instructions/BR?lang=en">br</a></li>
 </ul>
-<p><img src="/image-20200710160920246.png" alt="image-20200710160920246"></p>
-<p><img src="/image-20200710161911500.png" alt="image-20200710161911500"></p>
+<p><img src="/2020/07/05/20200705Behind-the-Scenes-of-the-%E2%80%A2Xcode-Build-Process/image-20200710160920246.png" alt="image-20200710160920246"></p>
+<p><img src="/2020/07/05/20200705Behind-the-Scenes-of-the-%E2%80%A2Xcode-Build-Process/image-20200710161911500.png" alt="image-20200710161911500"></p>
 <ul>
 <li><a target="_blank" rel="noopener" href="https://developer.apple.com/videos/play/wwdc2018/408">Building faster in Xcode</a></li>
 <li><a target="_blank" rel="noopener" href="https://www.onswiftwings.com/posts/build-time-optimization-part1/">build time optimization</a></li>

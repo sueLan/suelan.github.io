@@ -220,13 +220,13 @@
 <h3 id="SP-and-stack"><a href="#SP-and-stack" class="headerlink" title="SP and stack"></a>SP and stack</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sub	sp, sp, #48             ; =48</span><br></pre></td></tr></table></figure>
 
 <p>It sets up a call frame on the stack. Here <code>sp</code> refers to the register for stack-pointer. In AArch64 the stack-pointer must be 128-bit aligned; here is 48*8-bit.</p>
-<p><img src="/image-20200807093341883.png" alt="image-20200807093341883"></p>
+<p><img src="/2020/08/18/20200817-ios-main-in-assembly/image-20200807093341883.png" alt="image-20200807093341883"></p>
 <h4 id="Registers"><a href="#Registers" class="headerlink" title="Registers"></a>Registers</h4><blockquote>
 <p>Processor operations mostly involve processing data. This data can be stored in memory and accessed from thereon. However, reading data from and storing data into memory slows down the processor, as it involves complicated processes of sending the data request across the control bus and into <code>the memory storage unit</code> and getting the data through the same channel. To speed up the processor operations, the processor includes some <code>internal memory storage locations</code>, called <strong>registers</strong>.</p>
 <p>The registers store data elements for processing without having to access the memory. A limited number of registers are built into the processor chip. – <a target="_blank" rel="noopener" href="https://www.tutorialspoint.com/assembly_programming/assembly_registers.htm">https://www.tutorialspoint.com/assembly_programming/assembly_registers.htm</a> </p>
 </blockquote>
 <p>In ARM 64, the following graph shows the registers’ roles.</p>
-<p><img src="/image-20200805000244292.png" alt="image-20200805000244292"></p>
+<p><img src="/2020/08/18/20200817-ios-main-in-assembly/image-20200805000244292.png" alt="image-20200805000244292"></p>
 <ul>
 <li>The first eight registers, r0-r7, are used to pass argument values into a subroutine and to return result values from a function. </li>
 <li>The frame record for the innermost frame (belonging to the most recent routine invocation) shall be pointed to by the <code>Frame Pointer register</code> (FP). The lowest addressed double-word shall point to the <code>previous frame record</code> and the highest addressed double-word shall contain the value passed in LR on entry to the current function.</li>
@@ -246,7 +246,7 @@
 </ul>
 <p>In this environment, the stack frame size is not fixed.</p>
 <p>Another stack frame layout graph comes from <a target="_blank" rel="noopener" href="https://developer.arm.com/documentation/ihi0055/b/">Procedure Call Standard for the ARM 64-bit Architecture (AArch64)- AArch64 ABI release 1.0</a></p>
-<p><img src="/image-20200805222941420.png" alt="image-20200805222941420"></p>
+<p><img src="/2020/08/18/20200817-ios-main-in-assembly/image-20200805222941420.png" alt="image-20200805222941420"></p>
 <p>About stack and stack pointer, see more in. </p>
 <ul>
 <li><a target="_blank" rel="noopener" href="https://community.arm.com/developer/ip-products/processors/b/processors-ip-blog/posts/using-the-stack-in-aarch32-and-aarch64">Using the Stack in AArch32 and AArch64</a></li>
@@ -264,11 +264,11 @@
 <p>In the preceding figure, X1 contains the base address and <code>#12</code> is a byte offset from that address. This means that the accessed address is<code> X1+12</code>. The offset can be either a constant or another register. This type of addressing might be used for structs, for example. The compiler maintains a pointer to the base of struct using the offset to select different members.</p>
 </li>
 <li><p><strong>Pre-index addressing modes</strong> - In the instruction syntax, pre-index is shown by adding an exclamation mark <code>!</code> After the square brackets, as this figure shows: </p>
-<p><img src="/image-20200807151621841.png" alt="image-20200807151621841"></p>
+<p><img src="/2020/08/18/20200817-ios-main-in-assembly/image-20200807151621841.png" alt="image-20200807151621841"></p>
 <p>Pre-indexed addressing is like offset addressing,<code> except that the base pointer is updated as a result of the instruction</code>. In the preceding figure, <code>X1</code> would have the value X1+12 after the instruction has completed.</p>
 </li>
 <li><p><strong>Post-index addressing modes</strong> - With post-index addressing, the value is loaded from the address in the base pointer, and then the pointer is updated, as this figure shows: </p>
-<p><img src="/image-20200807151851210.png" alt="image-20200807151851210"></p>
+<p><img src="/2020/08/18/20200817-ios-main-in-assembly/image-20200807151851210.png" alt="image-20200807151851210"></p>
 <p>Post-index addressing is useful for popping off the stack. The instruction loads the value from the location pointed at by the stack pointer, and then moves the stack pointer on to the next full location in the stack.</p>
 </li>
 </ul>
@@ -276,7 +276,7 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">stp	x29, x30, [sp, #32] </span><br></pre></td></tr></table></figure>
 
 <p><code>stp</code> pushes X29 and X30 onto the stack, which means this instruction will store values from <code>x29</code> and <code>x30</code> to memory where the address is <code>sp+32</code>. And in ARMv8, <code>X29</code> is for frame pointer, <code>X30</code> is used as the Link Register and can be referred to as LR.</p>
-<p><img src="/image-20200807103821841.png" alt="image-20200807103821841"></p>
+<p><img src="/2020/08/18/20200817-ios-main-in-assembly/image-20200807103821841.png" alt="image-20200807103821841"></p>
 <h3 id="Store-parameters-on-the-Stack"><a href="#Store-parameters-on-the-Stack" class="headerlink" title="Store parameters on the Stack"></a>Store parameters on the Stack</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">add	x29, sp, #32            ; =32</span><br></pre></td></tr></table></figure>
 
 <p>set the value of <code>x29</code> as <code>sp</code> + <code>#32</code></p>
@@ -288,7 +288,7 @@
 </blockquote>
 <p>store value  from <code>w0</code> to <code>x29 + #-8;</code></p>
 <p>store value from <code>x1</code> to <code>sp + #16</code>.</p>
-<p><img src="/image-20200807103920889.png" alt="image-20200807103920889"></p>
+<p><img src="/2020/08/18/20200817-ios-main-in-assembly/image-20200807103920889.png" alt="image-20200807103920889"></p>
 <p>Most A64 instructions operate on registers. The architecture provides 31 general purpose registers. Each register can be used as a 64-bit X register (X0..X30), or as a 32-bit W register (W0..W30).   W0 is the bottom 32 bits of X0.</p>
 <img src="image-20200807155505092.png" alt="image-20200807155505092" style="zoom:50%;" />
 
@@ -302,14 +302,14 @@
 <p><code>void func(T arg)</code>,  the result is returned in the same registers used as passing arguments. For exmaple</p>
 </li>
 </ul>
-<p><img src="/image-20200807175855759.png" alt="image-20200807175855759"></p>
+<p><img src="/2020/08/18/20200817-ios-main-in-assembly/image-20200807175855759.png" alt="image-20200807175855759"></p>
 <ul>
 <li>Otherwise,  the caller shall reserve a block of memory of sufficient size and alignment to hold the result. The address of the memory block shall be passed as an additional argument to the function in X8.<code>XR</code> |<code>X8</code>.</li>
 </ul>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Ltmp0:</span><br><span class="line">	.loc	1 13 16 prologue_end    ; AssemblyMain/main.m:13:16</span><br><span class="line">	mov	x8, #0                    ; copy #0 to x8</span><br><span class="line">	str	x8, [sp, #8]              ; </span><br><span class="line">	.loc	1 14 22                 ; AssemblyMain/main.m:14:22</span><br></pre></td></tr></table></figure>
 
 <p>Then,  store value from <code>x8</code> to <code>sp + #8</code>.  </p>
-<p><img src="/image-20200807154518025.png" alt="image-20200807154518025"></p>
+<p><img src="/2020/08/18/20200817-ios-main-in-assembly/image-20200807154518025.png" alt="image-20200807154518025"></p>
 <h3 id="Branch-instructions-and-Function-calls"><a href="#Branch-instructions-and-Function-calls" class="headerlink" title="Branch instructions and Function calls"></a>Branch instructions and Function calls</h3><p>So let’s see the next instruction. </p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bl	_objc_autoreleasePoolPush</span><br></pre></td></tr></table></figure>
 
@@ -352,19 +352,19 @@
 
 <p><code>ldp	x29, x30, [sp, #32]</code>  this is for reset the <code>fp</code> and linker regiseter </p>
 <p><code>add	sp, sp, #48 </code> means, the call frame for this function is gone. </p>
-<p><img src="/image-20200810095955537.png" alt="image-20200810095955537"></p>
+<p><img src="/2020/08/18/20200817-ios-main-in-assembly/image-20200810095955537.png" alt="image-20200810095955537"></p>
 </section>
     <!-- Tags START -->
     
       <div class="tags">
         <span>Tags:</span>
         
-  <a href="/tags#Debug" >
-    <span class="tag-code">Debug</span>
-  </a>
-
   <a href="/tags#Popular Article" >
     <span class="tag-code">Popular Article</span>
+  </a>
+
+  <a href="/tags#Debug" >
+    <span class="tag-code">Debug</span>
   </a>
 
       </div>

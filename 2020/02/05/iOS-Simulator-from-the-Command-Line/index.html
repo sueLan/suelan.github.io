@@ -220,7 +220,7 @@
 <p>Take the follow command as an example, the <code>SIMULATOR_UDID</code> environment variable contains the UDID of the simulated device. But it doesn’t work for physical device. </p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">xcrun simctl getenv booted SIMULATOR_UDID</span><br><span class="line">9362BF90-132F-4894-A057-CEBFEC9C1FB6</span><br></pre></td></tr></table></figure>
 
-<p>We can add more environment variables by ourselves in schema for debugging use.<br><img src="/environment_variable.png"></p>
+<p>We can add more environment variables by ourselves in schema for debugging use.<br><img src="/2020/02/05/iOS-Simulator-from-the-Command-Line/environment_variable.png"></p>
 <p><a target="_blank" rel="noopener" href="https://nshipster.com/launch-arguments-and-environment-variables/">Launch Arguments &amp; Environment Variables</a></p>
 <h3 id="Create-a-custom-simulator"><a href="#Create-a-custom-simulator" class="headerlink" title="Create a custom simulator"></a>Create a custom simulator</h3><p><code>xcrun simctl create &lt;name&gt; &lt;device type&gt; &lt;runtime&gt;</code><br>For example, if I would like to create a iPhone 11 Pro Max with iOS 13.3, I can use the follow command.</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">xcrun simctl create &quot;ry&quot; &quot;iPhone 11 Pro Max&quot; iOS13.3  </span><br><span class="line">BE9A72F0-5793-447B-BEC4-63A73242BED5 </span><br></pre></td></tr></table></figure>
@@ -235,7 +235,7 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">NEW_DEVICE=$(xcrun simctl create &quot;Test Phone&quot; &quot;iPhone XR&quot; iOS13.0)</span><br><span class="line">echo &quot;🤖 Created $&#123;NEW_DEVICE&#125;&quot;</span><br><span class="line">🤖 Created BE9A72F0-5793-447B-BEC4-63A73242BED5</span><br></pre></td></tr></table></figure>
 
 <p>Another way to create a simulator using GUI is to go to <code>Window</code> -&gt; <code>Devices and Simulators</code> </p>
-<p><img src="/create.png" alt="create">
+<p><img src="/2020/02/05/iOS-Simulator-from-the-Command-Line/create.png" alt="create">
    </p>
 <h3 id="Boot-a-simulator"><a href="#Boot-a-simulator" class="headerlink" title="Boot a simulator"></a>Boot a simulator</h3><p>Boot a device using <code>$uuid</code> </p>
 <p><code>xcrun simctl boot BE9A72F0-5793-447B-BEC4-63A73242BED5</code> </p>
@@ -268,7 +268,7 @@
 <p><code>com.example.app</code> is bundle id of my application. We reset <code>ResetDatabase</code> to YES.<br>This is a handy way to change the user defaults for the application before its running.  </p>
 <h3 id="Log-Stream"><a href="#Log-Stream" class="headerlink" title="Log Stream"></a>Log Stream</h3><p>spwan command would work with log stream utility. We can pass a predicate and filter the log output. Here the predicate is <code>senderImagePath CONTAINS &quot;nsurlsessiond&quot;</code>. We can debug something wrong with URL session. </p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xcrun simctl spawn booted log stream --predicate &#x27;senderImagePath CONTAINS &quot;nsurlsessiond&quot;&#x27;</span><br></pre></td></tr></table></figure>
-<p><img src="/spawn_log.png" alt="spwan"></p>
+<p><img src="/2020/02/05/iOS-Simulator-from-the-Command-Line/spawn_log.png" alt="spwan"></p>
 <p>Also, we can use different predicates to filter what we want.  </p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">xcrun simctl spawn booted log stream — predicate ‘processImagePath endswith “xxx”’</span><br><span class="line">xcrun simctl spawn booted log stream — predicate ‘eventMessage contains “error” and messageType == info’</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
@@ -276,14 +276,14 @@
 <h3 id="Dignose"><a href="#Dignose" class="headerlink" title="Dignose"></a>Dignose</h3><p>In a auto-test system, if having some kind of issue, by using this command, you can not only collect logs on disk but also capture ephemeral logging and dump system state. </p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">➜  xcrun simctl diagnose -l                              </span><br><span class="line">Writing to /private/tmp/simctl_diagnose_2020_02_09.10-10-56+0800</span><br><span class="line">Getting Simulator component versions...</span><br><span class="line">Collecting CoreSimulator logs...</span><br><span class="line">Collecting device information (this may take some time)...</span><br><span class="line">This operation will time-out after 300 seconds.</span><br><span class="line">Gathering 15 crash reports...</span><br><span class="line">Compressing Archive...</span><br><span class="line">Successfully wrote simctl diagnose archive to &#x27;/private/tmp/simctl_diagnose_2020_02_09.10-10-56+0800.tar.gz&#x27;</span><br></pre></td></tr></table></figure>
 
-<p><img src="/diagnose.png" alt="diagnose"></p>
+<p><img src="/2020/02/05/iOS-Simulator-from-the-Command-Line/diagnose.png" alt="diagnose"></p>
 <h3 id="Clone"><a href="#Clone" class="headerlink" title="Clone"></a>Clone</h3><p>Clone is a very powerful command. See details in <a target="_blank" rel="noopener" href="https://developer.apple.com/videos/play/wwdc2019/418/">wwdc2019&#x2F;418</a>.  </p>
 <p><code>xcrun simctl clone &lt;device&gt; &lt;clone name&gt;</code>.  You can copy your custom device using this command. </p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// boot base simulator ry</span><br><span class="line">➜ xcrun simctl boot ry   </span><br><span class="line">➜ xcrun simctl install ry ./demo.app</span><br><span class="line">// Must shutdown it before clone </span><br><span class="line">➜ xcrun simctl shutdown all </span><br><span class="line">➜ xcrun simctl clone ry ry-1  </span><br><span class="line">➜ xcrun simctl clone ry ry-2 </span><br><span class="line">➜ xcrun simctl boot ry-1 &amp;&amp; xcrun simctl boot ry-2 </span><br></pre></td></tr></table></figure>
 
 
 <p>Two new devices are created with the same contents. </p>
-<p><img src="/clone.png" alt="clone"></p>
+<p><img src="/2020/02/05/iOS-Simulator-from-the-Command-Line/clone.png" alt="clone"></p>
 <h3 id="Push-Notification-to-simulator"><a href="#Push-Notification-to-simulator" class="headerlink" title="Push Notification to simulator"></a>Push Notification to simulator</h3><ol>
 <li>Create a <code>.apns</code> file, <code>ExamplePush.apns</code></li>
 </ol>
@@ -321,7 +321,7 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">// change the `dataNetwork` from `wifi` to `4g`</span><br><span class="line">➜  ~ xcrun simctl status_bar booted override --dataNetwork &#x27;4g&#x27;</span><br></pre></td></tr></table></figure>
 
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xcrun simctl status_bar booted override --time 15:42 --cellularBars 1 --dataNetwork &#x27;3g&#x27; --wifiMode &#x27;failed&#x27; --batteryState &#x27;charging&#x27;</span><br></pre></td></tr></table></figure>
-<p><img src="/status_bar_test.png" alt="status bar"></p>
+<p><img src="/2020/02/05/iOS-Simulator-from-the-Command-Line/status_bar_test.png" alt="status bar"></p>
 <p>and use <code>clear</code> option to clear all the settings.</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xcrun simctl status_bar booted clear</span><br></pre></td></tr></table></figure>
 
@@ -341,7 +341,7 @@
 <p>And we can also capture the out of the external display of the simulator. </p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xcrun simctl io booted recordVideo --display external external.mp4 </span><br></pre></td></tr></table></figure>
 
-<p><img src="/record_video.gif"></p>
+<p><img src="/2020/02/05/iOS-Simulator-from-the-Command-Line/record_video.gif"></p>
 <h3 id="Other-useful-commands"><a href="#Other-useful-commands" class="headerlink" title="Other useful commands"></a>Other useful commands</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">// Open a URL in a device.</span><br><span class="line">simctl openurl &lt;device&gt; &lt;URL&gt;</span><br><span class="line">// add a photo or movie to the Photos library of the specified simulator </span><br><span class="line">xcrun simctl addmedia &lt;device&gt; &lt;file1&gt; &lt;file2&gt;</span><br><span class="line">// Set up a device IO operation. screenshot or recordVideo </span><br><span class="line">xcrun simctl io &lt;device&gt; screenshot &lt;output.png&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 <blockquote>
@@ -357,12 +357,12 @@
     <span class="tag-code">WWDC</span>
   </a>
 
-  <a href="/tags#Debug" >
-    <span class="tag-code">Debug</span>
-  </a>
-
   <a href="/tags#Popular Article" >
     <span class="tag-code">Popular Article</span>
+  </a>
+
+  <a href="/tags#Debug" >
+    <span class="tag-code">Debug</span>
   </a>
 
   <a href="/tags#Simulator" >

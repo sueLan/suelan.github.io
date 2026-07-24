@@ -224,7 +224,7 @@
 <li><p>periodic or time-delayed events</p>
 </li>
 <li><p>asynchronous callbacks</p>
-<p><img src="/image-20210128230441389.png" alt="image-20210128230441389"></p>
+<p><img src="/2021/02/13/20210213-dive-into-runloop-ios/image-20210128230441389.png" alt="image-20210128230441389"></p>
 </li>
 </ul>
 <p>In Apple’s doc,  this kind of event loop is implemented by <code>CFRunLoop</code> in low-level. In cocoa, the object is an instance of <code>NSRunLoop</code> There is exactly one run loop per thread. </p>
@@ -237,7 +237,7 @@
 <p>A <em>run loop mode</em> is a collection of input sources and timers to be monitored and a collection of run loop observers to be notified. Each time you run your run loop, you specify (either explicitly or implicitly) a particular “mode” in which to run.During that pass of the run loop, only sources associated with that mode are monitored and allowed to deliver their events.   — <a target="_blank" rel="noopener" href="https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/Multithreading/RunLoopManagement/RunLoopManagement.html#//apple_ref/doc/uid/10000057i-CH16-SW23">doc</a></p>
 </blockquote>
 <p>A run loop mode contains a set of <code>CFRunLoopSource</code>, a list of <code>CFRunLoopTimer</code> and <code>CFRunLoopObservers</code>. They are all inputs for runloop. </p>
-<p><img src="/image-20210128223829153.png" alt="image-20210128223829153"></p>
+<p><img src="/2021/02/13/20210213-dive-into-runloop-ios/image-20210128223829153.png" alt="image-20210128223829153"></p>
 <h2 id="Inputs"><a href="#Inputs" class="headerlink" title="Inputs"></a>Inputs</h2><p>Three kinds of inputs can be monitored by a run loop </p>
 <ul>
 <li>CFRunLoopSource </li>
@@ -262,7 +262,7 @@
 <li>Version 1 sources are managed by the run loop and kernel. <ul>
 <li>These sources use <code>Mach ports</code> to signal when the sources are ready to fire. </li>
 <li>A source is automatically <code>signaled by the kernel</code> when a message arrives on the source’s Mach port.</li>
-<li>see <a target="_blank" rel="noopener" href="https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/Multithreading/RunLoopManagement/RunLoopManagement.html#//apple_ref/doc/uid/10000057i-CH16-131281">Configuring a Port-Based Input Source</a><br><img src="/image-20210125183432020.png" alt="image-20210125183432020"></li>
+<li>see <a target="_blank" rel="noopener" href="https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/Multithreading/RunLoopManagement/RunLoopManagement.html#//apple_ref/doc/uid/10000057i-CH16-131281">Configuring a Port-Based Input Source</a><br><img src="/2021/02/13/20210213-dive-into-runloop-ios/image-20210125183432020.png" alt="image-20210125183432020"></li>
 </ul>
 </li>
 </ul>
@@ -308,7 +308,7 @@
 
 <p><a target="_blank" rel="noopener" href="https://developer.apple.com/documentation/corefoundation/cfrunloopactivity">https://developer.apple.com/documentation/corefoundation/cfrunloopactivity</a> </p>
 <h3 id="Run-Loop-Sequence-of-Events"><a href="#Run-Loop-Sequence-of-Events" class="headerlink" title="Run Loop Sequence of Events"></a>Run Loop Sequence of Events</h3><p>According to <a target="_blank" rel="noopener" href="https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/Multithreading/RunLoopManagement/RunLoopManagement.html#//apple_ref/doc/uid/10000057i-CH16-SW1">apple doc</a>,  when runloop running  in a thread, it processes pending events and generates notifications for attached observers.  Briefly, it works as the follow diagram shows. </p>
-<p><img src="/image-20210209142244931.png" alt="image-20210209142244931"></p>
+<p><img src="/2021/02/13/20210213-dive-into-runloop-ios/image-20210209142244931.png" alt="image-20210209142244931"></p>
 <p>The implementation is in <code>CFRunLoopRunSpecific</code> and <code>__CFRunLoopRun</code> in <code>CFRunloop.c</code> . </p>
 <h2 id="Use-case"><a href="#Use-case" class="headerlink" title="Use case"></a>Use case</h2><h3 id="Detect-hitch-block-in-main-thread"><a href="#Detect-hitch-block-in-main-thread" class="headerlink" title="Detect hitch block in main thread"></a>Detect hitch block in main thread</h3><p> In <a target="_blank" rel="noopener" href="https://github.com/Tencent/matrix">Tencent matrix</a>, it leverages the Run Loop notifications to record timestamp when these notifications sent. </p>
 <ol>

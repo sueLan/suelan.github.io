@@ -221,7 +221,7 @@
 <h3 id="Analyse-Crash-Report"><a href="#Analyse-Crash-Report" class="headerlink" title="Analyse Crash Report"></a>Analyse Crash Report</h3><h3 id="Exception-Type"><a href="#Exception-Type" class="headerlink" title="Exception Type"></a>Exception Type</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Exception Type:  EXC_BREAKPOINT (SIGTRAP)</span><br><span class="line">Exception Codes: 0x0000000000000001, 0x000000010074596c</span><br><span class="line">Termination Signal: Trace/BPT trap: 5</span><br><span class="line">Termination Reason: Namespace SIGNAL, Code 0x5</span><br><span class="line">Terminating Process: exc handler [12523]</span><br><span class="line">Triggered by Thread:  0</span><br></pre></td></tr></table></figure>
 
 <h4 id="EXC-BREAKPOINT-SIGTRAP"><a href="#EXC-BREAKPOINT-SIGTRAP" class="headerlink" title="EXC_BREAKPOINT (SIGTRAP)"></a>EXC_BREAKPOINT (SIGTRAP)</h4><p><code>EXC_BREAKPOINT (SIGTRAP)  </code> is a trace trap interrupted the process. It gives an attached debugger, if any, a chance to interrupt the process at a specific point in its execution.  So when iOS system raises this exception since my process is trying to <code>access</code>  <code>0x00000000</code>, Xcode debugger can pause the process and show me this fatal error. </p>
-<p><img src="/./image-20210217115027905.png" alt="image-20210217115027905"></p>
+<p><img src="/2021/07/24/20210724-EXC-BREAKPOINT-in-forced-unwrapping-optional/image-20210217115027905.png" alt="image-20210217115027905"></p>
 <blockquote>
 <p>On ARM processors, this appears as <code>EXC_BREAKPOINT (SIGTRAP). </code>On <code>x86_64</code> processors, this appears as <code>EXC_BAD_INSTRUCTION (SIGILL)</code>.</p>
 </blockquote>
@@ -229,14 +229,14 @@
 <h3 id="Backtrace-in-Crashed-Thread"><a href="#Backtrace-in-Crashed-Thread" class="headerlink" title="Backtrace in Crashed Thread"></a>Backtrace in Crashed Thread</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Thread 0 Crashed:</span><br><span class="line">0   InvalideMemoryDemo            	0x000000010074596c 0x100740000 + 22892</span><br><span class="line">1   InvalideMemoryDemo            	0x00000001007458d8 0x100740000 + 22744</span><br><span class="line">2   InvalideMemoryDemo            	0x000000010074598c 0x100740000 + 22924</span><br></pre></td></tr></table></figure>
 
 <h3 id="Disassembling-executable-in-Hopper"><a href="#Disassembling-executable-in-Hopper" class="headerlink" title="Disassembling executable in Hopper"></a>Disassembling executable in Hopper</h3><p>Go to file offset <code>22892</code></p>
-<p><img src="/./image-20210217121336204.png" alt="image-20210217121336204"></p>
+<p><img src="/2021/07/24/20210724-EXC-BREAKPOINT-in-forced-unwrapping-optional/image-20210217121336204.png" alt="image-20210217121336204"></p>
 <p> <code>BRK</code> is Breakpoint instruction to cause a Software Breakpoint Instruction exception.</p>
 <p>Assembly code </p>
-<p><img src="/./image-20210217121006944.png" alt="image-20210217121006944"></p>
+<p><img src="/2021/07/24/20210724-EXC-BREAKPOINT-in-forced-unwrapping-optional/image-20210217121006944.png" alt="image-20210217121006944"></p>
 <p>Compiler already did optimizations for us.  It will use <code>cbz</code> command to compare value in register <code>x19</code> with zero. If it is zero, then go to label <code>loc_10000596c</code>, which causes a Software Breakpoint Instruction exception.</p>
-<p><img src="/./image-20210217121336204.png" alt="image-20210217121336204"></p>
+<p><img src="/2021/07/24/20210724-EXC-BREAKPOINT-in-forced-unwrapping-optional/image-20210217121336204.png" alt="image-20210217121336204"></p>
 <p>From Thread State in in the crash report, we got <code>x19: 0x0000000000000000</code>. So here it goes to  <code>loc_10000596c</code> to raise <code>EXC_BREAKPOINT</code> exception.  That is what we see in the crash report. </p>
-<p><img src="/./image-20210217121128060.png" alt="image-20210217121128060"></p>
+<p><img src="/2021/07/24/20210724-EXC-BREAKPOINT-in-forced-unwrapping-optional/image-20210217121128060.png" alt="image-20210217121128060"></p>
 <p>seems, nothing fancy. To be continue …</p>
 <ul>
 <li><a target="_blank" rel="noopener" href="https://www.mikeash.com/pyblog/friday-qa-2014-08-01-exploring-swift-memory-layout-part-ii.html">https://www.mikeash.com/pyblog/friday-qa-2014-08-01-exploring-swift-memory-layout-part-ii.html</a> </li>

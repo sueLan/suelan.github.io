@@ -238,26 +238,26 @@
 <li><p>download <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/IPSW">IPSW</a>, iPod Software from  <a target="_blank" rel="noopener" href="https://www.theiphonewiki.com/wiki/Firmware/iPhone/11.x">https://www.theiphonewiki.com/wiki/Firmware/iPhone/11.x</a> or <a target="_blank" rel="noopener" href="https://ipsw.me/">https://ipsw.me/</a>; or can decrypte <code>ipsw</code> by yourself following this <a target="_blank" rel="noopener" href="https://gist.github.com/tzmartin/812027b879f6ff4459af">guide</a></p>
 </li>
 <li><p><code>IPSW</code> file actually is <code>zip</code> file, we can change the file extension <code>ipsw</code> to <code>zip</code>. Then unzip it. You can see a big disk image there.</p>
-<p><img src="/image-20210305201936593.png"></p>
+<p><img src="/2021/03/05/20210305-crash-ate-bad-food/image-20210305201936593.png"></p>
 <p> Double click it. It will be mounted in filesystem. Then we can see it showing in the <code>Finder</code> </p>
-<p><img src="/image-20210305202238201.png"></p>
+<p><img src="/2021/03/05/20210305-crash-ate-bad-food/image-20210305202238201.png"></p>
 </li>
 <li><p>Then go to <code>/System/Library/Caches/com.apple.dyld</code> folder. Drag this file to <code>Hopper</code></p>
-<p><img src="/image-20210305202347747.png"></p>
+<p><img src="/2021/03/05/20210305-crash-ate-bad-food/image-20210305202347747.png"></p>
 </li>
 <li><p>Since all executable dylib are shipped into this whole file, we have to filter out <code>CoreData</code> in the search bar. </p>
-<p><img src="/image-20210305202507076.png"></p>
+<p><img src="/2021/03/05/20210305-crash-ate-bad-food/image-20210305202507076.png"></p>
 </li>
 <li><p>Get <code>offset</code> from frame in the backtrace in the crash report.  Using <code>go to file offset</code>  in Hopper, <code>option + g</code> to jump to that line of assembly code. I actually have a <a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=GPs3oPFSdo0">talk</a> about how to use exception info, thread state, offset in backtrace in crash report  to analyze crash report. </p>
-<p><img src="/image-20210305204358148.png"></p>
+<p><img src="/2021/03/05/20210305-crash-ate-bad-food/image-20210305204358148.png"></p>
 <p>take <code>line 29</code> as an example, it goes to a <code>bl</code> instruction. As we know, in Objective-C, <code>x1</code> stores the sector. So we can quickly figure out the selector is </p>
 <p><a target="_blank" rel="noopener" href="https://developer.apple.com/documentation/coredata/nspersistentstorecoordinator/1468872-executerequest?language=objc">executeRequest:withContext:error:</a></p>
-<p><img src="/image-20210305204545965.png"></p>
+<p><img src="/2021/03/05/20210305-crash-ate-bad-food/image-20210305204545965.png"></p>
 <p>Hmm, although it is a little bit tedious, we finanly get more info about what is happening here. </p>
 <p>Basically, when resuming from background, our app triggers a data request operation in <code>CoreData</code>. It is executed in <code>main thread</code> and make the main thread wait this transaction finished. While,  it is a bit of slow to execute this SQL-related transaction here and blocks <code>main thread</code> for extended period of time. Then when watchdog come to check, it terminates our app in order to maintain the system responsiveness.</p>
 </li>
 </ol>
-<p><img src="/image-20210305210726254.png"></p>
+<p><img src="/2021/03/05/20210305-crash-ate-bad-food/image-20210305210726254.png"></p>
 <p>As apple suggests, the watchdog terminates apps that block the main thread for a significant time.  There are some cases of this sort, like </p>
 <ul>
 <li>Synchronous networking</li>

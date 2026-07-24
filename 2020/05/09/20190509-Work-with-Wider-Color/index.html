@@ -205,7 +205,7 @@
 <h2 id="Basic-concepts-about-color"><a href="#Basic-concepts-about-color" class="headerlink" title="Basic concepts about color"></a>Basic concepts about color</h2><h3 id="What-is-Color-Space"><a href="#What-is-Color-Space" class="headerlink" title="What is Color Space"></a>What is Color Space</h3><blockquote>
 <p>A color space is a specific organization of colors. In combination with physical device profiling, it allows for reproducible representations of color, in both analog and digital representations.            — Wiki</p>
 </blockquote>
-<p><img src="/media/15884935782947/15884941050187.jpg"></p>
+<p><img src="/2020/05/09/20190509-Work-with-Wider-Color/media/15884935782947/15884941050187.jpg"></p>
 <p>This is the standard RGB space, which is the default color space in iOS. </p>
 <h4 id="Color-Primaries"><a href="#Color-Primaries" class="headerlink" title="Color Primaries"></a>Color Primaries</h4><blockquote>
 <p>Color primaries generally fall at the most intense value that you can get with that particular color channel.</p>
@@ -215,7 +215,7 @@
 <p>RGB {0.0, 0.0, 0.0} &#x3D; Black<br>RGB {1.0, 1.0, 1.0} &#x3D; White<br>RGB {1.0, 0.0, 0.0} &#x3D; Red</p>
 </blockquote>
 <h4 id="Color-gamut"><a href="#Color-gamut" class="headerlink" title="Color gamut"></a>Color gamut</h4><p>  All of the colors that can be defined as a combination of those individual color channels. </p>
-<h2 id="Display-P3"><a href="#Display-P3" class="headerlink" title="Display P3"></a>Display P3</h2><p><img src="/media/15884935782947/15885097554778.jpg"></p>
+<h2 id="Display-P3"><a href="#Display-P3" class="headerlink" title="Display P3"></a>Display P3</h2><p><img src="/2020/05/09/20190509-Work-with-Wider-Color/media/15884935782947/15885097554778.jpg"></p>
 <p>In the above image, the colored region represents the outer limits of perception in a human’s color vision. </p>
 <p>The inner black triangle represents sRGB’s limits of presentation.<br>In contrast, the DCI-P3 standard, and the Wide Color implementation, has a larger area underneath the triangle, representing the greater array of displayable color possible.</p>
 <ul>
@@ -255,7 +255,7 @@
 </li>
 <li><p>Color matching maps image colors to output device</p>
 <ul>
-<li><img src="/media/15884935782947/15885122964828.jpg"></li>
+<li><img src="/2020/05/09/20190509-Work-with-Wider-Color/media/15884935782947/15885122964828.jpg"></li>
 </ul>
 </li>
 <li><p>Not for free: Every pixel needs to be color matched</p>
@@ -283,7 +283,7 @@
 <li>Don’t “assign” P3 profile. It just remaps the existing color information into new color space. The colors are stretched, and the design file will be inevitably altered. </li>
 <li>Convert to P3 instead</li>
 </ul>
-<h2 id="Tools"><a href="#Tools" class="headerlink" title="Tools"></a>Tools</h2><p> <img src="/media/15884935782947/15885134344507.jpg"></p>
+<h2 id="Tools"><a href="#Tools" class="headerlink" title="Tools"></a>Tools</h2><p> <img src="/2020/05/09/20190509-Work-with-Wider-Color/media/15884935782947/15885134344507.jpg"></p>
 <h2 id="Color-Specification"><a href="#Color-Specification" class="headerlink" title="Color Specification"></a>Color Specification</h2><p>When communicating with designers, Be specific about color space!</p>
 <ul>
 <li><p>Use Display P3 instead of sRGB when working with wide gamut designs</p>

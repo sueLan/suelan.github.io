@@ -209,7 +209,7 @@
 <p>The registers store data elements for processing without having to access the memory. A limited number of registers are built into the processor chip. – <a target="_blank" rel="noopener" href="https://www.tutorialspoint.com/assembly_programming/assembly_registers.htm">https://www.tutorialspoint.com/assembly_programming/assembly_registers.htm</a> </p>
 </blockquote>
 <p>In ARM 64, the following graph shows the registers’ roles.</p>
-<p><img src="/image-20200805000244292.png" alt="image-20200805000244292"></p>
+<p><img src="/2020/08/05/20200805-tail-call-elimination/image-20200805000244292.png" alt="image-20200805000244292"></p>
 <ul>
 <li>The first eight registers, r0-r7, are used to pass argument values into a subroutine and to return result values from a function. </li>
 <li>The frame record for the innermost frame (belonging to the most recent routine invocation) shall be pointed to by the <code>Frame Pointer register</code> (FP). The lowest addressed double-word shall point to the <code>previous frame record</code> and the highest addressed double-word shall contain the value passed in LR on entry to the current function.</li>
@@ -229,7 +229,7 @@
 </ul>
 <p>In this environment, the stack frame size is not fixed.</p>
 <p>Another stack frame layout graph comes from <a target="_blank" rel="noopener" href="https://developer.arm.com/documentation/ihi0055/b/">Procedure Call Standard for the ARM 64-bit Architecture (AArch64)- AArch64 ABI release 1.0</a></p>
-<p><img src="/image-20200805222941420.png" alt="image-20200805222941420"></p>
+<p><img src="/2020/08/05/20200805-tail-call-elimination/image-20200805222941420.png" alt="image-20200805222941420"></p>
 <h3 id="Passing-Arguments"><a href="#Passing-Arguments" class="headerlink" title="Passing Arguments"></a>Passing Arguments</h3><blockquote>
 <p>When functions (routines) call other functions (subroutines), they may need to pass arguments to them. The called subroutines access these arguments as <em>parameters</em>. Conversely, some subroutines pass a <em>result</em> or return value to their callers. In the ARMv6 environment, arguments may be passed on the runtime stack or in registers; in addition, some vector arguments are also passed passed in registers. Results are returned in registers or in memory. To efficiently pass values between callers and callees, GCC follows strict rules when it generates a program’s object code. - <a target="_blank" rel="noopener" href="https://developer.apple.com/library/archive/documentation/Xcode/Conceptual/iPhoneOSABIReference/Articles/ARMv6FunctionCallingConventions.html#//apple_ref/doc/uid/TP40009021-SW8">ARMv6</a></p>
 </blockquote>
@@ -279,18 +279,18 @@
 
 <p>Since <code>CGContextDrawPath</code> needs nothing from <code>drawRect</code>, the params it needs arn’t from the call frame of <code>drawRect</code> , the compiler does an optimization here.  It rearranges the code as follow. I <code>pops stack frame</code> of <code>drawRect</code> firstly, <code>restores fp</code>,  then calls  <code>CGContextDrawPath</code> . So it doesn’t have to <code>jump back to caller</code>  , the address stored in the <code>lr</code> register. </p>
 <p>Figure 1. it is going to  <code>pops stack frame</code></p>
-<p><img src="/image-20200805232447437.png" alt="image-20200805232447437"></p>
+<p><img src="/2020/08/05/20200805-tail-call-elimination/image-20200805232447437.png" alt="image-20200805232447437"></p>
 <p>Figure 2. after  poping stack frame of <code>drawRect</code>, the call frame of drawRect doesn’t exist on the Stack any more.  Then <code>sp</code> moves.</p>
-<p><img src="/image-20200805232642308.png" alt="image-20200805232642308"></p>
+<p><img src="/2020/08/05/20200805-tail-call-elimination/image-20200805232642308.png" alt="image-20200805232642308"></p>
 <p>Figure 3. after restoring <code>fp</code> to the base address of its caller’s frame pointer, the <code>return address</code> and <code>frame ptr</code> of <code>drawRect</code> don’t exist on the Stack any more.  Then <code>sp</code> moves.</p>
-<p><img src="/image-20200805232724011.png" alt="image-20200805232724011"></p>
+<p><img src="/2020/08/05/20200805-tail-call-elimination/image-20200805232724011.png" alt="image-20200805232724011"></p>
 <p>Finally, it calls <code>CGContextDrawPath</code>, which establish its own call frame on the Stack. So, the stack is like this now. </p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">+0x76 b.w &quot;CGContextDrawPath$shim&quot;</span><br></pre></td></tr></table></figure>
 
 <img src="image-20200805234014273.png" alt="image-20200805234014273" style="zoom:50%;" />
 
 <h3 id="The-difference-in-the-Call-Tree"><a href="#The-difference-in-the-Call-Tree" class="headerlink" title="The difference in the Call Tree"></a>The difference in the Call Tree</h3><p>The left side is the normal case, the right side is the optimized case where then call frame of <code>drawRect</code> will be removed from the stack in the optimized case. It looks like <code>CGContextDrawPath</code> is directedly called from <code>drawLayout:inContext</code> .</p>
-<p><img src="/image-20200805234610955.png" alt="image-20200805234610955"></p>
+<p><img src="/2020/08/05/20200805-tail-call-elimination/image-20200805234610955.png" alt="image-20200805234610955"></p>
 <h3 id="The-benifit-of-Tail-call-Elimination"><a href="#The-benifit-of-Tail-call-Elimination" class="headerlink" title="The benifit of Tail call Elimination"></a>The benifit of Tail call Elimination</h3><ul>
 <li>Saves stack memory </li>
 <li>Keeps caches hot, and reuses the memory</li>
@@ -302,7 +302,7 @@
 </ul>
 <h3 id="Call-Semantics"><a href="#Call-Semantics" class="headerlink" title="Call Semantics"></a>Call Semantics</h3><p>There is a useful trick to indentify if this is a Tail call Elimination case. That is to</p>
 <p><code>look at the disaeembly and call sight of the last call</code></p>
-<p><img src="/image-20200806092252238.png" alt="image-20200806092252238"></p>
+<p><img src="/2020/08/05/20200805-tail-call-elimination/image-20200806092252238.png" alt="image-20200806092252238"></p>
 <ul>
 <li><p>In normal call, it uses <code>a Branch and Link family of instructions</code> (bl)</p>
 <ul>
